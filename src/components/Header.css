@@ -1,0 +1,40 @@
+.header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 40px;
+    background-color: #ffff;
+}
+
+.procura{
+    display: flex;
+    align-items: center;
+    border: 1px solid #ddd;
+    border-radius: 15px;
+    padding: 8px 15px;
+    background-color: #f7f7f7f7;
+}
+
+.procura-input{
+    border: none;
+    background: transparent;
+    outline: none;
+    font-size: 16px;
+    flex-grow: 1;
+    padding-right: 10px;
+}
+
+.botao-procura{
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+}
+
+.logo{
+    height: 40px;
+}
+
+.user{
+    font-size: 24px;
+}
