@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import './CategoriasHome.css';
 
 const CategoriasHome = () => {
     const [categorias] = useState([
@@ -40,7 +41,7 @@ const CategoriasHome = () => {
             <div className="categorias-container">
                 {categorias.map(categoria => (
                     <div key={categoria.id} className="categoria-card">
-                        <img src={categoria.imagem} />
+                        <img src={categoria.imagem} className='img-card'/>
                         <h3>{categoria.nome}</h3>
                     </div>
                 ))}

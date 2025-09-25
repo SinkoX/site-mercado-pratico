@@ -1,0 +1,31 @@
+.categorias-home {
+    width: 100%;
+    text-align: center;
+    padding: 70px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+h2 {
+    font-size: 30px;
+}
+
+.img-card {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background-color: gray;
+}
+
+.categorias-container {
+    display: flex;
+    justify-content: space-evenly;
+    flex-direction: row;
+}
+
+.categoria-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
