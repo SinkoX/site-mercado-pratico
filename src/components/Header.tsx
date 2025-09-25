@@ -1,21 +1,37 @@
-import React from "react";
-import './Header.css'
+import React, { useState } from "react";
+import './Header.css';
 
+interface HeaderProps {
+  onBuscarProduto: (busca: string) => void;
+}
 
-function Header(){
-  return(
-        <header className="header">
-            <div className="logo">
-                <img src="" alt="logo" />
-            </div>
+function Header({ onBuscarProduto }: HeaderProps) {
+  const [busca, setBusca] = useState('');
 
-            <div className="procura">
-                <input type="text" placeholder="Buscar Produtos..." className="procura-input"/>
-                <button type="submit" className="botao-procura"></button>
-            </div>
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    onBuscarProduto(busca);
+  };
 
-            <div className="user">icone</div>
-        </header>
+  return (
+    <header className="header">
+      <div className="logo">
+      <img src="/logo.png" className="Logo" alt="logo" />
+      </div>
+
+      <form className="procura" onSubmit={handleSubmit}>
+        <input
+          type="text"
+          placeholder="Buscar Produtos..."
+          className="procura-input"
+          value={busca}
+          onChange={(e) => setBusca(e.target.value)}
+        />
+        <button type="submit" className="botao-procura"></button>
+      </form>
+
+      <div className="user">icone</div>
+    </header>
   );
 }
 
