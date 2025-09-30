@@ -3,8 +3,8 @@ import './Image.css';
 
 const Image = () => {
     return(
-        <div className='Imagem'>
-            <img src="" alt="Imagem principal" className='tela-inteira'/>
+        <div className='slide'>
+            <img src="" alt="Imagem slide" className='imagem-slide'/>
         </div>
     );
 };

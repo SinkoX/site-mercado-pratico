@@ -1,0 +1,57 @@
+.footer {
+    display: flex;
+    flex-direction: column;
+    background-color: #54BD54;
+    color: #fff;
+    height: 520px;
+    padding: 30px;
+    gap: 100px;
+}
+
+.infos {
+    display: flex;
+    justify-content: center;
+    gap: 80px;
+}
+
+.info1 {
+    width: 350px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.info2, .info3 {
+    width: 250px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;    
+}
+
+.info4 .imagem {
+    background-color: #DFDFDF;
+    width: 250px;
+    height: 250px;
+    border-radius: 15px;
+}
+
+.info1 p, .info2 p, .info3 p, .info4 p, .direitos p {
+    font-family: "Inter";
+    font-weight: 100;
+}
+
+.direitos p {
+    font-size: 20px;
+}
+
+.direitos {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 50px;
+}
+
+.direitos hr {
+    width: 1500px;
+}

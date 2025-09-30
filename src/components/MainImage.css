@@ -1,0 +1,10 @@
+.imagem{
+    width: 100%;
+    overflow: hidden;
+}
+
+.tela-inteira{
+    width: 100%;
+    height: auto;
+    display: block;
+}
