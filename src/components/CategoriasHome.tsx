@@ -3,16 +3,14 @@ import "./CategoriasHome.css";
 
 const CategoriasHome = () => {
   const categorias = [
-    { id: 1, nome: "Super Ofertas", imagem: "" },
-    { id: 2, nome: "Hortifruti", imagem: "" },
-    { id: 3, nome: "Bebidas", imagem: "" },
-    { id: 4, nome: "Mercearia", imagem: "" },
-    { id: 5, nome: "Limpeza", imagem: "" },
-    { id: 6, nome: "Açougue", imagem: "" },
-    { id: 7, nome: "Higiene", imagem: "" },
-    { id: 8, nome: "Padaria", imagem: "" },
-    { id: 9, nome: "Laticínios", imagem: "" },
-    { id: 10, nome: "Pet Shop", imagem: "" },
+    { id: 1, nome: "Hortifruti", imagem: "" },
+    { id: 2, nome: "Bebidas", imagem: "" },
+    { id: 3, nome: "Mercearia", imagem: "" },
+    { id: 4, nome: "Limpeza", imagem: "" },
+    { id: 5, nome: "Açougue", imagem: "" },
+    { id: 6, nome: "Higiene", imagem: "" },
+    { id: 7, nome: "Padaria", imagem: "" },
+    { id: 8, nome: "Pet Shop", imagem: "" },
   ];
 
   const [indice, setIndice] = useState(0);

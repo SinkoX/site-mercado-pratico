@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import './Header.css';
-import iconPerfil from "../assets/images/iconPerfil.png";
-import iconPesquisa from "../assets/images/iconPesquisa.png";
+import iconPerfil from "../assets/images/icones/iconPerfil.png";
+import iconPesquisa from "../assets/images/icones/iconPesquisa.png";
+import { Link } from "react-router-dom";
 
 interface HeaderProps {
   onBuscarProduto: (busca: string) => void;
@@ -34,7 +35,9 @@ function Header({ onBuscarProduto }: HeaderProps) {
       </form>
 
       <div className="user">
-        <img src={iconPerfil} alt="" id="icon-perfil"/>
+        <Link to="/perfil">
+          <img src={iconPerfil} alt="" id="icon-perfil"/>
+        </Link>
       </div>
     </header>
   );
