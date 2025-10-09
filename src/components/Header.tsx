@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import './Header.css';
 import iconPerfil from "../assets/images/iconPerfil.png";
+import iconPesquisa from "../assets/images/iconPesquisa.png";
 
 interface HeaderProps {
   onBuscarProduto: (busca: string) => void;
@@ -17,10 +18,11 @@ function Header({ onBuscarProduto }: HeaderProps) {
   return (
     <header className="header">
       <div className="logo">
-      <img src="/logo.png" className="logo" alt="logo" />
+        <img src="/logo.png" className="logo" alt="logo" />
       </div>
 
       <form className="procura" onSubmit={handleSubmit}>
+        <img src={iconPesquisa} alt="" id="icon-pesquisa"/>
         <input
           type="text"
           placeholder="Buscar Produtos..."
@@ -32,7 +34,7 @@ function Header({ onBuscarProduto }: HeaderProps) {
       </form>
 
       <div className="user">
-        <img src={iconPerfil} alt="" className="icon-perfil"/>
+        <img src={iconPerfil} alt="" id="icon-perfil"/>
       </div>
     </header>
   );

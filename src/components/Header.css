@@ -8,11 +8,17 @@
 
 .procura{
     display: flex;
+    justify-content: center;
     align-items: center;
     border: 1px solid #ddd;
     border-radius: 15px;
-    padding: 8px 65px;
+    width: 600px;
+    height: 47px;
     background-color: #f7f7f7f7;
+}
+
+.procura > * {
+  margin-left: 20px;
 }
 
 .procura-input{
@@ -32,16 +38,26 @@
 }
 
 .logo {
-    width: 90px; /* ou o tamanho que você quiser */
+    width: 90px;
     height: auto;
 }
 
 .user {
-    width: 60px;
-    height: 60px;
-}
-
-.icon-perfil {
     width: 50px;
     height: 50px;
+    border-radius: 50%;
+    background-color: rgb(231, 231, 231);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#icon-perfil {
+    width: 30px;
+    height: 30px;
+}
+
+#icon-pesquisa {
+    width: 20px;
+    height: 20px;
 }
