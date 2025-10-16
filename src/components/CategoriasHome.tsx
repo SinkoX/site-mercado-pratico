@@ -1,16 +1,24 @@
 import { useState } from "react";
 import "./CategoriasHome.css";
+import categoriaHortiFruti from "../assets/images/categorias/categoriaHortiFruti.png";
+import categoriaBebidas from "../assets/images/categorias/categoriaBebidas.png";
+import categoriaMercearia from "../assets/images/categorias/categoriaMercearia.png";
+import categoriaLimpeza from "../assets/images/categorias/categoriaLimpeza.png";
+import categoriaAcougue from "../assets/images/categorias/categoriaAcougue.png";
+import categoriaHigiene from "../assets/images/categorias/categoriaHigiene.png";
+import categoriaPadaria from "../assets/images/categorias/categoriaPadaria.png";
+import categoriaPetShop from "../assets/images/categorias/categoriaPetShop.png";
 
 const CategoriasHome = () => {
   const categorias = [
-    { id: 1, nome: "Hortifruti", imagem: "" },
-    { id: 2, nome: "Bebidas", imagem: "" },
-    { id: 3, nome: "Mercearia", imagem: "" },
-    { id: 4, nome: "Limpeza", imagem: "" },
-    { id: 5, nome: "Açougue", imagem: "" },
-    { id: 6, nome: "Higiene", imagem: "" },
-    { id: 7, nome: "Padaria", imagem: "" },
-    { id: 8, nome: "Pet Shop", imagem: "" },
+    { id: 1, nome: "Hortifruti", imagem: categoriaHortiFruti },
+    { id: 2, nome: "Bebidas", imagem: categoriaBebidas },
+    { id: 3, nome: "Mercearia", imagem: categoriaMercearia },
+    { id: 4, nome: "Limpeza", imagem: categoriaLimpeza },
+    { id: 5, nome: "Açougue", imagem: categoriaAcougue },
+    { id: 6, nome: "Higiene", imagem: categoriaHigiene },
+    { id: 7, nome: "Padaria", imagem: categoriaPadaria },
+    { id: 8, nome: "Pet Shop", imagem: categoriaPetShop },
   ];
 
   const [indice, setIndice] = useState(0);
@@ -35,22 +43,28 @@ const CategoriasHome = () => {
       <h2>Categorias em Destaque</h2>
 
       <div className="carrossel-wrapper">
-        <button className="seta" onClick={anterior}>
-          &#8249;
-        </button>
+        <div className="container-seta">
+          <button className="seta" onClick={anterior}>
+            &#8249;
+          </button>
+        </div>
 
         <div className="categorias-container">
           {categoriasVisiveis.map((categoria) => (
             <div key={categoria.id} className="categoria-card">
-              <div className="img-card">IMAGEM</div>
+              <div className="img-card">
+                <img src={categoria.imagem} alt="" />
+              </div>
               <h3>{categoria.nome}</h3>
             </div>
           ))}
         </div>
 
-        <button className="seta" onClick={proximo}>
-          &#8250;
-        </button>
+        <div className="container-seta">
+          <button className="seta" onClick={proximo}>
+            &#8250;
+          </button>
+        </div>
       </div>
     </div>
   );

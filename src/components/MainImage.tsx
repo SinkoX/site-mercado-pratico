@@ -1,10 +1,10 @@
-import React from 'react';
 import './MainImage.css';
+import bannerPrincipal1 from "../assets/images/banner/bannerPrincipal1.png"
 
 const Image = () => {
     return(
         <div className='imagem'>
-            <img src="" alt="Imagem principal" className='tela-inteira'/>
+            <img src={bannerPrincipal1} alt="Imagem principal" className='tela-inteira1'/>
         </div>
     );
 };

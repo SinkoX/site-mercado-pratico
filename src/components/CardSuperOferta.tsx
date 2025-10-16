@@ -12,7 +12,7 @@ const CardSuperOferta: React.FC<CardSuperOfertaProps> = ({ src, alt }) => {
     <div className="card-superoferta">
       <img
         src={src}
-        alt={alt || "Imagem do card"}
+        alt={alt || "Imagem"}
         className="img-superoferta"
       />
     </div>

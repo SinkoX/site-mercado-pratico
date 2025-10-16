@@ -23,7 +23,7 @@ function Header({ onBuscarProduto }: HeaderProps) {
       </div>
 
       <form className="procura" onSubmit={handleSubmit}>
-        <img src={iconPesquisa} alt="" id="icon-pesquisa"/>
+        <img src={iconPesquisa} alt="icon perfil" id="icon-pesquisa"/>
         <input
           type="text"
           placeholder="Buscar Produtos..."
@@ -31,12 +31,11 @@ function Header({ onBuscarProduto }: HeaderProps) {
           value={busca}
           onChange={(e) => setBusca(e.target.value)}
         />
-        <button type="submit" className="botao-procura"></button>
       </form>
 
       <div className="user">
         <Link to="/perfil">
-          <img src={iconPerfil} alt="" id="icon-perfil"/>
+          <img src={iconPerfil} alt="icon perfil" id="icon-perfil"/>
         </Link>
       </div>
     </header>

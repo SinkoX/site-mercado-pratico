@@ -1,10 +1,20 @@
-.imagem{
-    width: 100%;
-    overflow: hidden;
+.imagem {
+  width: 110%;
+  height: 600px;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.tela-inteira{
-    width: 100%;
-    height: auto;
-    display: block;
+.tela-inteira1 {
+  width: 100%;
+  display: block;
+}
+
+.imagem img {
+    width: 110%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
 }

@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { api } from "../api";
 import Header from "../components/Header";
 import MainImage from "../components/MainImage";
 import MenuCategoria from "../components/MenuCategoria";
@@ -8,6 +9,11 @@ import CardSuperOferta from "../components/CardSuperOferta";
 import CardProduto from "../components/CardProduto";
 import Image from "../components/Image";
 import Footer from "../components/Footer";
+import superOferta1 from "../assets/images/superOfertas/superOferta1.png";
+import superOferta2 from "../assets/images/superOfertas/superOferta2.png";
+import superOferta3 from "../assets/images/superOfertas/superOferta3.png";
+import bannerSecundario1 from "../assets/images/banner/bannerSecundario1.png";
+import bannerSecundario2 from "../assets/images/banner/bannerSecundario2.png";
 import "./Home.css";
 
 function Home() {
@@ -15,6 +21,7 @@ function Home() {
     string | undefined
   >();
   const [buscaProduto, setBuscaProduto] = useState<string | undefined>();
+  const [produtos, setProdutos] = useState<any[]>([]);
 
   // Quando usuário usa a barra de busca
   const handleBusca = (termo: string) => {
@@ -27,6 +34,10 @@ function Home() {
     setBuscaProduto(undefined); // limpa busca se estiver clicando em categoria
     setCategoriaSelecionada(categoria);
   };
+
+  useEffect(() => {
+    api.get("/produtos").then((res) => setProdutos(res.data));
+  }, []);
 
   return (
     <div className="home">
@@ -63,9 +74,9 @@ function Home() {
         </section>
 
         <section id="section-super-ofertas">
-          <CardSuperOferta src="" alt="" />
-          <CardSuperOferta src="" alt="" />
-          <CardSuperOferta src="" alt="" />
+          <CardSuperOferta src={superOferta1} alt="imagem super oferta 1" />
+          <CardSuperOferta src={superOferta2} alt="imagem super oferta 2" />
+          <CardSuperOferta src={superOferta3} alt="imagem super oferta 3" />
         </section>
 
         <section id="section-produtos-destaque">
@@ -74,30 +85,20 @@ function Home() {
             <hr />
           </div>
           <div className="produtos">
-            <CardProduto src="" alt="" />
-            <CardProduto src="" alt="" />
-            <CardProduto src="" alt="" />
-            <CardProduto src="" alt="" />
-            <CardProduto src="" alt="" />
-            <CardProduto src="" alt="" />
-            <CardProduto src="" alt="" />
-            <CardProduto src="" alt="" />
+            {produtos.slice(0, 8).map((produto) => (
+              <CardProduto key={produto.idProduto} produto={produto} />
+            ))}
           </div>
-          <Image />
+          <Image src={bannerSecundario1} alt="banner" />
           <div className="produtos">
-            <CardProduto src="" alt="" />
-            <CardProduto src="" alt="" />
-            <CardProduto src="" alt="" />
-            <CardProduto src="" alt="" />
-            <CardProduto src="" alt="" />
-            <CardProduto src="" alt="" />
-            <CardProduto src="" alt="" />
-            <CardProduto src="" alt="" />
+            {produtos.slice(8, 16).map((produto) => (
+              <CardProduto key={produto.idProduto} produto={produto} />
+            ))}
           </div>
         </section>
 
         <section id="section-banner-propaganda">
-          <Image />
+          <Image src={bannerSecundario2} alt="banner" />
         </section>
       </main>
 

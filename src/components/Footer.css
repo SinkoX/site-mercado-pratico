@@ -4,6 +4,7 @@
     background-color: #54BD54;
     color: #fff;
     height: 520px;
+    width: 100%;
     padding: 30px;
     gap: 100px;
 }
@@ -12,6 +13,7 @@
     display: flex;
     justify-content: center;
     gap: 80px;
+    width: 100%;
 }
 
 .info1 {
