@@ -1,0 +1,122 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 1200px;
+  margin-top: 60px;
+  text-align: center;
+  justify-content: center;
+  font-size: 27px;
+}
+
+.logo-section {
+  display: flex;
+  flex-direction: column;
+}
+
+.mensagem {
+  font-size: 20px;
+  color: #F75F13;
+  margin-top: 15px;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.form {
+  background-color: #ffffff;
+  border-radius: 40px;
+  width: 550px;
+  border: 0.5px solid rgba(0, 0, 0, 0.323);
+  padding: 20px;
+  font-family: Arial, Helvetica, sans-serif;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: auto;
+  margin-top: 60px; 
+}
+
+.titulo {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.campo {
+  margin-bottom: 30px; 
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+label {
+  font-size: 15px;
+  font-weight: bold;
+  margin-bottom: 10px; 
+  text-align: left;
+}
+
+input {
+  background-color: #fff7f7;
+  border-radius: 10px;
+  height: 40px;
+  width: 100%;
+  padding: 0 15px;
+  border: 1px solid rgba(0, 0, 0, 0.326);
+  box-sizing: border-box;
+}
+
+.conta {
+  text-align: center;
+  margin-top: 10px;
+  margin-bottom: 0;
+  font-size: 14px;
+  color: #666;
+  font-weight: normal;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+}
+
+.cadastrar-se {
+  color: #1e02d0;
+  font-weight: bold;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.cadastrar-se:hover {
+  color: #1e02d0;
+  text-decoration: underline;
+}
+
+button {
+  display: block;
+  margin: 20px auto 0; 
+  border-radius: 8px;
+  border: none;
+  padding: 12px;
+  width: 70%;
+  background-color: #54bd54;
+  font-size: 16px;
+  cursor: pointer;
+  color: white;
+  font-weight: bold;
+}
+
+button:hover {
+  background-color: #0cd954;
+}
+
+.subtitulo {
+  color: #887474;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 20px;
+  margin-top: 10px;
+}
