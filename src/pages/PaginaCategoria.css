@@ -1,0 +1,130 @@
+/* Categoria.module.css */
+
+.container {
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Filtros */
+.filtros {
+  flex: 0 0 250px;
+  background-color: #f8f8f8;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.filtros h3 {
+  margin-bottom: 15px;
+  font-size: 18px;
+}
+
+.filtro {
+  margin-bottom: 20px;
+}
+
+.filtro strong {
+  display: block;
+  margin-bottom: 8px;
+}
+
+.filtro label {
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+  font-size: 14px;
+}
+
+.filtro input[type="radio"],
+.filtro input[type="checkbox"] {
+  margin-right: 8px;
+}
+
+.filtro input[type="number"] {
+  width: 100px;
+  padding: 5px;
+  margin-right: 5px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+.filtro button {
+  margin-top: 5px;
+  padding: 5px 10px;
+  background-color: #0077cc;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.filtro button:hover {
+  background-color: #005fa3;
+}
+
+/* Produtos */
+.produtos {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+.cardProduto {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  padding: 10px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: transform 0.2s;
+}
+
+.cardProduto:hover {
+  transform: translateY(-5px);
+}
+
+.cardProduto img {
+  width: 100%;
+  max-height: 150px;
+  object-fit: contain;
+  margin-bottom: 10px;
+}
+
+.cardProduto h4 {
+  font-size: 16px;
+  margin-bottom: 5px;
+  text-align: center;
+}
+
+.cardProduto p {
+  font-size: 14px;
+  margin-bottom: 3px;
+}
+
+.cardProduto button {
+  margin-top: 10px;
+  padding: 5px 10px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.cardProduto button:hover {
+  background-color: #218838;
+}
+
+/* Mensagem de nenhum produto */
+.produtos p {
+  grid-column: 1/-1;
+  text-align: center;
+  font-size: 16px;
+  color: #555;
+}

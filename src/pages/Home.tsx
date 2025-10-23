@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { api } from "../api";
 import Header from "../components/Header";
 import MainImage from "../components/MainImage";
@@ -9,47 +10,50 @@ import CardSuperOferta from "../components/CardSuperOferta";
 import CardProduto from "../components/CardProduto";
 import Image from "../components/Image";
 import Footer from "../components/Footer";
+
 import superOferta1 from "../assets/images/superOfertas/superOferta1.png";
 import superOferta2 from "../assets/images/superOfertas/superOferta2.png";
 import superOferta3 from "../assets/images/superOfertas/superOferta3.png";
 import bannerSecundario1 from "../assets/images/banner/bannerSecundario1.png";
 import bannerSecundario2 from "../assets/images/banner/bannerSecundario2.png";
+
 import "./Home.css";
 
 function Home() {
-  const [categoriaSelecionada, setCategoriaSelecionada] = useState<
-    string | undefined
-  >();
-  const [buscaProduto, setBuscaProduto] = useState<string | undefined>();
+  const [categoriaSelecionada, setCategoriaSelecionada] = useState<number | null>(null);
   const [produtos, setProdutos] = useState<any[]>([]);
+  const navigate = useNavigate();
 
-  // Quando usuário usa a barra de busca
+  // Função de busca: redireciona para /busca/:termo
   const handleBusca = (termo: string) => {
-    setCategoriaSelecionada(undefined); // limpa categoria se estiver buscando por nome
-    setBuscaProduto(termo);
+    if (!termo.trim()) return;
+    navigate(`/busca/${termo}`);
   };
 
-  // Quando usuário seleciona uma categoria
-  const handleSelecionarCategoria = (categoria: string) => {
-    setBuscaProduto(undefined); // limpa busca se estiver clicando em categoria
-    setCategoriaSelecionada(categoria);
+  // Seleção de categoria em destaque: redireciona para /categoria/:id
+  const handleSelecionarCategoria = (id: number) => {
+    navigate(`/categoria/${id}`);
   };
 
   useEffect(() => {
-    api.get("/produtos").then((res) => setProdutos(res.data));
+    // Carrega todos os produtos para exibição na Home
+    api.get("/produtos")
+      .then((res) => setProdutos(res.data))
+      .catch((err) => console.error(err));
   }, []);
 
   return (
     <div className="home-page">
       <Header onBuscarProduto={handleBusca} />
       <MenuCategoria onSelecionarCategoria={handleSelecionarCategoria} />
+
       <main>
         <section id="section-main-img">
           <MainImage />
         </section>
 
-        {/* Tela inicial - sem categoria nem busca */}
-        {!categoriaSelecionada && !buscaProduto ? (
+        {/* Tela inicial - sem categoria selecionada */}
+        {!categoriaSelecionada && (
           <div>
             <h1>Bem-vindo ao Mercado Prático 🛒</h1>
             <p>
@@ -57,20 +61,14 @@ function Home() {
               toda a praticidade para suas compras online.
             </p>
             <p>
-              Selecione uma categoria no menu acima ou pesquise um produto para
-              começar!
+              Selecione uma categoria no menu acima, clique em uma das categorias em destaque
+              ou pesquise um produto para começar!
             </p>
           </div>
-        ) : (
-          // Exibe lista de produtos com base em categoria ou busca
-          <ProdutosLista
-            categoria={categoriaSelecionada}
-            nomeBusca={buscaProduto}
-          />
         )}
 
         <section id="section-categorias-home">
-          <CategoriasHome />
+          <CategoriasHome onSelecionarCategoria={handleSelecionarCategoria} />
         </section>
 
         <section id="section-super-ofertas">

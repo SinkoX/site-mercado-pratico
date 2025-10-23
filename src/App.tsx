@@ -6,6 +6,7 @@ import CadastroProduto from "./pages/CadastroProdutos";
 import Login from "./pages/PaginaLogin";
 import Produto from "./pages/PaginaProduto";
 import Perfil from "./pages/PerfilUsuario";
+import Categoria from "./pages/PaginaCategoria"; 
 import "./App.css";
 
 function App() {
@@ -16,8 +17,10 @@ function App() {
       <Route path="/cadastro/endereco" element={<CadastroEndereco />} />
       <Route path="/cadastro/produto" element={<CadastroProduto />} />
       <Route path="/login" element={<Login />} />
-      <Route path="/perfil" element={<Perfil />}/>
-      <Route path="/produto" element={<Produto />} />
+      <Route path="/perfil" element={<Perfil />} />
+      <Route path="/produto/:id" element={<Produto />} />
+      <Route path="/categoria/:id" element={<Categoria />} />
+      <Route path="/busca/:termo" element={<Categoria />} /> {/* nova rota de busca */}
     </Routes>
   );
 }

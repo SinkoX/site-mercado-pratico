@@ -2,18 +2,23 @@ import React, { useState } from "react";
 import "./Header.css";
 import iconPerfil from "../assets/images/icones/iconPerfil.png";
 import iconPesquisa from "../assets/images/icones/iconPesquisa.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 interface HeaderProps {
-  onBuscarProduto: (busca: string) => void;
+  onBuscarProduto?: (busca: string) => void; // agora opcional
 }
 
 function Header({ onBuscarProduto }: HeaderProps) {
   const [busca, setBusca] = useState("");
+  const navigate = useNavigate();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onBuscarProduto(busca);
+    if (onBuscarProduto) {
+      onBuscarProduto(busca); // usa a função passada
+    } else {
+      navigate(`/busca/${busca}`); // navegação padrão
+    }
   };
 
   return (
@@ -23,7 +28,7 @@ function Header({ onBuscarProduto }: HeaderProps) {
       </div>
 
       <form className="procura" onSubmit={handleSubmit}>
-        <img src={iconPesquisa} alt="icon perfil" id="icon-pesquisa" />
+        <img src={iconPesquisa} alt="icon pesquisa" id="icon-pesquisa" />
         <input
           type="text"
           placeholder="Buscar Produtos..."
