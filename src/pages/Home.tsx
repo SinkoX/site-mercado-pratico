@@ -2,13 +2,11 @@ import { useState, useEffect } from "react";
 import { api } from "../api";
 import Layout from "../components/Layout";
 import MainImage from "../components/MainImage";
-import MenuCategoria from "../components/MenuCategoria";
 import ProdutosLista from "../pages/ProdutoLista";
 import CategoriasHome from "../components/CategoriasHome";
 import CardSuperOferta from "../components/CardSuperOferta";
 import CardProduto from "../components/CardProduto";
 import Image from "../components/Image";
-import Footer from "../components/Footer";
 import superOferta1 from "../assets/images/superOfertas/superOferta1.png";
 import superOferta2 from "../assets/images/superOfertas/superOferta2.png";
 import superOferta3 from "../assets/images/superOfertas/superOferta3.png";
@@ -57,8 +55,7 @@ function Home() {
               toda a praticidade para suas compras online.
             </p>
             <p>
-              Selecione uma categoria no menu acima ou pesquise um produto para
-              começar!
+              Selecione uma categoria no menu lateral ou pesquise um produto para começar!
             </p>
           </div>
         ) : (
