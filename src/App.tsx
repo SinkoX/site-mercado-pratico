@@ -4,10 +4,11 @@ import CadastroUsuario from "./pages/CadastroUsuario";
 import CadastroEndereco from "./pages/CadastroEndereco";
 import CadastroProduto from "./pages/CadastroProdutos";
 import PaginaLogin from "./pages/PaginaLogin";
-import Produto from "./pages/PaginaProduto";
+import Produto from "./components/PaginaProduto";
 import Perfil from "./pages/PerfilUsuario";
 import PaginaCategoria from "./pages/PaginaCategoria";
 import { useAuth } from "./hooks/useAuth";
+import Carrinho from "./pages/Carrinho";
 import "./App.css";
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
       <Route path="/login" element={<PaginaLogin loginFn={login}/>} />
       <Route path="/perfil" element={<Perfil />} />
       <Route path="/produto/:id" element={<Produto />} />
+       <Route path="/carrinho" element={<Carrinho />} />
 
       {/* ✅ Rota única e correta para categorias */}
       <Route path="/categoria/:nomeCategoria" element={<PaginaCategoria />} />

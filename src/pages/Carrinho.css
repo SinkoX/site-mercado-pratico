@@ -1,0 +1,78 @@
+.user-icons {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.carrinho-icon {
+  position: relative;
+  cursor: pointer;
+}
+
+.carrinho-icon img {
+  width: 35px;
+  height: 35px;
+}
+
+.contador {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background: red;
+  color: white;
+  font-size: 0.8rem;
+  font-weight: bold;
+  border-radius: 50%;
+  padding: 2px 6px;
+}
+
+.dropdown-carrinho {
+  position: absolute;
+  top: 45px;
+  right: 0;
+  background: white;
+  border: 1px solid #ccc;
+  padding: 10px;
+  width: 200px;
+  z-index: 1000;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+.item-dropdown {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 5px;
+}
+.carrinho-vazio {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 60vh;
+  text-align: center;
+  gap: 15px;
+}
+
+.carrinho-vazio h2 {
+  font-size: 28px;
+  color: #555;
+}
+
+.carrinho-vazio p {
+  font-size: 18px;
+  color: #777;
+}
+
+.carrinho-vazio button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.carrinho-vazio button:hover {
+  background-color: #0056b3;
+}

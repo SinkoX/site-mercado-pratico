@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import "./CardProduto.css";
 import PlaceHolder from "../assets/images/categorias/placeholder.png";
 
@@ -15,6 +16,9 @@ interface CardProdutoProps {
 }
 
 const CardProduto: React.FC<CardProdutoProps> = ({ produto }) => {
+  const navigate = useNavigate();
+
+  // Escolhe a imagem correta
   const imagemFinal =
     produto.imgUrl && produto.imgUrl.trim() !== ""
       ? produto.imgUrl
@@ -24,6 +28,11 @@ const CardProduto: React.FC<CardProdutoProps> = ({ produto }) => {
       ? `data:image/png;base64,${produto.imagemProdutoBase64}`
       : PlaceHolder;
 
+  // Redireciona para a página de produto individual
+  const irParaProduto = () => {
+    navigate(`/produto/${produto.idProduto}`);
+  };
+
   return (
     <div className="card-produto">
       <img src={imagemFinal} alt={produto.nomeProduto} className="produto" />
@@ -32,7 +41,7 @@ const CardProduto: React.FC<CardProdutoProps> = ({ produto }) => {
         {produto.descricaoProduto && <p>{produto.descricaoProduto}</p>}
         <p>Preço: R$ {Number(produto.precoProduto).toFixed(2)}</p>
       </div>
-      <button>Adicionar</button>
+      <button onClick={irParaProduto}>Visualizar</button>
     </div>
   );
 };
