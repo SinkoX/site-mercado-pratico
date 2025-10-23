@@ -4,22 +4,23 @@
 }
 
 .footer {
-    display: flex;
-    flex-direction: column;
-    background-color: #54BD54;
-    color: #fff;
-    height: 520px;
-    width: 100%;
-    padding: 30px;
-    gap: 100px;
-    font-family: "Inter"; 
+  display: flex;
+  flex-direction: column;
+  background-color: #54BD54;
+  color: #fff;
+  width: 100%;
+  padding: 24px;
+  gap: 32px;
+  font-family: "Inter"; 
 }
 
 .infos {
-    display: flex;
-    justify-content: center;
-    gap: 80px;
-    width: 100%;
+  display: grid;
+  grid-template-columns: 1fr;
+  align-items: start;
+  gap: 24px;
+  max-width: 1280px;
+  margin: 0 auto;
 }
 
 .infos h1 {
@@ -27,20 +28,20 @@
 }
 
 .info1 {
-    width: 350px;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .info2, .info3 {
-    width: 250px;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;    
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;    
 }
 
-.info4 iframe {
+.info4 .imagem {
     background-color: #DFDFDF;
     width: 250px;
     height: 250px;
@@ -57,13 +58,29 @@
 }
 
 .direitos {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 24px;
+}
+.direitos hr {
+  width: 100%;
+  max-width: 1280px;
 }
 
-.direitos hr {
-    width: 1500px;
+/* Tablet */
+@media (min-width: 501px) and (max-width: 1023px) {
+  .infos {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* Desktop */
+@media (min-width: 1024px) {
+  .footer { padding: 32px; }
+  .infos {
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 48px;
+  }
 }

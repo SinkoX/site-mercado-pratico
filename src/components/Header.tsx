@@ -2,35 +2,37 @@ import React, { useState } from "react";
 import "./Header.css";
 import iconPerfil from "../assets/images/icones/iconPerfil.png";
 import iconPesquisa from "../assets/images/icones/iconPesquisa.png";
-import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../hooks/useAuth";
+import { Link } from "react-router-dom";
 
 interface HeaderProps {
-  onBuscarProduto?: (busca: string) => void; // agora opcional
+  onBuscarProduto?: (busca: string) => void;
+  onToggleSidebar?: () => void;
 }
 
-function Header({ onBuscarProduto }: HeaderProps) {
+function Header({ onBuscarProduto, onToggleSidebar }: HeaderProps) {
   const [busca, setBusca] = useState("");
-  const navigate = useNavigate();
-  const { user } = useAuth();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (onBuscarProduto) {
-      onBuscarProduto(busca); // usa a função passada
-    } else {
-      navigate(`/busca/${busca}`); // navegação padrão
-    }
+    if (onBuscarProduto) onBuscarProduto(busca);
   };
 
   return (
     <header className="header">
+      <button
+        className="header__burger"
+        aria-label="Abrir menu"
+        onClick={onToggleSidebar}
+        type="button"
+      >
+        <span className="header__burger-lines" />
+      </button>
       <div className="logo">
         <img src="/logo.png" className="logo" alt="logo" />
       </div>
 
       <form className="procura" onSubmit={handleSubmit}>
-        <img src={iconPesquisa} alt="icon pesquisa" id="icon-pesquisa" />
+        <img src={iconPesquisa} alt="icon perfil" id="icon-pesquisa" />
         <input
           type="text"
           placeholder="Buscar Produtos..."
@@ -40,20 +42,11 @@ function Header({ onBuscarProduto }: HeaderProps) {
         />
       </form>
 
-      {!user && (
-        <Link to="/login">
-          <div className="user">
-            <img src={iconPerfil} alt="icon perfil" id="icon-perfil" />
-          </div>
-        </Link>
-      )}
-      {user && (
-        <Link to="/perfil">
-          <div className="user">
-            <img src={iconPerfil} alt="icon perfil" id="icon-perfil" />
-          </div>
-        </Link>
-      )}
+      <Link to="/login" className="header__user-link">
+        <div className="user">
+          <img src={iconPerfil} alt="icon perfil" id="icon-perfil" />
+        </div>
+      </Link>
     </header>
   );
 }

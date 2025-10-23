@@ -9,6 +9,7 @@
   gap: 50px;
   padding: 15px;
   background-color: #54bd54;
+    overflow-x: auto;
 }
 
 .categoria-btn {
@@ -21,7 +22,7 @@
   cursor: pointer;
   transition: all 0.3s ease;
   border-radius: 4px;
-  width: 200px;
+  min-width: 160px;
   font-weight: 300;
   font-family: "KonkhmerSleokchher";
 }
@@ -29,4 +30,13 @@
 .categoria-btn:hover {
   color: #ff8c18;
   background-color: transparent;
+}
+
+@media (max-width: 500px) {
+  .categoria-menu {
+    gap: 16px;
+  }
+  .categoria-menu{
+    display: none;
+  }
 }
