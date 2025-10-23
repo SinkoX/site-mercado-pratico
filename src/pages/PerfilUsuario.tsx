@@ -1,47 +1,48 @@
-import React, { useState } from "react";
+import React from "react";
+import { useAuth } from "../hooks/useAuth";
+import { useNavigate } from "react-router-dom";
 import "./PerfilUsuario.css";
 
 function PerfilUsuario() {
-  const [userData] = useState({
-    nome: "Nome completo",
-    email: "email@email.com",
-    telefone: "(11)99999-9999",
-    cpf: "000.000.000-00",
-    cep: "00000-000"
-  });
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
 
   const handleLogout = () => {
-    console.log("Logout realizado");
-    alert("Logout realizado com sucesso!");
+    logout();
+    navigate("/login");
   };
 
+  if (!user) {
+    return <p>Carregando perfil...</p>;
+  }
+
   return (
-    <div className="profile-container">
-      <div className="profile-header">  
+    <div className="perfil-page">
+      <div className="profile-header">
         <div className="avatar">
-            <img src="C:\Users\DEV-2D\Pictures\Screenshots\Captura de tela 2025-09-30 132559.png" alt="" />
+          <img
+            src="C:\\Users\\DEV-2D\\Pictures\\Screenshots\\Captura de tela 2025-09-30 132559.png"
+            alt="Avatar"
+          />
         </div>
       </div>
+
       <div className="form">
         <div className="info-item">
-          <label className="info-label">Name</label>
-          <span className="info-box">{userData.nome}</span>
+          <label className="info-label">Nome</label>
+          <span className="info-box">{user.nomeUsuario}</span>
         </div>
         <div className="info-item">
           <label className="info-label">Email</label>
-          <span className="info-box">{userData.email}</span>
+          <span className="info-box">{user.emailUsuario}</span>
         </div>
         <div className="info-item">
           <label className="info-label">Telefone</label>
-          <span className="info-box">{userData.telefone}</span>
+          <span className="info-box">{user.telefoneUsuario}</span>
         </div>
         <div className="info-item">
           <label className="info-label">CPF</label>
-          <span className="info-box">{userData.cpf}</span>
-        </div>
-        <div className="info-item">
-          <label className="info-label">CEP</label>
-          <span className="info-box">{userData.cep}</span>
+          <span className="info-box">{user.cpfUsuario}</span>
         </div>
 
         <button className="logout-btn" onClick={handleLogout}>

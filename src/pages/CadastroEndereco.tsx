@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { api } from "../api"; // usa a mesma API do projeto
+import { useNavigate } from "react-router-dom";
 import "./CadastroEndereco.css";
 
 interface FormData {
@@ -7,6 +9,7 @@ interface FormData {
   rua: string;
   bairro: string;
   cidade: string;
+  idUsuario?: number; // adiciona esse campo opcional
 }
 
 function CadastroEndereco() {
@@ -17,6 +20,7 @@ function CadastroEndereco() {
     bairro: "",
     cidade: "",
   });
+  const navigate = useNavigate();
 
   // Atualiza os campos normais
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -26,20 +30,22 @@ function CadastroEndereco() {
 
   // CEP com máscara e busca automática
   const handleCepChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    let value = e.target.value.replace(/\D/g, ""); // só números
+    let value = e.target.value.replace(/\D/g, "");
 
-    // limita a 8 dígitos
     if (value.length > 8) value = value.slice(0, 8);
-
-    // aplica a máscara 00000-000
     const maskedCep = value.replace(/^(\d{5})(\d)/, "$1-$2");
-
     setFormData((prev) => ({ ...prev, cep: maskedCep }));
 
-    // quando o CEP estiver completo (8 dígitos), busca o endereço
     if (value.length === 8) {
       try {
-        const response = await fetch(`https://viacep.com.br/ws/${value}/json/`);
+        const response = await fetch(
+          `https://viacep.com.br/ws/${value}/json/`,
+          {
+            method: "GET",
+            headers: { "Content-Type": "application/json" },
+          }
+        );
+
         const data = await response.json();
 
         if (data.erro) {
@@ -60,10 +66,38 @@ function CadastroEndereco() {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Endereço cadastrado:", formData);
-    alert("Endereço cadastrado com sucesso!");
+    try {
+      const idUsuario = localStorage.getItem("usuarioId");
+
+      if (!idUsuario) {
+        alert("Usuário não identificado! Faça login novamente.");
+        return;
+      }
+
+      // Chama o endpoint correto com o id do usuário
+      const response = await api.post(
+        `/enderecos/usuario/${idUsuario}`,
+        formData
+      );
+
+      console.log("Endereço cadastrado:", response.data);
+      alert("Endereço cadastrado com sucesso!");
+
+      setFormData({
+        cep: "",
+        numero: "",
+        rua: "",
+        bairro: "",
+        cidade: "",
+      });
+
+      navigate("/");
+    } catch (error) {
+      console.error("Erro ao cadastrar endereço:", error);
+      alert("Erro ao cadastrar o endereço. Tente novamente.");
+    }
   };
 
   return (

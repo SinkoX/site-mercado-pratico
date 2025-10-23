@@ -3,6 +3,7 @@ import "./Header.css";
 import iconPerfil from "../assets/images/icones/iconPerfil.png";
 import iconPesquisa from "../assets/images/icones/iconPesquisa.png";
 import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../hooks/useAuth";
 
 interface HeaderProps {
   onBuscarProduto?: (busca: string) => void; // agora opcional
@@ -11,6 +12,7 @@ interface HeaderProps {
 function Header({ onBuscarProduto }: HeaderProps) {
   const [busca, setBusca] = useState("");
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -38,11 +40,20 @@ function Header({ onBuscarProduto }: HeaderProps) {
         />
       </form>
 
-      <Link to="/login">
-        <div className="user">
-          <img src={iconPerfil} alt="icon perfil" id="icon-perfil" />
-        </div>
-      </Link>
+      {!user && (
+        <Link to="/login">
+          <div className="user">
+            <img src={iconPerfil} alt="icon perfil" id="icon-perfil" />
+          </div>
+        </Link>
+      )}
+      {user && (
+        <Link to="/perfil">
+          <div className="user">
+            <img src={iconPerfil} alt="icon perfil" id="icon-perfil" />
+          </div>
+        </Link>
+      )}
     </header>
   );
 }

@@ -9,7 +9,6 @@ import CardSuperOferta from "../components/CardSuperOferta";
 import CardProduto from "../components/CardProduto";
 import Image from "../components/Image";
 import Footer from "../components/Footer";
-
 import superOferta1 from "../assets/images/superOfertas/superOferta1.png";
 import superOferta2 from "../assets/images/superOfertas/superOferta2.png";
 import superOferta3 from "../assets/images/superOfertas/superOferta3.png";

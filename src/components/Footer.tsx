@@ -27,7 +27,12 @@ const Footer = () => {
           <p>Rua do Mercado 123-Araçoiaba</p>
         </div>
         <div className="info4">
-          <img src="" alt="" className="imagem"/>
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3658.1247!2d-47.5846622!3d-23.470167!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94c5f38b5179f1ed%3A0x859ab2572caa8b17!2sMercado%20D&#39;%20Tereza!5e0!3m2!1spt-BR!2sbr!4v1697567396111!5m2!1spt-BR!2sbr"
+            allowFullScreen
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+          ></iframe>
         </div>
       </div>
       <div className="direitos">

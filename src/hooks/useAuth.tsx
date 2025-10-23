@@ -9,8 +9,10 @@ export interface TipoUsuario {
 export interface User {
   id: number;
   nomeUsuario: string;
-  email: string;
-  senha: string;
+  emailUsuario: string;
+  senhaUsuario: string;
+  telefoneUsuario: string;
+  cpfUsuario: string;
   tipoUsuario: TipoUsuario;
 }
 
