@@ -15,8 +15,6 @@ interface CardProdutoProps {
 }
 
 const CardProduto: React.FC<CardProdutoProps> = ({ produto }) => {
-  // escolhe a melhor imagem disponível
-  
   const imagemFinal =
     produto.imgUrl && produto.imgUrl.trim() !== ""
       ? produto.imgUrl

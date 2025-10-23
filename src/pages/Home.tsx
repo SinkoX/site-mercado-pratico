@@ -4,7 +4,6 @@ import { api } from "../api";
 import Header from "../components/Header";
 import MainImage from "../components/MainImage";
 import MenuCategoria from "../components/MenuCategoria";
-import ProdutosLista from "../pages/ProdutoLista";
 import CategoriasHome from "../components/CategoriasHome";
 import CardSuperOferta from "../components/CardSuperOferta";
 import CardProduto from "../components/CardProduto";
@@ -20,7 +19,6 @@ import bannerSecundario2 from "../assets/images/banner/bannerSecundario2.png";
 import "./Home.css";
 
 function Home() {
-  const [categoriaSelecionada, setCategoriaSelecionada] = useState<number | null>(null);
   const [produtos, setProdutos] = useState<any[]>([]);
   const navigate = useNavigate();
 
@@ -28,11 +26,6 @@ function Home() {
   const handleBusca = (termo: string) => {
     if (!termo.trim()) return;
     navigate(`/busca/${termo}`);
-  };
-
-  // Seleção de categoria em destaque: redireciona para /categoria/:id
-  const handleSelecionarCategoria = (id: number) => {
-    navigate(`/categoria/${id}`);
   };
 
   useEffect(() => {
@@ -45,30 +38,28 @@ function Home() {
   return (
     <div className="home-page">
       <Header onBuscarProduto={handleBusca} />
-      <MenuCategoria onSelecionarCategoria={handleSelecionarCategoria} />
+      <MenuCategoria />
 
       <main>
         <section id="section-main-img">
           <MainImage />
         </section>
 
-        {/* Tela inicial - sem categoria selecionada */}
-        {!categoriaSelecionada && (
-          <div>
-            <h1>Bem-vindo ao Mercado Prático 🛒</h1>
-            <p>
-              Aqui você encontra ofertas imperdíveis, produtos fresquinhos e
-              toda a praticidade para suas compras online.
-            </p>
-            <p>
-              Selecione uma categoria no menu acima, clique em uma das categorias em destaque
-              ou pesquise um produto para começar!
-            </p>
-          </div>
-        )}
+        {/* Tela inicial */}
+        <div>
+          <h1>Bem-vindo ao Mercado Prático 🛒</h1>
+          <p>
+            Aqui você encontra ofertas imperdíveis, produtos fresquinhos e
+            toda a praticidade para suas compras online.
+          </p>
+          <p>
+            Selecione uma categoria no menu acima ou pesquise um produto para
+            começar!
+          </p>
+        </div>
 
         <section id="section-categorias-home">
-          <CategoriasHome onSelecionarCategoria={handleSelecionarCategoria} />
+          <CategoriasHome />
         </section>
 
         <section id="section-super-ofertas">

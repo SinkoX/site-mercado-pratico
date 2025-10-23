@@ -57,8 +57,8 @@ const CategoriasHome = () => {
             <div
               key={categoria.id}
               className="categoria-card"
-              onClick={() => navigate(`/categoria/${categoria.nome}`)} // 🔹 aqui usamos o nome
               style={{ cursor: "pointer" }}
+              onClick={() => navigate(`/categoria/${categoria.nome}`)} // 🔹 Rota de categoria correta
             >
               <div className="img-card">
                 <img src={categoria.imagem} alt={categoria.nome} />

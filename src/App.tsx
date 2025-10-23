@@ -6,7 +6,7 @@ import CadastroProduto from "./pages/CadastroProdutos";
 import Login from "./pages/PaginaLogin";
 import Produto from "./pages/PaginaProduto";
 import Perfil from "./pages/PerfilUsuario";
-import Categoria from "./pages/PaginaCategoria"; 
+import PaginaCategoria from "./pages/PaginaCategoria"; // componente que já trata categoria e busca
 import "./App.css";
 
 function App() {
@@ -19,8 +19,12 @@ function App() {
       <Route path="/login" element={<Login />} />
       <Route path="/perfil" element={<Perfil />} />
       <Route path="/produto/:id" element={<Produto />} />
-      <Route path="/categoria/:id" element={<Categoria />} />
-      <Route path="/busca/:termo" element={<Categoria />} /> {/* nova rota de busca */}
+
+      {/* ✅ Rota única e correta para categorias */}
+      <Route path="/categoria/:nomeCategoria" element={<PaginaCategoria />} />
+
+      {/* ✅ Rota de busca usando o mesmo componente */}
+      <Route path="/busca/:termo" element={<PaginaCategoria />} />
     </Routes>
   );
 }

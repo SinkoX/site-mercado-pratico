@@ -1,11 +1,11 @@
-/* Categoria.module.css */
-
+/* Container principal */
 .container {
   display: flex;
   gap: 20px;
   padding: 20px;
   max-width: 1200px;
   margin: 0 auto;
+  flex-wrap: wrap; /* Permite que o conteúdo quebre em telas menores */
 }
 
 /* Filtros */
@@ -15,6 +15,7 @@
   padding: 15px;
   border-radius: 8px;
   box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  height: fit-content; /* Ajusta altura ao conteúdo */
 }
 
 .filtros h3 {
@@ -66,13 +67,14 @@
 }
 
 /* Produtos */
-.produtos {
+.produtos-lista {
   flex: 1;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); /* Cada produto tem largura mínima e flexível */
   gap: 20px;
 }
 
+/* Card Produto */
 .cardProduto {
   background-color: #fff;
   border-radius: 8px;
@@ -122,9 +124,25 @@
 }
 
 /* Mensagem de nenhum produto */
-.produtos p {
+.produtos-lista p {
   grid-column: 1/-1;
   text-align: center;
   font-size: 16px;
   color: #555;
+}
+
+/* Responsivo: em telas menores */
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column; /* Filtros em cima, produtos embaixo */
+  }
+
+  .filtros {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+
+  .produtos-lista {
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  }
 }
