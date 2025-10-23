@@ -40,7 +40,7 @@ function Home() {
   }, []);
 
   return (
-    <div className="home">
+    <div className="home-page">
       <Header onBuscarProduto={handleBusca} />
       <MenuCategoria onSelecionarCategoria={handleSelecionarCategoria} />
       <main>

@@ -1,4 +1,4 @@
-body {
+.cadastro-usuario-page {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -7,7 +7,7 @@ body {
   background-color: #fff7f7;
 }
 
-.form {
+.cadastro-usuario-page .form {
   background-color: #ffffff;
   border-radius: 20px;
   width: 550px;
@@ -20,55 +20,113 @@ body {
   height: auto;
 }
 
-.titulo {
+.cadastro-usuario-page .titulo {
   text-align: center;
   margin-bottom: 30px;
 }
 
-.campo {
-  margin-bottom: 15px;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-}
-
-label {
-  font-size: 15px;
+.cadastro-usuario-page label {
+  font-size: 12px;
   font-weight: bold;
   margin-bottom: 5px;
   text-align: left; 
 }
 
-input {
+.cadastro-usuario-page input {
   background-color: #fff7f7;
   border-radius: 10px;
-  height: 40px;
+  height: 30px;
   width: 100%;
   padding: 0 15px;
   border: 1px solid rgba(0, 0, 0, 0.326);
 }
 
-button {
+.cadastro-usuario-page button {
   display: block;
   margin: 30px auto 0;
   border-radius: 8px;
   border: none;
-  padding: 12px;
-  width: 70%;
+  padding: 8px;
+  width: 60%;
   background-color: #54bd54;
-  font-size: 12px;
+  font-size: 8px;
   cursor: pointer;
   color: white;
   font-weight: bold;
 }
 
-button:hover {
+.cadastro-usuario-page button:hover {
   background-color: #0cd954;
 }
 
-.subtitulo{
-    color: #887474;
+.cadastro-usuario-page .subtitulo{
+    color: #F75F13;
     font-family: Arial, Helvetica, sans-serif;
     font-size: 20px;
     margin-top: 10px;
+}
+
+.cadastro-usuario-page .campos {
+  display: flex;
+  flex-direction: column;
+  align-items: center ;
+  gap: 10px;
+}
+
+.cadastro-usuario-page .campo {
+  position: relative;
+  width: 90%;
+}
+
+.cadastro-usuario-page .campo input {
+  width: 100%;
+  padding-right: 40px;
+  height: 45px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding-left: 10px;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+.cadastro-usuario-page .icon-btn {
+  position: absolute;
+  right: 10px;
+  top: 73%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: #555;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.cadastro-usuario-page .icon-btn:hover {
+  color: #000;
+}
+
+
+.cadastro-usuario-page .conta {
+  text-align: center;
+  margin-top: 10px;
+  margin-bottom: 0;
+  font-size: 14px;
+  color: #666;
+  font-weight: normal;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+}
+
+.cadastro-usuario-page .logar {
+  color: #0080FF;
+  font-weight: bold;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.cadastro-usuario-page .logar:hover {
+  color: #1e02d0;
+  text-decoration: underline;
 }

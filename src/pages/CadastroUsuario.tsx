@@ -1,17 +1,30 @@
 import React, { useState } from "react";
-import "./CadastroUsuario.css"
+import { useNavigate } from "react-router-dom";
+import { api } from "../api";
+import { FaEye, FaEyeSlash } from "react-icons/fa"; 
+import "./CadastroUsuario.css";
 
-function CadastroProduto() {
-  const [formData, setFormData] = useState({
-    nome_Usuario: "",
-    email_Usuario: "",
-    telefone_Usuario: "",
-    cpf_Usuario: "",
-    senha_Usuario: "",
-    data_Nascimento_Usuario: "",
+interface FormData {
+  nomeUsuario: string;
+  emailUsuario: string;
+  senhaUsuario: string;
+  telefoneUsuario: string;
+  cpfUsuario: string;
+}
+
+const CadastroUsuario: React.FC = () => {
+  const [formData, setFormData] = useState<FormData>({
+    nomeUsuario: "",
+    emailUsuario: "",
+    senhaUsuario: "",
+    telefoneUsuario: "",
+    cpfUsuario: "",
   });
 
-  const handleChange = (e: { target: { name: any; value: any } }) => {
+  const [showSenha, setShowSenha] = useState(false);
+  const navigate = useNavigate();
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prevState) => ({
       ...prevState,
@@ -19,108 +32,168 @@ function CadastroProduto() {
     }));
   };
 
+  const handleCpfChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let value = e.target.value.replace(/\D/g, "");
+    if (value.length > 11) value = value.slice(0, 11);
+    value = value
+      .replace(/(\d{3})(\d)/, "$1.$2")
+      .replace(/(\d{3})(\d)/, "$1.$2")
+      .replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+    setFormData({ ...formData, cpfUsuario: value });
+  };
+
+  const handleTelChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let value = e.target.value.replace(/\D/g, "");
+    if (value.length > 11) value = value.slice(0, 11);
+    value = value
+      .replace(/^(\d{2})(\d)/, "($1) $2")
+      .replace(/(\d{5})(\d)/, "$1-$2");
+    setFormData({ ...formData, telefoneUsuario: value });
+  };
+
+  const toggleSenha = () => setShowSenha((prev) => !prev);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      const response = await api.post("/usuario/cadastro", formData);
+
+      alert("Cadastro realizado com sucesso!");
+      localStorage.setItem("usuarioId", response.data.idUsuario);
+
+      setFormData({
+        nomeUsuario: "",
+        emailUsuario: "",
+        senhaUsuario: "",
+        telefoneUsuario: "",
+        cpfUsuario: "",
+      });
+
+      navigate("/login");
+    } catch (error: any) {
+      console.error(error);
+      alert(
+        error.response?.data?.message ||
+          "Falha ao cadastrar usuário. Tente novamente."
+      );
+    }
+  };
+
   return (
-    <form className="form">
+    <div className="cadastro-usuario-page">
+    <form className="form" onSubmit={handleSubmit}>
       <div className="titulo">
         <h1>Seja Bem-Vindo!</h1>
         <div className="subtitulo">
-            <h5>Cadastre-se e aproveite as oportunidades imperdíveis</h5>
+          <h5>Cadastre-se e aproveite as oportunidades imperdíveis</h5>
         </div>
       </div>
-      <div className="campo">
-        <label htmlFor="nome_usuario">
-          <h2>Nome Completo</h2>{" "}
-        </label>
-        <input
-          type="text"
-          id="idNomeUsuario"
-          name="nome_Usuario"
-          value={formData.nome_Usuario}
-          onChange={handleChange}
-          required
-          placeholder="Digite seu Nome Completo"
-        />
-      </div>
 
-      <div className="campo">
-        <label htmlFor="email_Usuario">
-          <h2>Email</h2>{" "}
-        </label>
-        <input
-          type="text"
-          id="idEmailUsuario"
-          name="emailUsuario"
-          value={formData.email_Usuario}
-          onChange={handleChange}
-          required
-          placeholder="Digite seu email"
-        />
-      </div>
+      <div className="campos">
+        <div className="campo">
+          <label htmlFor="idNomeUsuario">
+            <h2>Nome Completo</h2>
+          </label>
+          <input
+            type="text"
+            id="idNomeUsuario"
+            name="nomeUsuario"
+            value={formData.nomeUsuario}
+            onChange={handleChange}
+            required
+            placeholder="Digite seu nome completo"
+          />
+        </div>
 
-     <div className="campo">
-        <label htmlFor="telefone_Usuario">
-          <h2>Telefone</h2>{" "}
-        </label>
-        <input
-          type="number"
-          id="idTelefoneUsuario"
-          name="telefoneUsuario"
-          value={formData.email_Usuario}
-          onChange={handleChange}
-          required
-          placeholder="(11)9999-9999"
-        />
-      </div>
+        <div className="campo">
+          <label htmlFor="idEmailUsuario">
+            <h2>Email</h2>
+          </label>
+          <input
+            type="email"
+            id="idEmailUsuario"
+            name="emailUsuario"
+            value={formData.emailUsuario}
+            onChange={handleChange}
+            required
+            placeholder="email@gmail.com"
+          />
+        </div>
 
-      <div className="campo">
-        <label htmlFor="cpf_Usuario">
-          <h2>Cpf</h2>{" "}
-        </label>
-        <input
-          type="number"
-          id="idCpfUsuario"
-          name="cpfUsuario"
-          value={formData.cpf_Usuario}
-          onChange={handleChange}
-          required
-          placeholder="Digite seu cpf"
-        />
-      </div>
+        <div className="campo senha-campo">
+          <label htmlFor="idSenhaUsuario">
+            <h2>Senha</h2>
+          </label>
+          <div className="senha-wrapper">
+            <input
+              type={showSenha ? "text" : "password"}
+              id="idSenhaUsuario"
+              name="senhaUsuario"
+              value={formData.senhaUsuario}
+              onChange={handleChange}
+              required
+              placeholder="Digite sua senha"
+            />
+    <span
+      className="icon-btn"
+      onClick={toggleSenha}
+      tabIndex={-1} // pra não atrapalhar a navegação
+    >
+      {showSenha ? <FaEye /> : <FaEyeSlash />}
+    </span>
+          </div>
+        </div>
 
-      <div className="campo">
-        <label htmlFor="senha">
-          <h2>Senha</h2>{" "}
-        </label>
-        <input
-          type="text"
-          id="idSenhausuario"
-          name="senha_Usuario"
-          value={formData.senha_Usuario}
-          onChange={handleChange}
-          required
-          placeholder="digite sua senha!"
-        />
-      </div>
+        <div className="campo">
+          <label htmlFor="idTelefoneUsuario">
+            <h2>Telefone</h2>
+          </label>
+          <input
+            type="tel"
+            id="idTelefoneUsuario"
+            name="telefoneUsuario"
+            value={formData.telefoneUsuario}
+            onChange={handleTelChange}
+            maxLength={15}
+            required
+            placeholder="(00) 00000-0000"
+          />
+        </div>
 
-      <div>
-        <label htmlFor="data_de_nascimento">
-          <h2>Data de nascimento</h2>{" "}
-        </label>
-        <input
-          type="date"
-          id="idData_de_Nascimento"
-          name="Data_de_Nascimento"
-          value={formData.data_Nascimento_Usuario}
-          onChange={handleChange}
-          required
-        />
+        <div className="campo">
+          <label htmlFor="idCpfUsuario">
+            <h2>CPF</h2>
+          </label>
+          <input
+            type="text"
+            id="idCpfUsuario"
+            name="cpfUsuario"
+            value={formData.cpfUsuario}
+            onChange={handleCpfChange}
+            maxLength={14}
+            required
+            placeholder="000.000.000-00"
+          />
+        </div>
       </div>
 
       <button className="button" type="submit">
-        <h1>Criar Conta</h1>
+        <h1>Cadastrar</h1>
       </button>
+              <div className="conta">
+          <p className="login-link">
+            Possui uma conta?{" "}
+            <span
+              onClick={() => navigate("/login")}
+              className="logar"
+            >
+              Login
+            </span>
+          </p>
+        </div>
     </form>
+    </div>
   );
-}
+};
 
-export default CadastroProduto;
+export default CadastroUsuario;

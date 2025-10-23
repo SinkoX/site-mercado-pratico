@@ -1,9 +1,20 @@
+@font-face {
+  font-family: "Inter";
+  src: url("../assets/fonts/Inter/static/Inter_18pt-Regular.ttf");
+}
+
+@font-face {
+  font-family: "KonkhmerSleokchher";
+  src: url("../assets/fonts/KonkhmerSleokchher-Regular.ttf");
+}
+
 .categorias-home {
   width: 100%;
   text-align: center;
   display: flex;
   flex-direction: column;
   gap: 30px;
+  font-family: "KonkhmerSleokchher";
 }
 
 .categorias-home h2 {
@@ -20,6 +31,8 @@
 .categorias-container {
   display: flex;
   gap: 100px;
+  font-family: "Inter";
+  font-size: 15px;
 }
 
 .categoria-card {
@@ -38,10 +51,9 @@
   width: 60px;
   height: 60px;
   border-radius: 50%;
-  font-size: 40px;
+  font-size: 45px;
   display: flex;
   justify-content: center;
-  align-items: center;
   margin: 0;
 }
 

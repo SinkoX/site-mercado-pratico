@@ -1,9 +1,14 @@
-.categoria-menu{
-    display: flex;
-    justify-content: center;
-    gap: 50px;
-    padding: 15px;
-    background-color: #54BD54;
+@font-face {
+  font-family: "KonkhmerSleokchher";
+  src: url("../assets/fonts/KonkhmerSleokchher-Regular.ttf");
+}
+
+.categoria-menu {
+  display: flex;
+  justify-content: center;
+  gap: 50px;
+  padding: 15px;
+  background-color: #54bd54;
 }
 
 .categoria-btn {
@@ -18,9 +23,10 @@
   border-radius: 4px;
   width: 200px;
   font-weight: 300;
+  font-family: "KonkhmerSleokchher";
 }
 
-.categoria-btn:hover{
-    color: #ff8c18;
-    background-color: transparent;
+.categoria-btn:hover {
+  color: #ff8c18;
+  background-color: transparent;
 }

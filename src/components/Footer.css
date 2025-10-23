@@ -1,3 +1,8 @@
+@font-face {
+  font-family: "Inter";
+  src: url("../assets/fonts/Inter/static/Inter_18pt-Regular.ttf");
+}
+
 .footer {
     display: flex;
     flex-direction: column;
@@ -7,6 +12,7 @@
     width: 100%;
     padding: 30px;
     gap: 100px;
+    font-family: "Inter"; 
 }
 
 .infos {
@@ -14,6 +20,10 @@
     justify-content: center;
     gap: 80px;
     width: 100%;
+}
+
+.infos h1 {
+    font-size: 30px;
 }
 
 .info1 {

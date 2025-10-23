@@ -1,4 +1,4 @@
-body {
+.cadastro-endereco-page {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -7,7 +7,7 @@ body {
   background-color: #fff7f7;
 }
 
-.form {
+.cadastro-endereco-page .form {
   background-color: #ffffff;
   border-radius: 20px;
   width: 550px;
@@ -20,26 +20,30 @@ body {
   height: auto;
 }
 
-.titulo {
+.cadastro-endereco-page .titulo {
   text-align: center;
   margin-bottom: 30px;
 }
 
-.campo {
-  margin-bottom: 15px;
-  width: 100%;
-  display: flex;
+.cadastro-endereco-page .campos {
+    display: flex;
   flex-direction: column;
+  align-items: center ;
 }
 
-label {
-  font-size: 15px;
+.cadastro-endereco-page .campo {
+  margin-bottom: 15px;
+  width: 90%;
+}
+
+.cadastro-endereco-page label {
+  font-size: 12px;
   font-weight: bold;
   margin-bottom: 5px;
   text-align: left; 
 }
 
-input {
+.cadastro-endereco-page input {
   background-color: #fff7f7;
   border-radius: 10px;
   height: 40px;
@@ -48,26 +52,26 @@ input {
   border: 1px solid rgba(0, 0, 0, 0.326);
 }
 
-button {
+.cadastro-endereco-page button {
   display: block;
   margin: 30px auto 0;
   border-radius: 8px;
   border: none;
-  padding: 12px;
-  width: 70%;
+  padding: 8px;
+  width: 60%;
   background-color: #54bd54;
-  font-size: 12px;
+  font-size: 8px;
   cursor: pointer;
   color: white;
   font-weight: bold;
 }
 
-button:hover {
+.cadastro-endereco-page button:hover {
   background-color: #0cd954;
 }
 
-.subtitulo{
-    color: #887474;
+.cadastro-endereco-page .subtitulo{
+    color: #F75F13;
     font-family: Arial, Helvetica, sans-serif;
     font-size: 20px;
     margin-top: 10px;

@@ -1,4 +1,4 @@
-body {
+.cadastro-produto-page {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -7,7 +7,7 @@ body {
   background-color: #fff7f7;
 }
 
-.form {
+.cadastro-produto-page .form {
   background-color: #ffffff;
   border-radius: 20px;
   width: 550px;
@@ -21,33 +21,26 @@ body {
   height: auto;
 }
 
-.titulo {
+.cadastro-produto-page .titulo {
   text-align: center;
   justify-content: center;
   align-items: center;
   margin-bottom: 40px;
 }
 
-.campo {
+.cadastro-produto-page .campo {
   margin-bottom: 9px;
   width: 480px;
 }
 
-label {
+.cadastro-produto-page label {
   font-size: 13px;
   display: block;
   margin-bottom: 3px;
   font-weight: bold;
 }
 
-label {
-  font-size: 13px;
-  display: block;
-  margin-bottom: 3px;
-  font-weight: bold;
-}
-
-input {
+.cadastro-produto-page input {
   background-color: #fff7f7;
   border-radius: 10px;
   height: 40px;
@@ -57,7 +50,7 @@ input {
   border: 1px solid rgba(0, 0, 0, 0.326);
 }
 
-button {
+.cadastro-produto-page button {
   display: block;
   margin: 30px auto 0;
   border-radius: 8px;
@@ -70,7 +63,7 @@ button {
   color: white;
 }
 
-.select-box {
+.cadastro-produto-page .select-box {
   width: 100%;
   padding: 10px;
   border-radius: 8px;
@@ -81,10 +74,10 @@ button {
   color: rgb(119, 103, 103);
 }
 
-button:hover {
+.cadastro-produto-page button:hover {
   background-color: #0cd954;
 }
 
-h2 {
+.cadastro-produto-page h2 {
   font-size: 18px;
 }

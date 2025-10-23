@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import './Header.css';
+import "./Header.css";
 import iconPerfil from "../assets/images/icones/iconPerfil.png";
 import iconPesquisa from "../assets/images/icones/iconPesquisa.png";
 import { Link } from "react-router-dom";
@@ -9,7 +9,7 @@ interface HeaderProps {
 }
 
 function Header({ onBuscarProduto }: HeaderProps) {
-  const [busca, setBusca] = useState('');
+  const [busca, setBusca] = useState("");
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -23,7 +23,7 @@ function Header({ onBuscarProduto }: HeaderProps) {
       </div>
 
       <form className="procura" onSubmit={handleSubmit}>
-        <img src={iconPesquisa} alt="icon perfil" id="icon-pesquisa"/>
+        <img src={iconPesquisa} alt="icon perfil" id="icon-pesquisa" />
         <input
           type="text"
           placeholder="Buscar Produtos..."
@@ -33,11 +33,11 @@ function Header({ onBuscarProduto }: HeaderProps) {
         />
       </form>
 
-      <div className="user">
-        <Link to="/perfil">
-          <img src={iconPerfil} alt="icon perfil" id="icon-perfil"/>
-        </Link>
-      </div>
+      <Link to="/login">
+        <div className="user">
+          <img src={iconPerfil} alt="icon perfil" id="icon-perfil" />
+        </div>
+      </Link>
     </header>
   );
 }

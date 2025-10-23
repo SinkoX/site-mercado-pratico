@@ -1,10 +1,10 @@
-.slide{
-    width: 70%;
-    height: 800px;
+.slide {
+    width: 80%;
+    height: 500px;
     background-color: #DFDFDF;
 }
 
-.tela-inteira{
+.tela-inteira {
     width: 80%;
     height: auto;
     display: block;

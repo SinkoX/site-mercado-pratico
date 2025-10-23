@@ -9,17 +9,22 @@ interface CardProdutoProps {
     precoProduto: number;
     descricaoProduto?: string;
     imgUrl?: string;
+    img_url?: string;
     imagemProdutoBase64?: string;
   };
 }
 
 const CardProduto: React.FC<CardProdutoProps> = ({ produto }) => {
+  // escolhe a melhor imagem disponível
+  
   const imagemFinal =
     produto.imgUrl && produto.imgUrl.trim() !== ""
       ? produto.imgUrl
+      : produto.img_url && produto.img_url.trim() !== ""
+      ? produto.img_url
       : produto.imagemProdutoBase64
       ? `data:image/png;base64,${produto.imagemProdutoBase64}`
-      : PlaceHolder; // imagem padrão
+      : PlaceHolder;
 
   return (
     <div className="card-produto">
