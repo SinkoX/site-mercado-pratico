@@ -5,19 +5,29 @@ import iconPesquisa from "../assets/images/icones/iconPesquisa.png";
 import { Link } from "react-router-dom";
 
 interface HeaderProps {
-  onBuscarProduto: (busca: string) => void;
+  onBuscarProduto?: (busca: string) => void;
+  onToggleSidebar?: () => void;
 }
 
-function Header({ onBuscarProduto }: HeaderProps) {
+function Header({ onBuscarProduto, onToggleSidebar }: HeaderProps) {
   const [busca, setBusca] = useState("");
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onBuscarProduto(busca);
+    if (onBuscarProduto) onBuscarProduto(busca);
   };
 
   return (
     <header className="header">
+      <button
+        className="header__burger"
+        aria-label="Abrir menu"
+        onClick={onToggleSidebar}
+        type="button"
+      >
+        <span className="header__burger-lines" />
+      </button>
+
       <div className="logo">
         <img src="/logo.png" className="logo" alt="logo" />
       </div>
@@ -33,7 +43,7 @@ function Header({ onBuscarProduto }: HeaderProps) {
         />
       </form>
 
-      <Link to="/login">
+      <Link to="/login" className="header__user-link">
         <div className="user">
           <img src={iconPerfil} alt="icon perfil" id="icon-perfil" />
         </div>

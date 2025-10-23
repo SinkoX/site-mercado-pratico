@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { api } from "../api";
-import Header from "../components/Header";
+import Layout from "../components/Layout";
 import MainImage from "../components/MainImage";
 import MenuCategoria from "../components/MenuCategoria";
 import ProdutosLista from "../pages/ProdutoLista";
@@ -40,9 +40,9 @@ function Home() {
   }, []);
 
   return (
-    <div className="home-page">
-      <Header onBuscarProduto={handleBusca} />
-      <MenuCategoria onSelecionarCategoria={handleSelecionarCategoria} />
+    <Layout onBuscarProduto={handleBusca} onSelecionarCategoria={handleSelecionarCategoria}>
+      <div className="home-page">
+      
       <main>
         <section id="section-main-img">
           <MainImage />
@@ -102,10 +102,8 @@ function Home() {
         </section>
       </main>
 
-      <footer>
-        <Footer />
-      </footer>
-    </div>
+      </div>
+    </Layout>
   );
 }
 

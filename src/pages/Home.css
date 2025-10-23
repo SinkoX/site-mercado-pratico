@@ -9,8 +9,7 @@
 }
 
 .home-page {
-  height: 100vh;
-  width: 100vw;
+  width: 100%;
 }
 
 .home-page main {
@@ -52,16 +51,14 @@
 .home-page .produtos {
   width: 100%;
   display: grid;
-  grid-template-columns: repeat(4, 325px);
-  gap: 40px;
+  grid-template-columns: repeat(4, minmax(220px, 1fr));
+  gap: 24px;
   justify-content: center;
   justify-items: center;
-  align-items: center;
+  align-items: start;
 }
 
-.home-page hr {
-  width: 1400px;
-}
+.home-page hr { width: min(100%, 1200px); }
 
 .home-page #section-banner-propaganda {
   display: flex;
@@ -70,4 +67,30 @@
 
 .home-page footer {
   margin-top: 100px;
+}
+
+/* ====== Breakpoints ====== */
+/* Desktop (>=1024px): allow more columns if space permits */
+@media (min-width: 1280px) {
+  .home-page .produtos {
+    grid-template-columns: repeat(5, minmax(220px, 1fr));
+  }
+}
+
+/* Tablet (501px–1023px): two columns */
+@media (min-width: 501px) and (max-width: 1023px) {
+  .home-page .produtos {
+    grid-template-columns: repeat(2, minmax(200px, 1fr));
+    gap: 20px;
+  }
+}
+
+/* Mobile (<=500px): one column and tighter spacing */
+@media (max-width: 500px) {
+  .home-page main { gap: 48px; }
+  .home-page #section-main-img { height: auto; }
+  .home-page .produtos {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
 }

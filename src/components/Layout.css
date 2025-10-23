@@ -1,0 +1,65 @@
+/* Root layout grid ensures no horizontal scroll and fluid columns */
+:root {
+  --sidebar-width-desktop: 260px;
+  --sidebar-width-tablet: 80px; /* collapsed */
+  --header-height: 72px;
+  --footer-gap: 32px;
+}
+
+.layout {
+  display: grid;
+  grid-template-areas:
+    "header header"
+    "sidebar content"
+    "footer footer";
+  grid-template-columns: var(--sidebar-width-desktop) 1fr;
+  grid-template-rows: var(--header-height) 1fr auto;
+  min-height: 100dvh;
+  width: 100%;
+  overflow-x: hidden;
+}
+
+.layout__header { grid-area: header; }
+.layout__sidebar { grid-area: sidebar; }
+.layout__content { 
+  grid-area: content; 
+  padding: 16px;
+  max-width: 100%;
+}
+.layout__footer { grid-area: footer; }
+
+/* Sidebar overlay when open on mobile */
+.layout--sidebar-open .sidebar.sidebar--overlay {
+  transform: translateX(0);
+}
+
+/* ====== Breakpoints ====== */
+/* Desktop: >= 1024px: full sidebar visible */
+@media (min-width: 1024px) {
+  .layout {
+    grid-template-columns: var(--sidebar-width-desktop) 1fr;
+  }
+}
+
+/* Tablet: 501px to 1023px: collapsed sidebar */
+@media (min-width: 501px) and (max-width: 1023px) {
+  .layout {
+    grid-template-columns: var(--sidebar-width-tablet) 1fr;
+  }
+}
+
+/* Mobile: <= 500px: sidebar overlays and base grid has no reserved column */
+@media (max-width: 500px) {
+  .layout {
+    grid-template-areas:
+      "header"
+      "content"
+      "footer";
+    grid-template-columns: 1fr;
+    grid-template-rows: var(--header-height) 1fr auto;
+  }
+
+  .layout__content {
+    padding: 12px;
+  }
+}

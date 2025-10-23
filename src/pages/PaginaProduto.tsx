@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom"; //importa o hook aqui
 import "./PaginaProduto.css";
-import Header from "../components/Header";
-import MenuCategoria from "../components/MenuCategoria";
+import Layout from "../components/Layout";
 import CardProduto from "../components/CardProduto";
-import Footer from "../components/Footer";
 import axios from "axios";
 
 const PaginaProduto = () => {
@@ -25,16 +23,13 @@ const PaginaProduto = () => {
   if (!produto) return <p>Carregando produto...</p>;
 
   return (
-    <div>
-      <Header />
-      <MenuCategoria />
-
+    <Layout>
       <div className="pagina-produto">
         <div className="imagem-container">
           <img
             src={`data:imagem/png;base64,${produto.imagemProdutoBase64}`}
             alt="Produto"
-            style={styles.imagemProdutoBase64}
+            className="product-image"
           />
         </div>
 
@@ -55,8 +50,7 @@ const PaginaProduto = () => {
       </div>
 
       <CardProduto />
-      <Footer />
-    </div>
+    </Layout>
   );
 };
 
