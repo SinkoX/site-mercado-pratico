@@ -1,13 +1,13 @@
 // MenuCategoria.tsx
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './MenuCategoria.css';
 
-interface MenuCategoriaProps {
-    onSelecionarCategoria?: (categoria: string) => void;
-}
+interface MenuCategoriaProps {}
 
-const MenuCategoria: React.FC<MenuCategoriaProps> = ({ onSelecionarCategoria }) => {
+const MenuCategoria: React.FC<MenuCategoriaProps> = () => {
     const [categoriaAtiva, setCategoriaAtiva] = useState('Super Ofertas');
+    const navigate = useNavigate();
 
     const categorias = [
         'Super Ofertas',
@@ -18,9 +18,10 @@ const MenuCategoria: React.FC<MenuCategoriaProps> = ({ onSelecionarCategoria }) 
 
     const handleClick = (categoria: string) => {
         setCategoriaAtiva(categoria);
-        if (onSelecionarCategoria) {
-            onSelecionarCategoria(categoria); // avisa o App da nova categoria
-        }
+
+        // Redireciona para a rota da categoria
+        // Caso queira manter nomes com espaços, use encodeURIComponent
+        navigate(`/categoria/${encodeURIComponent(categoria)}`);
     };
 
     return (
