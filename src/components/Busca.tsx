@@ -14,18 +14,19 @@ interface Produto {
 }
 
 function Busca() {
-  const { termo } = useParams(); // Exemplo: "Bebidas"
+  const { termo } = useParams<{ termo?: string }>(); // Ex: "Arroz"
   const [produtos, setProdutos] = useState<Produto[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (!termo) return;
+
     const fetchProdutos = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8080/categorias/${termo}/produtos`
+          `http://localhost:8080/produtos/busca?nome=${encodeURIComponent(termo)}`
         );
-        setProdutos(response.data);
+        setProdutos(Array.isArray(response.data) ? response.data : []);
       } catch (error) {
         console.error("Erro ao buscar produtos:", error);
       } finally {
@@ -45,7 +46,7 @@ function Busca() {
         {loading ? (
           <p>Carregando produtos...</p>
         ) : produtos.length === 0 ? (
-          <p>Nenhum produto encontrado para esta categoria.</p>
+          <p>Nenhum produto encontrado para este termo.</p>
         ) : (
           <div className="grid-produtos">
             {produtos.map((produto) => (

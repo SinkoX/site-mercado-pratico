@@ -1,77 +1,61 @@
 import { useState, useEffect } from "react";
 import { api } from "../api";
+import { useAuth } from "../hooks/useAuth";
+
 import Header from "../components/Header";
 import MainImage from "../components/MainImage";
 import MenuCategoria from "../components/MenuCategoria";
-import ProdutosLista from "../pages/ProdutoLista";
 import CategoriasHome from "../components/CategoriasHome";
 import CardSuperOferta from "../components/CardSuperOferta";
 import CardProduto from "../components/CardProduto";
 import Image from "../components/Image";
 import Footer from "../components/Footer";
+
 import superOferta1 from "../assets/images/superOfertas/superOferta1.png";
 import superOferta2 from "../assets/images/superOfertas/superOferta2.png";
 import superOferta3 from "../assets/images/superOfertas/superOferta3.png";
 import bannerSecundario1 from "../assets/images/banner/bannerSecundario1.png";
 import bannerSecundario2 from "../assets/images/banner/bannerSecundario2.png";
+
 import "./Home.css";
 
 function Home() {
-  const [categoriaSelecionada, setCategoriaSelecionada] = useState<string | undefined>();
-  const [buscaProduto, setBuscaProduto] = useState<string | undefined>();
+  const { user } = useAuth();
   const [produtos, setProdutos] = useState<any[]>([]);
-
-  // Quando usuário usa a barra de busca
-  const handleBusca = (termo: string) => {
-    if (!termo.trim()) return;
-    setCategoriaSelecionada(undefined); // limpa categoria se estiver buscando por nome
-    setBuscaProduto(termo);
-  };
-
-  // Quando usuário seleciona uma categoria
-  const handleSelecionarCategoria = (categoria: string) => {
-    setBuscaProduto(undefined); // limpa busca se estiver clicando em categoria
-    setCategoriaSelecionada(categoria);
-  };
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Carrega todos os produtos para exibição na Home
-    api
-      .get("/produtos")
-      .then((res) => setProdutos(res.data))
-      .catch((err) => console.error(err));
+    const fetchProdutos = async () => {
+      setLoading(true);
+      try {
+        // Endpoint correto para buscar todos os produtos
+        const response = await api.get("/produtos"); 
+        // Garante que é um array
+        setProdutos(Array.isArray(response.data) ? response.data : []);
+      } catch (error) {
+        console.error("Erro ao carregar produtos:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProdutos();
   }, []);
 
   return (
     <div className="home-page">
-      <Header onBuscarProduto={handleBusca} />
-      <MenuCategoria onSelecionarCategoria={handleSelecionarCategoria} />
-
+      <Header />
+      <MenuCategoria />
       <main>
         <section id="section-main-img">
           <MainImage />
         </section>
 
-        {/* Tela inicial - sem categoria nem busca */}
-        {!categoriaSelecionada && !buscaProduto ? (
-          <div>
-            <h1>Bem-vindo ao Mercado Prático 🛒</h1>
-            <p>
-              Aqui você encontra ofertas imperdíveis, produtos fresquinhos e
-              toda a praticidade para suas compras online.
-            </p>
-            <p>
-              Selecione uma categoria no menu acima ou pesquise um produto para
-              começar!
-            </p>
-          </div>
-        ) : (
-          // Exibe lista de produtos com base em categoria ou busca
-          <ProdutosLista
-            categoria={categoriaSelecionada}
-            nomeBusca={buscaProduto}
-          />
-        )}
+        <div>
+          <h1>Bem-vindo ao Mercado Prático 🛒</h1>
+          {user && <p>Olá, {user.nomeUsuario}! Confira suas ofertas personalizadas abaixo.</p>}
+          <p>Aqui você encontra ofertas imperdíveis, produtos fresquinhos e toda a praticidade para suas compras online.</p>
+        </div>
 
         <section id="section-categorias-home">
           <CategoriasHome />
@@ -88,27 +72,38 @@ function Home() {
             <h1>Produtos em Destaque</h1>
             <hr />
           </div>
-          <div className="produtos">
-            {produtos.slice(0, 8).map((produto) => (
-              <CardProduto key={produto.idProduto} produto={produto} />
-            ))}
-          </div>
+
+          {loading ? (
+            <p>Carregando produtos...</p>
+          ) : produtos.length === 0 ? (
+            <p>Nenhum produto encontrado.</p>
+          ) : (
+            <div className="produtos">
+              {produtos.slice(0, 16).map((produto) => (
+                <CardProduto
+                  key={produto.idProduto}
+                  produto={{
+                    ...produto,
+                    imgUrl:
+                      produto.imgUrl && produto.imgUrl.trim() !== ""
+                        ? produto.imgUrl
+                        : produto.imagemProdutoBase64
+                        ? `data:image/png;base64,${produto.imagemProdutoBase64}`
+                        : "/placeholder.png",
+                  }}
+                />
+              ))}
+            </div>
+          )}
+
           <Image src={bannerSecundario1} alt="banner" />
-          <div className="produtos">
-            {produtos.slice(8, 16).map((produto) => (
-              <CardProduto key={produto.idProduto} produto={produto} />
-            ))}
-          </div>
         </section>
 
         <section id="section-banner-propaganda">
           <Image src={bannerSecundario2} alt="banner" />
         </section>
       </main>
-
-      <footer>
-        <Footer />
-      </footer>
+      <Footer />
     </div>
   );
 }

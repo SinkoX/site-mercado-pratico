@@ -1,38 +1,74 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./Header.css";
 import iconPerfil from "../assets/images/icones/iconPerfil.png";
 import iconPesquisa from "../assets/images/icones/iconPesquisa.png";
-import { Link } from "react-router-dom";
+import { FaShoppingCart } from "react-icons/fa"; 
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../hooks/useAuth";
+import { api } from "../api";
 
-interface HeaderProps {
-  onBuscarProduto?: (busca: string) => void;
-  onToggleSidebar?: () => void;
+interface HeaderProps {}
+
+interface ItemCarrinhoDTO {
+  idItemCarrinho: number;
+  nomeProduto: string;
+  quantidade: number;
+  subTotal: number;
 }
 
-function Header({ onBuscarProduto, onToggleSidebar }: HeaderProps) {
+interface CarrinhoDTO {
+  idCarrinho: number;
+  quantidadeTotal: number;
+  valorTotal: number;
+  itens: ItemCarrinhoDTO[];
+}
+
+const categoriasDisponiveis = [
+  "Hortifruti", "Bebidas", "Mercearia", "Limpeza",
+  "Açougue", "Higiene", "Padaria", "Pet Shop"
+];
+
+function Header({}: HeaderProps) {
   const [busca, setBusca] = useState("");
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  const [carrinho, setCarrinho] = useState<CarrinhoDTO | null>(null);
+  const [mostrarDropdown, setMostrarDropdown] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (onBuscarProduto) onBuscarProduto(busca);
+    if (!busca.trim()) return;
+
+    // Se for categoria, navega para categoria
+    if (categoriasDisponiveis.includes(busca)) {
+      navigate(`/categoria/${busca}`);
+    } else {
+      // Para outros termos, vai para página de busca
+      navigate(`/busca/${busca}`);
+    }
+
+    setBusca(""); // limpa input
+  };
+
+  useEffect(() => {
+    if (!user?.id) return;
+    api.get(`/carrinho/${user.id}`)
+      .then(res => setCarrinho(res.data))
+      .catch(err => console.error(err));
+  }, [user]);
+
+  const irParaCarrinho = () => {
+    navigate("/carrinho");
   };
 
   return (
     <header className="header">
-      <button
-        className="header__burger"
-        aria-label="Abrir menu"
-        onClick={onToggleSidebar}
-        type="button"
-      >
-        <span className="header__burger-lines" />
-      </button>
       <div className="logo">
         <img src="/logo.png" className="logo" alt="logo" />
       </div>
 
       <form className="procura" onSubmit={handleSubmit}>
-        <img src={iconPesquisa} alt="icon perfil" id="icon-pesquisa" />
+        <img src={iconPesquisa} alt="icon pesquisa" id="icon-pesquisa" />
         <input
           type="text"
           placeholder="Buscar Produtos..."
@@ -42,11 +78,36 @@ function Header({ onBuscarProduto, onToggleSidebar }: HeaderProps) {
         />
       </form>
 
-      <Link to="/login" className="header__user-link">
-        <div className="user">
-          <img src={iconPerfil} alt="icon perfil" id="icon-perfil" />
-        </div>
-      </Link>
+      <div className="user-icons">
+        {user && (
+          <div
+            className="carrinho-icon"
+            onMouseEnter={() => setMostrarDropdown(true)}
+            onMouseLeave={() => setMostrarDropdown(false)}
+            onClick={irParaCarrinho}
+          >
+            <FaShoppingCart size={24} />
+            {carrinho && carrinho.quantidadeTotal > 0 && (
+              <span className="contador">{carrinho.quantidadeTotal}</span>
+            )}
+            {mostrarDropdown && carrinho && carrinho.itens.length > 0 && (
+              <div className="dropdown-carrinho">
+                {carrinho.itens.map(item => (
+                  <div key={item.idItemCarrinho} className="item-dropdown">
+                    <span>{item.nomeProduto}</span>
+                    <span>Qtd: {item.quantidade}</span>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+        <Link to={user ? "/perfil" : "/login"}>
+          <div className="user">
+            <img src={iconPerfil} alt="icon perfil" id="icon-perfil" />
+          </div>
+        </Link>
+      </div>
     </header>
   );
 }
