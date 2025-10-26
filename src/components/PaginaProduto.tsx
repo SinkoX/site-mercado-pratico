@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { api } from "../api";
 import { useAuth } from "../hooks/useAuth";
@@ -26,7 +26,10 @@ const PaginaProduto = () => {
     if (!id) return;
 
     api.get(`/produtos/${id}`)
-      .then(res => setProduto(res.data))
+      .then(res => {
+        const data = res.data;
+        setProduto({ ...data, precoProduto: Number(data.precoProduto) });
+      })
       .catch(err => console.error("Erro ao buscar produto:", err));
   }, [id]);
 
@@ -34,24 +37,25 @@ const PaginaProduto = () => {
   const diminuir = () => setQuantidade(q => (q > 1 ? q - 1 : 1));
 
   const adicionarAoCarrinho = async () => {
-    console.log("🟢 Tentando adicionar ao carrinho");
-    console.log("🔹 Usuário logado:", user);
-    console.log("🔹 Produto selecionado:", produto);
-
-    if (!user || !produto) {
+    if (!user) {
       alert("Você precisa estar logado para adicionar produtos ao carrinho.");
       return;
     }
+    if (!produto) return;
 
     try {
-      console.log(`📤 Enviando requisição para /carrinho/${user.id}/adicionar`);
-      await api.post(`/carrinho/${user.id}/adicionar`, {
-        idProduto: produto.idProduto,
-        quantidade,
-      });
-      alert("Produto adicionado ao carrinho!");
+      console.log("Usuário logado:", user);
+      console.log("Produto selecionado:", produto);
+
+      await api.post(
+        `/carrinho/${user?.idUsuario}/adicionar/${produto.idProduto}`,
+        {}, // corpo vazio
+        { params: { quantidade } } // quantidade como query param
+      );
+
+      alert(`Produto adicionado ao carrinho! Quantidade: ${quantidade}`);
     } catch (err) {
-      console.error("❌ Erro ao adicionar produto ao carrinho:", err);
+      console.error("Erro ao adicionar produto ao carrinho:", err);
       alert("Erro ao adicionar produto ao carrinho.");
     }
   };
@@ -68,7 +72,7 @@ const PaginaProduto = () => {
 
   return (
     <div>
-      <Header onBuscarProduto={() => {}} />
+      <Header />
       <MenuCategoria />
 
       <div className="pagina-produto">

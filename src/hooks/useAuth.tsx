@@ -7,7 +7,7 @@ export interface TipoUsuario {
 }
 
 export interface User {
-  id: number;
+  idUsuario: number; // campo igual ao backend
   nomeUsuario: string;
   emailUsuario: string;
   senhaUsuario: string;

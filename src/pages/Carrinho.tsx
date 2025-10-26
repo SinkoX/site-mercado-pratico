@@ -33,7 +33,7 @@ function Carrinho() {
     if (!user) return;
     setLoading(true);
     try {
-      const res = await api.get(`/carrinho/${user.id}`);
+      const res = await api.get(`/carrinho/${user.idUsuario}`);
       setCarrinho(res.data);
     } catch (err) {
       console.error(err);
@@ -50,7 +50,9 @@ function Carrinho() {
   const handleAtualizarQuantidade = async (idItem: number, quantidade: number) => {
     if (!user || quantidade < 1) return;
     try {
-      await api.put(`/itens-carrinho/${user.id}/atualizar/${idItem}?quantidade=${quantidade}`);
+      await api.put(
+        `/itens-carrinho/${user.idUsuario}/atualizar/${idItem}?quantidade=${quantidade}`
+      );
       fetchCarrinho();
     } catch (err) {
       console.error(err);
@@ -61,7 +63,7 @@ function Carrinho() {
   const handleRemoverItem = async (idProduto: number) => {
     if (!user) return;
     try {
-      await api.delete(`/carrinho/${user.id}/remover/${idProduto}`);
+      await api.delete(`/carrinho/${user.idUsuario}/remover/${idProduto}`);
       fetchCarrinho();
     } catch (err) {
       console.error(err);
@@ -72,7 +74,7 @@ function Carrinho() {
   const handleLimparCarrinho = async () => {
     if (!user) return;
     try {
-      await api.delete(`/carrinho/${user.id}/limpar`);
+      await api.delete(`/carrinho/${user.idUsuario}/limpar`);
       fetchCarrinho();
     } catch (err) {
       console.error(err);
@@ -87,7 +89,6 @@ function Carrinho() {
     return <p>Carregando carrinho...</p>;
   }
 
-  // Mensagem quando o carrinho está vazio
   if (!carrinho || carrinho.itens.length === 0) {
     return (
       <div className="carrinho-page">
@@ -125,7 +126,9 @@ function Carrinho() {
                   type="number"
                   value={item.quantidade}
                   min={1}
-                  onChange={(e) => handleAtualizarQuantidade(item.idItemCarrinho, Number(e.target.value))}
+                  onChange={(e) =>
+                    handleAtualizarQuantidade(item.idItemCarrinho, Number(e.target.value))
+                  }
                 />
               </td>
               <td>R$ {item.subTotal.toFixed(2)}</td>
@@ -144,7 +147,6 @@ function Carrinho() {
 
       <div className="carrinho-acoes">
         <button onClick={handleLimparCarrinho}>Limpar Carrinho</button>
-        {/* Aqui você pode adicionar botão de finalizar compra */}
       </div>
 
       <Footer />
