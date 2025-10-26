@@ -51,8 +51,8 @@ function Header({}: HeaderProps) {
   };
 
   useEffect(() => {
-    if (!user?.id) return;
-    api.get(`/carrinho/${user.id}`)
+    if (!user?.idUsuario) return;
+    api.get(`/carrinho/${user.idUsuario}`)
       .then(res => setCarrinho(res.data))
       .catch(err => console.error(err));
   }, [user]);
@@ -86,7 +86,7 @@ function Header({}: HeaderProps) {
             onMouseLeave={() => setMostrarDropdown(false)}
             onClick={irParaCarrinho}
           >
-            <FaShoppingCart size={24} />
+            <FaShoppingCart size={34} />
             {carrinho && carrinho.quantidadeTotal > 0 && (
               <span className="contador">{carrinho.quantidadeTotal}</span>
             )}

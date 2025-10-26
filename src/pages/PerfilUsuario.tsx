@@ -12,6 +12,7 @@ function PerfilUsuario() {
     navigate("/login");
   };
 
+  // Caso não haja usuário logado
   if (!user) {
     return <p>Carregando perfil...</p>;
   }
@@ -20,8 +21,9 @@ function PerfilUsuario() {
     <div className="perfil-page">
       <div className="profile-header">
         <div className="avatar">
+          {/* Troque pelo caminho de uma imagem válida ou URL */}
           <img
-            src="C:\\Users\\DEV-2D\\Pictures\\Screenshots\\Captura de tela 2025-09-30 132559.png"
+            src="/avatar-placeholder.png"
             alt="Avatar"
           />
         </div>
