@@ -1,3 +1,4 @@
+/* Ícones de usuário e carrinho (da Home) */
 .user-icons {
   display: flex;
   align-items: center;
@@ -26,6 +27,7 @@
   padding: 2px 6px;
 }
 
+/* Dropdown do carrinho */
 .dropdown-carrinho {
   position: absolute;
   top: 45px;
@@ -43,6 +45,84 @@
   justify-content: space-between;
   margin-bottom: 5px;
 }
+
+/* Página do carrinho */
+.carrinho-page {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.carrinho-page h1 {
+  font-size: 28px;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+/* Tabela do carrinho */
+.carrinho-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+.carrinho-table th,
+.carrinho-table td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: center;
+}
+
+.carrinho-table th {
+  background-color: #f4f4f4;
+  color: #333;
+}
+
+.carrinho-table input[type="number"] {
+  width: 60px;
+  padding: 5px;
+  text-align: center;
+}
+
+/* Botões */
+.carrinho-table button,
+.carrinho-acoes button,
+.carrinho-vazio button {
+  padding: 8px 16px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.2s;
+}
+
+.carrinho-table button:hover,
+.carrinho-acoes button:hover,
+.carrinho-vazio button:hover {
+  background-color: #0056b3;
+}
+
+/* Totais do carrinho */
+.carrinho-total {
+  display: flex;
+  justify-content: flex-end;
+  gap: 20px;
+  margin-bottom: 20px;
+  font-size: 16px;
+  color: #333;
+  font-weight: bold;
+}
+
+/* Ações gerais do carrinho */
+.carrinho-acoes {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+/* Carrinho vazio */
 .carrinho-vazio {
   display: flex;
   flex-direction: column;
@@ -61,18 +141,4 @@
 .carrinho-vazio p {
   font-size: 18px;
   color: #777;
-}
-
-.carrinho-vazio button {
-  padding: 10px 20px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 16px;
-}
-
-.carrinho-vazio button:hover {
-  background-color: #0056b3;
 }

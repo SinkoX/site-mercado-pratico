@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { api } from "../api";
 import { useAuth } from "../hooks/useAuth";
 import Header from "../components/Header";
@@ -16,52 +16,57 @@ interface Produto {
   imagemProdutoBase64?: string;
 }
 
-const PaginaProduto = () => {
+const PaginaProduto: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [produto, setProduto] = useState<Produto | null>(null);
   const [quantidade, setQuantidade] = useState(1);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (!id) return;
 
+    setLoading(true);
     api.get(`/produtos/${id}`)
       .then(res => {
         const data = res.data;
         setProduto({ ...data, precoProduto: Number(data.precoProduto) });
       })
-      .catch(err => console.error("Erro ao buscar produto:", err));
+      .catch(err => console.error("Erro ao buscar produto:", err))
+      .finally(() => setLoading(false));
   }, [id]);
 
   const aumentar = () => setQuantidade(q => q + 1);
   const diminuir = () => setQuantidade(q => (q > 1 ? q - 1 : 1));
 
-  const adicionarAoCarrinho = async () => {
-    if (!user) {
-      alert("Você precisa estar logado para adicionar produtos ao carrinho.");
-      return;
-    }
-    if (!produto) return;
+const adicionarAoCarrinho = async () => {
+  if (!user) {
+    alert("Você precisa estar logado para adicionar produtos ao carrinho.");
+    return;
+  }
+  if (!produto) return;
 
-    try {
-      console.log("Usuário logado:", user);
-      console.log("Produto selecionado:", produto);
+  try {
+    console.log("Usuário logado:", user);
+    console.log("Produto selecionado:", produto);
 
-      await api.post(
-        `/carrinho/${user?.idUsuario}/adicionar/${produto.idProduto}`,
-        {}, // corpo vazio
-        { params: { quantidade } } // quantidade como query param
-      );
+    // URL completa garantida
+    const url = `/carrinho/${user.idUsuario}/adicionar/${produto.idProduto}`;
+    console.log("Requisição POST para:", url, "quantidade:", quantidade);
 
-      alert(`Produto adicionado ao carrinho! Quantidade: ${quantidade}`);
-    } catch (err) {
-      console.error("Erro ao adicionar produto ao carrinho:", err);
-      alert("Erro ao adicionar produto ao carrinho.");
-    }
-  };
+    await api.post(url, null, { params: { quantidade } });
 
-  if (!produto)
-    return <p style={{ textAlign: "center", marginTop: "50px" }}>Carregando produto...</p>;
+    alert(`Produto adicionado ao carrinho! Quantidade: ${quantidade}`);
+  } catch (err) {
+    console.error("Erro ao adicionar produto ao carrinho:", err);
+    alert("Erro ao adicionar produto ao carrinho.");
+  }
+};
+
+
+  if (loading) return <p style={{ textAlign: "center", marginTop: "50px" }}>Carregando produto...</p>;
+  if (!produto) return <p style={{ textAlign: "center", marginTop: "50px" }}>Produto não encontrado.</p>;
 
   const imagemFinal =
     produto.imgUrl && produto.imgUrl.trim() !== ""

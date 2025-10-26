@@ -41,8 +41,19 @@ const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
   // Função de login
   const login = (newUser: User) => {
-    setUser(newUser);
-    localStorage.setItem("usuarioLogado", JSON.stringify(newUser));
+    // Cria um objeto “limpo” sem carrinho ou endereços
+    const usuarioLimpo = {
+      idUsuario: newUser.idUsuario,
+      nomeUsuario: newUser.nomeUsuario,
+      emailUsuario: newUser.emailUsuario,
+      cpfUsuario: newUser.cpfUsuario,
+      telefoneUsuario: newUser.telefoneUsuario,
+      tipoUsuario: newUser.tipoUsuario,
+      senhaUsuario: newUser.senhaUsuario,
+    };
+
+    setUser(usuarioLimpo);
+    localStorage.setItem("usuarioLogado", JSON.stringify(usuarioLimpo));
   };
 
   // Função de logout

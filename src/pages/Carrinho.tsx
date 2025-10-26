@@ -9,6 +9,7 @@ import "./Carrinho.css";
 // Tipos do DTO do backend
 interface ItemCarrinhoDTO {
   idItemCarrinho: number;
+  idProduto: number; // ⚠️ Necessário para remover
   nomeProduto: string;
   quantidade: number;
   subTotal: number;
@@ -46,7 +47,7 @@ function Carrinho() {
     fetchCarrinho();
   }, [user]);
 
-  // Atualiza quantidade do item
+  // Atualiza quantidade do item manualmente
   const handleAtualizarQuantidade = async (idItem: number, quantidade: number) => {
     if (!user || quantidade < 1) return;
     try {
@@ -59,11 +60,19 @@ function Carrinho() {
     }
   };
 
-  // Remove item do carrinho
-  const handleRemoverItem = async (idProduto: number) => {
+  // Remove ou decrementa item do carrinho
+  const handleRemoverItem = async (idProduto: number, quantidadeAtual: number, idItemCarrinho: number) => {
     if (!user) return;
     try {
-      await api.delete(`/carrinho/${user.idUsuario}/remover/${idProduto}`);
+      if (quantidadeAtual > 1) {
+        // Se tiver mais de 1 unidade, decrementa 1
+        await api.put(
+          `/itens-carrinho/${user.idUsuario}/atualizar/${idItemCarrinho}?quantidade=${quantidadeAtual - 1}`
+        );
+      } else {
+        // Se tiver 1 unidade, remove totalmente
+        await api.delete(`/carrinho/${user.idUsuario}/remover/${idProduto}`);
+      }
       fetchCarrinho();
     } catch (err) {
       console.error(err);
@@ -81,15 +90,9 @@ function Carrinho() {
     }
   };
 
-  if (!user) {
-    return <p>Você precisa estar logado para acessar o carrinho.</p>;
-  }
-
-  if (loading) {
-    return <p>Carregando carrinho...</p>;
-  }
-
-  if (!carrinho || carrinho.itens.length === 0) {
+  if (!user) return <p>Você precisa estar logado para acessar o carrinho.</p>;
+  if (loading) return <p>Carregando carrinho...</p>;
+  if (!carrinho || carrinho.itens.length === 0)
     return (
       <div className="carrinho-page">
         <Header />
@@ -101,7 +104,6 @@ function Carrinho() {
         <Footer />
       </div>
     );
-  }
 
   return (
     <div className="carrinho-page">
@@ -133,7 +135,13 @@ function Carrinho() {
               </td>
               <td>R$ {item.subTotal.toFixed(2)}</td>
               <td>
-                <button onClick={() => handleRemoverItem(item.idItemCarrinho)}>Remover</button>
+                <button
+                  onClick={() =>
+                    handleRemoverItem(item.idProduto, item.quantidade, item.idItemCarrinho)
+                  }
+                >
+                  Remover
+                </button>
               </td>
             </tr>
           ))}
