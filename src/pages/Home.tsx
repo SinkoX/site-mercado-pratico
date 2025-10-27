@@ -29,7 +29,7 @@ function Home() {
       setLoading(true);
       try {
         // Endpoint correto para buscar todos os produtos
-        const response = await api.get("/produtos"); 
+        const response = await api.get("/produtos");
         // Garante que é um array
         setProdutos(Array.isArray(response.data) ? response.data : []);
       } catch (error) {
@@ -46,6 +46,7 @@ function Home() {
     <div className="home-page">
       <Header />
       <MenuCategoria />
+
       <main>
         <section id="section-main-img">
           <MainImage />
@@ -103,6 +104,7 @@ function Home() {
           <Image src={bannerSecundario2} alt="banner" />
         </section>
       </main>
+
       <Footer />
     </div>
   );
