@@ -1,10 +1,12 @@
 .cadastro-produto-page {
   display: flex;
   justify-content: center;
-  align-items: center;
-  height: 100vh;
+  align-items: flex-start; /* agora alinha no topo */
+  padding-top: 50px; /* ajusta a distância do topo */
+  min-height: 100vh;
   margin: 0;
   background-color: #fff7f7;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 .cadastro-produto-page .form {
@@ -12,66 +14,60 @@
   border-radius: 20px;
   width: 550px;
   border: 0.5px solid rgba(0, 0, 0, 0.323);
-  padding: 20px;
-  font-family: Arial, Helvetica, sans-serif;
+  padding: 30px 20px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
-  height: auto;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
 .cadastro-produto-page .titulo {
   text-align: center;
-  justify-content: center;
-  align-items: center;
   margin-bottom: 40px;
 }
 
 .cadastro-produto-page .campo {
-  margin-bottom: 9px;
-  width: 480px;
+  margin-bottom: 15px;
+  width: 100%;
 }
 
 .cadastro-produto-page label {
-  font-size: 13px;
+  font-size: 14px;
   display: block;
-  margin-bottom: 3px;
+  margin-bottom: 6px;
   font-weight: bold;
+  color: #333;
 }
 
 .cadastro-produto-page input {
   background-color: #fff7f7;
   border-radius: 10px;
   height: 40px;
-  width: 480px;
-  padding: 01px 0px 0px 15px;
-  margin-bottom: 15px;
-  border: 1px solid rgba(0, 0, 0, 0.326);
+  width: 100%;
+  padding: 0 15px;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  font-size: 14px;
+  transition: all 0.2s ease-in-out;
+}
+
+.cadastro-produto-page input:focus {
+  outline: none;
+  border-color: #54bd54;
+  box-shadow: 0 0 6px rgba(84, 189, 84, 0.5);
 }
 
 .cadastro-produto-page button {
   display: block;
   margin: 30px auto 0;
   border-radius: 8px;
-  border: 0.5px solid rgba(0, 0, 0, 0);
-  padding: 10px;
+  border: none;
+  padding: 12px;
   width: 350px;
   background-color: #54bd54;
-  font-size: 8px;
+  font-size: 14px;
   cursor: pointer;
   color: white;
-}
-
-.cadastro-produto-page .select-box {
-  width: 100%;
-  padding: 10px;
-  border-radius: 8px;
-  border: 1px solid rgba(0, 0, 0, 0.326);
-  background-color: #fff7f7;
-  margin-bottom: 9px;
-  cursor: pointer;
-  color: rgb(119, 103, 103);
+  transition: background-color 0.2s;
 }
 
 .cadastro-produto-page button:hover {
@@ -80,4 +76,46 @@
 
 .cadastro-produto-page h2 {
   font-size: 18px;
+  margin-bottom: 5px;
+}
+
+/* Campo Categoria (select) */
+.cadastro-produto-page select {
+  width: 100%;
+  padding: 12px 15px;
+  border-radius: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  background-color: #fff7f7;
+  font-size: 14px;
+  color: #555;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  transition: all 0.2s ease-in-out;
+}
+
+.cadastro-produto-page select:focus {
+  outline: none;
+  border-color: #54bd54;
+  box-shadow: 0 0 6px rgba(84, 189, 84, 0.5);
+}
+
+/* Campo Descrição (textarea) */
+.cadastro-produto-page textarea {
+  width: 100%;
+  padding: 12px 15px;
+  border-radius: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  background-color: #fff7f7;
+  font-size: 14px;
+  color: #555;
+  resize: none;
+  min-height: 120px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  transition: all 0.2s ease-in-out;
+}
+
+.cadastro-produto-page textarea:focus {
+  outline: none;
+  border-color: #54bd54;
+  box-shadow: 0 0 6px rgba(84, 189, 84, 0.5);
 }
