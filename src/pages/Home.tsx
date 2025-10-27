@@ -73,29 +73,36 @@ function Home() {
             <h1>Produtos em Destaque</h1>
             <hr />
           </div>
+          
+{loading ? (
+  <p>Carregando produtos...</p>
+) : produtos.length === 0 ? (
+  <p>Nenhum produto encontrado.</p>
+) : (
+  <div className="produtos">
+    {produtos.slice(0, 16).map((produto) => {
+      // Lógica para definir a imagem
+      const imagemFinal =
+        produto.imgUrl && produto.imgUrl.trim() !== ""
+          ? produto.imgUrl // Se imgUrl não estiver vazio, use a URL
+          : produto.imagemProdutoBase64 // Caso contrário, use a imagem em base64
+          ? produto.imagemProdutoBase64
+          : "/placeholder.png"; // Caso não haja imagem, use o placeholder
 
-          {loading ? (
-            <p>Carregando produtos...</p>
-          ) : produtos.length === 0 ? (
-            <p>Nenhum produto encontrado.</p>
-          ) : (
-            <div className="produtos">
-              {produtos.slice(0, 16).map((produto) => (
-                <CardProduto
-                  key={produto.idProduto}
-                  produto={{
-                    ...produto,
-                    imgUrl:
-                      produto.imgUrl && produto.imgUrl.trim() !== ""
-                        ? produto.imgUrl
-                        : produto.imagemProdutoBase64
-                        ? `data:image/png;base64,${produto.imagemProdutoBase64}`
-                        : "/placeholder.png",
-                  }}
-                />
-              ))}
-            </div>
-          )}
+      return (
+        <CardProduto
+          key={produto.idProduto}
+          produto={{
+            ...produto,
+            imgUrl: imagemFinal, // Aqui você passa a imagem correta para o CardProduto
+          }}
+        />
+      );
+    })}
+  </div>
+)}
+
+        
 
           <Image src={bannerSecundario1} alt="banner" />
         </section>
