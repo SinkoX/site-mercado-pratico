@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./CardProduto.css";
 import PlaceHolder from "../assets/images/categorias/placeholder.png";
 
@@ -28,21 +28,18 @@ const CardProduto: React.FC<CardProdutoProps> = ({ produto }) => {
       ? `data:image/png;base64,${produto.imagemProdutoBase64}`
       : PlaceHolder;
 
-  // Redireciona para a página de produto individual
-  const irParaProduto = () => {
-    navigate(`/produto/${produto.idProduto}`);
-  };
-
   return (
-    <div className="card-produto">
-      <img src={imagemFinal} alt={produto.nomeProduto} className="produto" />
-      <div className="card-produto-text">
-        <h3>{produto.nomeProduto}</h3>
-        {produto.descricaoProduto && <p>{produto.descricaoProduto}</p>}
-        <p>Preço: R$ {Number(produto.precoProduto).toFixed(2)}</p>
+    <Link to={`/produto/${produto.idProduto}`}>
+      <div className="card-produto">
+        <img src={imagemFinal} alt={produto.nomeProduto} className="produto" />
+        <div className="card-produto-text">
+          <h3>{produto.nomeProduto}</h3>
+          {produto.descricaoProduto && <p>{produto.descricaoProduto}</p>}
+          <p>R${Number(produto.precoProduto).toFixed(2)}</p>
+        </div>
+        <button>Visualizar</button>
       </div>
-      <button onClick={irParaProduto}>Visualizar</button>
-    </div>
+    </Link>
   );
 };
 

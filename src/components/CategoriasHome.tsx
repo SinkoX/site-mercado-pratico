@@ -21,7 +21,7 @@ const CategoriasHome = () => {
     { id: 5, nome: "Açougue", imagem: categoriaAcougue },
     { id: 6, nome: "Higiene", imagem: categoriaHigiene },
     { id: 7, nome: "Padaria", imagem: categoriaPadaria },
-    { id: 8, nome: "Pet Shop", imagem: categoriaPetShop },
+    { id: 8, nome: "PetShop", imagem: categoriaPetShop },
   ];
 
   const [indice, setIndice] = useState(0);
