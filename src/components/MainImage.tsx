@@ -1,12 +1,27 @@
-import './MainImage.css';
-import bannerPrincipal1 from "../assets/images/banner/bannerPrincipal1.png"
+import "./MainImage.css";
+import logoCarrinho from "../assets/images/icones/logo.png";
 
-const Image = () => {
-    return(
-        <div className='imagem'>
-            <img src={bannerPrincipal1} alt="Imagem principal" className='tela-inteira1'/>
-        </div>
-    );
-};
+export default function MainImage() {
+  return (
+    <div className="main-image">
+      {/* Formas orgânicas coloridas (morphing fluido) */}
+      <div className="forma verde"></div>
+      <div className="forma verde-claro"></div>
+      <div className="forma laranja"></div>
 
-export default Image;
+      {/* Bola branca com logo */}
+      <div className="bola">
+        <img src={logoCarrinho} alt="Logo Mercado Prático" />
+      </div>
+
+      {/* Texto principal */}
+      <div className="texto">
+        <h1>
+          <span className="verde-texto">Mercado</span>{" "}
+          <span className="laranja-texto">Prático</span>
+        </h1>
+        <p>Tudo o que você precisa, se encontra aqui</p>
+      </div>
+    </div>
+  );
+}
