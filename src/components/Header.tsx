@@ -51,7 +51,7 @@ const handleSubmit = async (e: React.FormEvent) => {
 
   try {
     // Verifica se há produtos correspondentes antes de navegar
-    const response = await api.get(`/produto/buscar?termo=${buscaTratada}`);
+    const response = await api.get(`/produto/busca?nome=${buscaTratada}`);
 
     if (response.data && response.data.length > 0) {
       navigate(`/busca/${buscaTratada}`);
