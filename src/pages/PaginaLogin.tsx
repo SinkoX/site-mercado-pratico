@@ -25,7 +25,7 @@ const PaginaLogin: React.FC<LoginProps> = ({ loginFn }) => {
       [name]: value,
     }));
   };
-  
+
   const toggleSenha = () => setShowSenha((prev) => !prev);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -52,8 +52,8 @@ const PaginaLogin: React.FC<LoginProps> = ({ loginFn }) => {
   return (
     <div className="login-page">
       <div className="home-icon" onClick={() => navigate("/")}>
-      <FaHome />
-    </div>
+        <FaHome />
+      </div>
       <div className="top-part-login">
         <h1 className="nome-mercado">Mercado Prático</h1>
         <p className="mensagem">Seu mercado de confiança desde 1975</p>
@@ -81,11 +81,8 @@ const PaginaLogin: React.FC<LoginProps> = ({ loginFn }) => {
             />
           </div>
 
-
           <div className="campo senha-campo">
-            <label htmlFor="senhaUsuario">
-              Senha
-            </label>
+            <label htmlFor="senhaUsuario">Senha</label>
             <div className="senha-wrapper">
               <input
                 type={showSenha ? "text" : "password"}
@@ -125,6 +122,6 @@ const PaginaLogin: React.FC<LoginProps> = ({ loginFn }) => {
       </form>
     </div>
   );
-}
+};
 
 export default PaginaLogin;

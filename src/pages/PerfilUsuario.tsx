@@ -2,6 +2,7 @@ import React from "react";
 import { useAuth } from "../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import "./PerfilUsuario.css";
+import { FaHome } from "react-icons/fa";
 
 function PerfilUsuario() {
   const { user, logout } = useAuth();
@@ -19,13 +20,13 @@ function PerfilUsuario() {
 
   return (
     <div className="perfil-page">
+      <div className="home-icon" onClick={() => navigate("/")}>
+        <FaHome />
+      </div>
       <div className="profile-header">
         <div className="avatar">
           {/* Troque pelo caminho de uma imagem válida ou URL */}
-          <img
-            src="/avatar-placeholder.png"
-            alt="Avatar"
-          />
+          <img src="/avatar-placeholder.png" alt="Avatar" />
         </div>
       </div>
 

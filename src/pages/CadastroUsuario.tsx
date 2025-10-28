@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { api } from "../api";
-import { FaEye, FaEyeSlash } from "react-icons/fa"; 
+import { FaEye, FaEyeSlash, FaHome } from "react-icons/fa";
 import "./CadastroUsuario.css";
 
 interface FormData {
@@ -85,6 +85,9 @@ const CadastroUsuario: React.FC = () => {
 
   return (
     <div className="cadastro-usuario-page">
+      <div className="home-icon" onClick={() => navigate("/")}>
+        <FaHome />
+      </div>
       <form className="form" onSubmit={handleSubmit}>
         <div className="titulo">
           <h1>Seja Bem-Vindo!</h1>

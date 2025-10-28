@@ -26,20 +26,30 @@ const CategoriasHome = () => {
 
   const [indice, setIndice] = useState(0);
   const itensPorPagina = 6;
-
-  const anterior = () => {
-    setIndice((prev) => (prev === 0 ? categorias.length - 1 : prev - 1));
-  };
+  const [animacao, setAnimacao] = useState("");
 
   const proximo = () => {
-    setIndice((prev) => (prev === categorias.length - 1 ? 0 : prev + 1));
+    setAnimacao("animar-proximo");
+    setTimeout(() => {
+      setIndice((prev) => (prev === categorias.length - 1 ? 0 : prev + 1));
+      setAnimacao("");
+    }, 400); // tempo igual à duração da animação
   };
 
-  const categoriasVisiveis = [];
-  for (let i = 0; i < itensPorPagina; i++) {
-    const index = (indice + i) % categorias.length;
-    categoriasVisiveis.push(categorias[index]);
-  }
+  const anterior = () => {
+    setAnimacao("animar-anterior");
+    setTimeout(() => {
+      setIndice((prev) => (prev === 0 ? categorias.length - 1 : prev - 1));
+      setAnimacao("");
+    }, 400);
+  };
+  const categoriasVisiveis = [
+    ...categorias.slice(indice, indice + itensPorPagina),
+    ...categorias.slice(
+      0,
+      Math.max(0, indice + itensPorPagina - categorias.length)
+    ),
+  ];
 
   return (
     <div className="categorias-home">
@@ -52,13 +62,14 @@ const CategoriasHome = () => {
           </button>
         </div>
 
-        <div className="categorias-container">
+        {/* 🔹 Adicionamos a classe dinâmica aqui */}
+        <div className={`categorias-container ${animacao}`}>
           {categoriasVisiveis.map((categoria) => (
             <div
               key={categoria.id}
               className="categoria-card"
               style={{ cursor: "pointer" }}
-              onClick={() => navigate(`/categoria/${categoria.nome}`)} // 🔹 Rota de categoria correta
+              onClick={() => navigate(`/categoria/${categoria.nome}`)}
             >
               <div className="img-card">
                 <img src={categoria.imagem} alt={categoria.nome} />

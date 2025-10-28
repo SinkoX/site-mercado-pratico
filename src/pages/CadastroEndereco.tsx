@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { api } from "../api"; // usa a mesma API do projeto
 import { useNavigate } from "react-router-dom";
 import "./CadastroEndereco.css";
+import { FaHome } from "react-icons/fa";
 
 interface FormData {
   cep: string;
@@ -102,6 +103,9 @@ function CadastroEndereco() {
 
   return (
     <div className="cadastro-endereco-page">
+      <div className="home-icon" onClick={() => navigate("/")}>
+        <FaHome />
+      </div>
       <form className="form" onSubmit={handleSubmit}>
         <div className="titulo">
           <h1>Cadastro de Endereço</h1>

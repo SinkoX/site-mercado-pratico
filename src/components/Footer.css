@@ -42,9 +42,8 @@
   gap: 8px;    
 }
 
-.info4 .imagem {
-    background-color: #DFDFDF;
-    width: 250px;
+iframe {
+    width: 350px;
     height: 250px;
     border-radius: 15px;
 }

@@ -70,8 +70,6 @@ function Home() {
     fetchProdutos();
   }, []);
 
-  console.log("📦 Produtos carregados:", produtos);
-
   return (
     <div className="home-page">
       <Header />
@@ -81,17 +79,6 @@ function Home() {
         <section id="section-main-img">
           <MainImage />
         </section>
-
-        <div>
-          <h1>Bem-vindo ao Mercado Prático 🛒</h1>
-          {user && (
-            <p>Olá, {user.nomeUsuario}! Confira suas ofertas personalizadas abaixo.</p>
-          )}
-          <p>
-            Aqui você encontra ofertas imperdíveis, produtos fresquinhos e toda a
-            praticidade para suas compras online.
-          </p>
-        </div>
 
         <section id="section-categorias-home">
           <CategoriasHome />
@@ -115,13 +102,26 @@ function Home() {
             <p>Nenhum produto encontrado.</p>
           ) : (
             <div className="produtos">
-              {produtos.slice(0, 16).map((produto) => (
+              {produtos.slice(0, 8).map((produto) => (
                 <CardProduto key={produto.idProduto} produto={produto} />
               ))}
             </div>
           )}
 
           <Image src={bannerSecundario1} alt="banner" />
+
+          
+          {loading ? (
+            <p>Carregando produtos...</p>
+          ) : produtos.length === 0 ? (
+            <p>Nenhum produto encontrado.</p>
+          ) : (
+            <div className="produtos">
+              {produtos.slice(8, 16).map((produto) => (
+                <CardProduto key={produto.idProduto} produto={produto} />
+              ))}
+            </div>
+          )}
         </section>
 
         <section id="section-banner-propaganda">
