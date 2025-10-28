@@ -36,7 +36,7 @@ function Home() {
     const fetchProdutos = async () => {
       setLoading(true);
       try {
-        const response = await api.get("/produtos");
+        const response = await api.get("/produto");
 
         const data = response.data;
         let listaProdutos: any[] = [];

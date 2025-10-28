@@ -1,0 +1,36 @@
+.pagina-produtos-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.filtro-categorias {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.filtro-categorias button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  background-color: #eee;
+  color: #333;
+  transition: 0.2s;
+}
+
+.filtro-categorias button.ativo {
+  background-color: #28a745; /* Verde do site */
+  color: white;
+}
+
+.filtro-categorias button:hover {
+  opacity: 0.8;
+}
+
+.produtos-lista {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
