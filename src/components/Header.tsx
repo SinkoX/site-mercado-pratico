@@ -7,8 +7,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 import { api } from "../api";
 
-interface HeaderProps {}
-
 interface ItemCarrinhoDTO {
   idItemCarrinho: number;
   nomeProduto: string;
@@ -24,31 +22,50 @@ interface CarrinhoDTO {
 }
 
 const categoriasDisponiveis = [
-  "Hortifruti", "Bebidas", "Mercearia", "Limpeza",
-  "Açougue", "Higiene", "Padaria", "Pet Shop"
+  "hortifruti", "bebidas", "mercearia", "limpeza",
+  "açougue", "higiene", "padaria", "petshop"
 ];
 
-function Header({}: HeaderProps) {
+function Header() {
   const [busca, setBusca] = useState("");
   const { user } = useAuth();
   const navigate = useNavigate();
   const [carrinho, setCarrinho] = useState<CarrinhoDTO | null>(null);
   const [mostrarDropdown, setMostrarDropdown] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!busca.trim()) return;
+const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
 
-    // Se for categoria, navega para categoria
-    if (categoriasDisponiveis.includes(busca)) {
-      navigate(`/categoria/${busca}`);
+  const buscaTratada = busca.toLowerCase().replace(/\s+/g, "");
+  if (!buscaTratada) {
+    alert("Digite algo para buscar!");
+    return;
+  }
+
+  // Se for categoria existente
+  if (categoriasDisponiveis.includes(buscaTratada)) {
+    navigate(`/categoria/${buscaTratada}`);
+    setBusca("");
+    return;
+  }
+
+  try {
+    // Verifica se há produtos correspondentes antes de navegar
+    const response = await api.get(`/produto/buscar?termo=${buscaTratada}`);
+
+    if (response.data && response.data.length > 0) {
+      navigate(`/busca/${buscaTratada}`);
     } else {
-      // Para outros termos, vai para página de busca
-      navigate(`/busca/${busca}`);
+      alert("Nenhum produto encontrado para essa busca.");
     }
+  } catch (error) {
+    console.error("Erro ao buscar produtos:", error);
+    alert("Ocorreu um erro ao realizar a busca. Tente novamente mais tarde.");
+  }
 
-    setBusca(""); // limpa input
-  };
+  setBusca("");
+};
+
 
   useEffect(() => {
     if (!user?.idUsuario) return;

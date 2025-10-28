@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./CadastroProduto.css";
+import { api } from "../api";
 
 interface Categoria {
   idCategoria: number;
@@ -9,14 +10,14 @@ interface Categoria {
 
 function CadastroProduto() {
   const [formData, setFormData] = useState({
-    nome_produto: "",
-    quantidade_produto: "",
-    categoria_produto: "",
-    preco_produto: "",
-    data_validade_produto: "",
-    descricao_produto: "",
-    imagem_produto: "",
-    img_url: "",
+    nomeProduto: "",
+    quantidadeProduto: "",
+    categoriaProduto: "",
+    precoProduto: "",
+    dataValidade: "",
+    descricao: "",
+    imagemProduto: "",
+    imgUrl: "",
   });
 
   const [categorias, setCategorias] = useState<Categoria[]>([]);
@@ -33,7 +34,7 @@ function CadastroProduto() {
   ) => {
     const { name, value, files } = e.target as HTMLInputElement;
 
-    if (name === "preco_produto") {
+    if (name === "precoProduto") {
       // Formata o valor para duas casas decimais se for número válido
       if (!isNaN(Number(value)) && value.trim() !== "") {
         setFormData((prev) => ({
@@ -49,7 +50,7 @@ function CadastroProduto() {
       reader.onloadend = () => {
         setFormData((prev) => ({
           ...prev,
-          imagem_produto: reader.result as string,
+          imagemProduto: reader.result as string,
         }));
       };
       reader.readAsDataURL(file);
@@ -65,65 +66,66 @@ function CadastroProduto() {
     e.preventDefault();
 
     // Validações básicas
-    if (!formData.nome_produto.trim()) {
+    if (!formData.nomeProduto.trim()) {
       alert("Por favor, insira o nome do produto.");
       return;
     }
 
-    const quantidadeNum = Number(formData.quantidade_produto);
+    const quantidadeNum = Number(formData.quantidadeProduto);
     if (isNaN(quantidadeNum) || quantidadeNum <= 0) {
       alert("Por favor, insira uma quantidade válida.");
       return;
     }
 
-    const precoNum = parseFloat(formData.preco_produto);
+    const precoNum = parseFloat(formData.precoProduto);
     if (isNaN(precoNum) || precoNum <= 0) {
       alert("Por favor, insira um preço válido.");
       return;
     }
 
-    if (!formData.categoria_produto) {
+    if (!formData.categoriaProduto) {
       alert("Por favor, selecione uma categoria.");
       return;
     }
 
-    if (!formData.descricao_produto.trim()) {
+    if (!formData.descricao.trim()) {
       alert("Por favor, insira uma descrição do produto.");
       return;
     }
 
     // Preparar objeto conforme ProdutoDTO
     const produto = {
-      nomeProduto: formData.nome_produto.trim(),
+      nomeProduto: formData.nomeProduto.trim(),
       quantidade: quantidadeNum,
       precoProduto: precoNum,
-      dataValidade: formData.data_validade_produto || null,
-      idSubcategoria: Number(formData.categoria_produto),
-      descricaoProduto: formData.descricao_produto.trim(),
-      imagemProdutoBase64: formData.imagem_produto || null,
-      imgUrl: formData.img_url?.trim() || null,
+      dataValidade: formData.dataValidade || null,
+      idSubcategoria: Number(formData.categoriaProduto),
+      descricaoProduto: formData.descricao.trim(),
+      imagemProdutoBase64: formData.imagemProduto || null,
+      imgUrl: formData.imgUrl?.trim() || null,
     };
 
     console.log("JSON enviado para backend:", JSON.stringify(produto, null, 2));
 
     try {
-      const response = await axios.post("http://localhost:8080/produtos", produto, {
-        headers: { "Content-Type": "application/json" },
-      });
+      console.log("📦 Dados enviados:", formData);
+
+      const response = await api.post("/produto/cadastro");
+      
 
       console.log("✅ Produto cadastrado com sucesso:", response.data);
       alert("Produto cadastrado com sucesso!");
 
       // Resetar formulário
       setFormData({
-        nome_produto: "",
-        quantidade_produto: "",
-        categoria_produto: "",
-        preco_produto: "",
-        data_validade_produto: "",
-        descricao_produto: "",
-        imagem_produto: "",
-        img_url: "",
+        nomeProduto: "",
+        quantidadeProduto: "",
+        categoriaProduto: "",
+        precoProduto: "",
+        dataValidade: "",
+        descricao: "",
+        imagemProduto: "",
+        imgUrl: "",
       });
     } catch (error) {
       console.error("❌ Erro ao cadastrar produto:", error);
@@ -137,12 +139,12 @@ function CadastroProduto() {
         <h1>Cadastro Produto</h1>
 
         <div className="campo">
-          <label htmlFor="nome_produto">Nome do Produto</label>
+          <label htmlFor="nomeProduto">Nome do Produto</label>
           <input
             type="text"
-            id="nome_produto"
-            name="nome_produto"
-            value={formData.nome_produto}
+            id="nomeProduto"
+            name="nomeProduto"
+            value={formData.nomeProduto}
             onChange={handleChange}
             placeholder="Digite o nome do produto"
             required
@@ -150,12 +152,12 @@ function CadastroProduto() {
         </div>
 
         <div className="campo">
-          <label htmlFor="quantidade_produto">Quantidade</label>
+          <label htmlFor="quantidadeProduto">Quantidade</label>
           <input
             type="number"
-            id="quantidade_produto"
-            name="quantidade_produto"
-            value={formData.quantidade_produto}
+            id="quantidadeProduto"
+            name="quantidadeProduto"
+            value={formData.quantidadeProduto}
             onChange={handleChange}
             placeholder="Digite a quantidade"
             required
@@ -163,11 +165,11 @@ function CadastroProduto() {
         </div>
 
         <div className="campo">
-          <label htmlFor="categoria_produto">Categoria</label>
+          <label htmlFor="categoriaproduto">Categoria</label>
           <select
-            id="categoria_produto"
-            name="categoria_produto"
-            value={formData.categoria_produto}
+            id="categoriaProduto"
+            name="categoriaProduto"
+            value={formData.categoriaProduto}
             onChange={handleChange}
             required
           >
@@ -181,13 +183,13 @@ function CadastroProduto() {
         </div>
 
         <div className="campo">
-          <label htmlFor="preco_produto">Preço</label>
+          <label htmlFor="precoProduto">Preço</label>
           <input
             type="number"
             step="0.01"
-            id="preco_produto"
-            name="preco_produto"
-            value={formData.preco_produto}
+            id="precoProduto"
+            name="precoProduto"
+            value={formData.precoProduto}
             onChange={handleChange}
             placeholder="Digite o preço (ex: 12.50)"
             required
@@ -195,22 +197,22 @@ function CadastroProduto() {
         </div>
 
         <div className="campo">
-          <label htmlFor="data_validade_produto">Data de Validade</label>
+          <label htmlFor="dataValidade">Data de Validade</label>
           <input
             type="date"
-            id="data_validade_produto"
-            name="data_validade_produto"
-            value={formData.data_validade_produto}
+            id="dataValidade"
+            name="dataValidade"
+            value={formData.dataValidade}
             onChange={handleChange}
           />
         </div>
 
         <div className="campo">
-          <label htmlFor="descricao_produto">Descrição</label>
+          <label htmlFor="descricao">Descrição</label>
           <textarea
-            id="descricao_produto"
-            name="descricao_produto"
-            value={formData.descricao_produto}
+            id="descricao"
+            name="descricao"
+            value={formData.descricao}
             onChange={handleChange}
             placeholder="Digite a descrição do produto"
             required
@@ -218,20 +220,20 @@ function CadastroProduto() {
         </div>
 
         <div className="campo">
-          <label htmlFor="img_url">URL da Imagem (opcional)</label>
+          <label htmlFor="imgUrl">URL da Imagem (opcional)</label>
           <input
             type="text"
-            id="img_url"
-            name="img_url"
-            value={formData.img_url}
+            id="imgUrl"
+            name="imgUrl"
+            value={formData.imgUrl}
             onChange={handleChange}
             placeholder="https://exemplo.com/imagem.jpg"
           />
         </div>
 
         <div className="campo">
-          <label htmlFor="imagem_produto">Imagem do Produto</label>
-          <input type="file" id="imagem_produto" name="imagem_produto" onChange={handleChange} />
+          <label htmlFor="imagemProduto">Imagem do Produto</label>
+          <input type="file" id="imagemProduto" name="imagemProduto" onChange={handleChange} />
         </div>
 
         <button type="submit" className="button">
