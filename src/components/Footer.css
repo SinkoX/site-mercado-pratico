@@ -64,6 +64,7 @@ iframe {
   align-items: center;
   gap: 24px;
 }
+
 .direitos hr {
   width: 100%;
   max-width: 1280px;
@@ -82,5 +83,11 @@ iframe {
   .infos {
     grid-template-columns: 2fr 1fr 1fr 1fr;
     gap: 48px;
+  }
+}
+
+@media(max-width: 500px){
+  iframe{
+    width: 250px;
   }
 }

@@ -19,12 +19,12 @@
 }
 
 @media (max-width: 500px){
-  .imagem{
+  .imagem img {
+    width: 100%;
     height: auto;
-  }
-  .imagem img{
-    object-fit: contain;
-    max-height: 250px;
+    object-fit: contain; 
+    max-height: none;    
   }
 }
+
 

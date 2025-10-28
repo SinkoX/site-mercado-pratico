@@ -16,3 +16,24 @@
     object-fit: cover;
     object-position: center;
 }
+
+@media(max-width: 500px){
+    .slide{
+        width: 100%;
+        height: auto;
+    }
+}
+
+@media(min-width: 501px) and (max-width: 1023px){
+    .slide{
+        width: 80%;
+        height: auto;
+    }
+}
+
+@media(min-width: 1024px){
+    .slide{
+        width: 80%;
+        height: auto;
+    }
+}
