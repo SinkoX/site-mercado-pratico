@@ -40,7 +40,7 @@ export default function PaginaCategoria() {
 
     // URL para buscar produtos
     const url = termo
-      ? `http://localhost:8080/produtos/busca?nome=${encodeURIComponent(parametro)}`
+      ? `http://localhost:8080/produto/busca?nome=${encodeURIComponent(parametro)}`
       : `http://localhost:8080/categorias/${encodeURIComponent(parametro)}/produtos`;
 
     axios.get(url)
@@ -50,7 +50,7 @@ export default function PaginaCategoria() {
 
     // Se for categoria, tenta carregar subcategorias
     if (nomeCategoria) {
-      axios.get(`http://localhost:8080/categorias/${encodeURIComponent(nomeCategoria)}/subcategorias`)
+      axios.get(`http://localhost:8080/categorias/${encodeURIComponent(nomeCategoria)}`)
         .then(res => setSubcategorias(Array.isArray(res.data) ? res.data : []))
         .catch(err => console.warn("Sem subcategorias para esta categoria:", err));
     }

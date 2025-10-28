@@ -28,7 +28,7 @@ const PaginaProduto: React.FC = () => {
     if (!id) return;
 
     setLoading(true);
-    api.get(`/produtos/${id}`)
+    api.get(`/produto/${id}`)
       .then(res => {
         const data = res.data;
         setProduto({ ...data, precoProduto: Number(data.precoProduto) });

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import "./Header.css";
-import Layout from "../components/Layout";
 import iconPerfil from "../assets/images/icones/iconPerfil.png";
 import iconPesquisa from "../assets/images/icones/iconPesquisa.png";
 import { FaShoppingCart } from "react-icons/fa"; 
@@ -81,9 +80,11 @@ const handleSubmit = async (e: React.FormEvent) => {
 
   return (
     <header className="header">
+      <Link to={"/"}>
       <div className="logo">
-        <img src="/logo.png" className="logo" alt="logo" />
+        <img src="/logo.png" className="logo" alt="logo"/>
       </div>
+      </Link>
 
       <form className="procura" onSubmit={handleSubmit}>
         <img src={iconPesquisa} alt="icon pesquisa" id="icon-pesquisa" />

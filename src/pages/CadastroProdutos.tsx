@@ -99,7 +99,7 @@ function CadastroProduto() {
       quantidade: quantidadeNum,
       precoProduto: precoNum,
       dataValidade: formData.dataValidade || null,
-      idSubcategoria: Number(formData.categoriaProduto),
+      idCategoria: Number(formData.categoriaProduto),
       descricaoProduto: formData.descricao.trim(),
       imagemProdutoBase64: formData.imagemProduto || null,
       imgUrl: formData.imgUrl?.trim() || null,
@@ -110,7 +110,7 @@ function CadastroProduto() {
     try {
       console.log("📦 Dados enviados:", formData);
 
-      const response = await api.post("/produto/cadastro");
+      const response = await api.post("/produto/cadastro", produto);
       
 
       console.log("✅ Produto cadastrado com sucesso:", response.data);
