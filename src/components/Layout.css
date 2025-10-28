@@ -1,0 +1,59 @@
+:root {
+  --sidebar-width-desktop: 260px;
+  --sidebar-width-tablet: 80px;
+  --header-heigth: 72px;
+  --footer-gap: 32px;
+}
+
+.layout {
+  display: grid;
+  grid-template-areas:
+    "header header"
+    "sidebar content"
+    "footer footer";
+  grid-template-columns: var(--sidebar-width-desktop) 1fr;
+  grid-template-rows: var(--header-heigth) 1fr auto;
+  min-height: 100dvh;
+  width: 100%;
+  overflow-x: hidden;
+}
+
+.layout_header {
+  grid-area: header;
+}
+.layout_sidebar {
+  grid-area: sidebar;
+}
+.layout_content {
+  grid-area: content;
+  padding: 16px;
+  max-width: 100%;
+}
+.layout_footer {
+  grid-area: footer;
+}
+
+/* Sobreposição da barra lateral quando aberta no celular */
+.layout--sidebar-open .sidebar.sidebar--overlay {
+  transform: translateX(0);
+}
+
+@media (min-width: 501px) and (max-width: 1023px) {
+  .layout {
+    grid-template-columns: var(--sidebar-width-tablet) 1fr;
+  }
+}
+
+@media (max-width: 500px) {
+  .layout {
+    grid-template-areas:
+    "header"
+    "content"
+    "footer";
+    grid-template-columns: 1fr;
+    grid-template-rows: var(--header-heigth) 1fr auto;
+  }
+  .layout_content{
+    padding: 12px;
+  }
+}

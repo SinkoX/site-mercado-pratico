@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./Header.css";
+import Layout from "../components/Layout";
 import iconPerfil from "../assets/images/icones/iconPerfil.png";
 import iconPesquisa from "../assets/images/icones/iconPesquisa.png";
 import { FaShoppingCart } from "react-icons/fa"; 

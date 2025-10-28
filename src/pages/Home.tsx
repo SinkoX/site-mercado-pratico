@@ -114,7 +114,7 @@ function Home() {
           {loading ? (
             <p>Carregando produtos...</p>
           ) : produtos.length === 0 ? (
-            <p>Nenhum produto encontrado.</p>
+              <p>Nenhum produto encontrado.</p>
           ) : (
             <div className="produtos">
               {produtos.slice(8, 16).map((produto) => (
