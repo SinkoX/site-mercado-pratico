@@ -24,14 +24,42 @@ function Home() {
   const [produtos, setProdutos] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
+  // Função para remover loops recursivos
+  const limparProduto = (produto: any) => {
+    const copia = { ...produto };
+    delete copia.itensCarrinho;
+    delete copia.itensPedido;
+    return copia;
+  };
+
   useEffect(() => {
     const fetchProdutos = async () => {
       setLoading(true);
       try {
-        // Endpoint correto para buscar todos os produtos
         const response = await api.get("/produtos");
-        // Garante que é um array
-        setProdutos(Array.isArray(response.data) ? response.data : []);
+
+        const data = response.data;
+        let listaProdutos: any[] = [];
+
+        // Verifica se é um array direto
+        if (Array.isArray(data)) {
+          listaProdutos = data;
+        } else if (Array.isArray(data.produtos)) {
+          listaProdutos = data.produtos;
+        } else if (Array.isArray(data.data)) {
+          listaProdutos = data.data;
+        } else {
+          console.warn("⚠️ Formato inesperado de resposta da API:", data);
+          listaProdutos = [];
+        }
+
+        // Limpa loops e padroniza imagem
+        const produtosFormatados = listaProdutos.map((p: any) => ({
+          ...limparProduto(p),
+          imgUrl: p.imgUrl || p.img_url || "/placeholder.png",
+        }));
+
+        setProdutos(produtosFormatados);
       } catch (error) {
         console.error("Erro ao carregar produtos:", error);
       } finally {
@@ -41,6 +69,8 @@ function Home() {
 
     fetchProdutos();
   }, []);
+
+  console.log("📦 Produtos carregados:", produtos);
 
   return (
     <div className="home-page">
@@ -54,8 +84,13 @@ function Home() {
 
         <div>
           <h1>Bem-vindo ao Mercado Prático 🛒</h1>
-          {user && <p>Olá, {user.nomeUsuario}! Confira suas ofertas personalizadas abaixo.</p>}
-          <p>Aqui você encontra ofertas imperdíveis, produtos fresquinhos e toda a praticidade para suas compras online.</p>
+          {user && (
+            <p>Olá, {user.nomeUsuario}! Confira suas ofertas personalizadas abaixo.</p>
+          )}
+          <p>
+            Aqui você encontra ofertas imperdíveis, produtos fresquinhos e toda a
+            praticidade para suas compras online.
+          </p>
         </div>
 
         <section id="section-categorias-home">
@@ -73,36 +108,18 @@ function Home() {
             <h1>Produtos em Destaque</h1>
             <hr />
           </div>
-          
-{loading ? (
-  <p>Carregando produtos...</p>
-) : produtos.length === 0 ? (
-  <p>Nenhum produto encontrado.</p>
-) : (
-  <div className="produtos">
-    {produtos.slice(0, 16).map((produto) => {
-      // Lógica para definir a imagem
-      const imagemFinal =
-        produto.imgUrl && produto.imgUrl.trim() !== ""
-          ? produto.imgUrl // Se imgUrl não estiver vazio, use a URL
-          : produto.imagemProdutoBase64 // Caso contrário, use a imagem em base64
-          ? produto.imagemProdutoBase64
-          : "/placeholder.png"; // Caso não haja imagem, use o placeholder
 
-      return (
-        <CardProduto
-          key={produto.idProduto}
-          produto={{
-            ...produto,
-            imgUrl: imagemFinal, // Aqui você passa a imagem correta para o CardProduto
-          }}
-        />
-      );
-    })}
-  </div>
-)}
-
-        
+          {loading ? (
+            <p>Carregando produtos...</p>
+          ) : produtos.length === 0 ? (
+            <p>Nenhum produto encontrado.</p>
+          ) : (
+            <div className="produtos">
+              {produtos.slice(0, 16).map((produto) => (
+                <CardProduto key={produto.idProduto} produto={produto} />
+              ))}
+            </div>
+          )}
 
           <Image src={bannerSecundario1} alt="banner" />
         </section>
