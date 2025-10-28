@@ -1,30 +1,154 @@
-.imagem {
+.main-image {
+  position: relative;
   width: 100%;
+  height: 100vh;
   overflow: hidden;
+  background: white;
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
 }
 
-.tela-inteira1 {
-  width: 100%;
-  display: block;
+/* ====== FORMAS LÍQUIDAS (DEFORMADAS E SEPARADAS) ====== */
+.forma {
+  position: absolute;
+  opacity: 0.9;
+  filter: blur(6px);
+  border-radius: 45% 55% 65% 35% / 55% 45% 55% 45%;
+  animation: liquido 18s ease-in-out infinite alternate;
+  transition: all 2s ease-in-out;
+  z-index: 1;
 }
 
-.imagem img {
-    width: 100%;
-    height: auto;
-    object-fit: contain;
-    object-position: center;
+/* === CORES === */
+.verde {
+  background: #388e3c;
+  width: 500px;
+  height: 460px;
+  top: 8%;
+  right: 12%;
+  animation-delay: 0s;
 }
 
-@media (max-width: 500px){
-  .imagem{
-    height: auto;
+.verde-claro {
+  background: #7ac943;
+  width: 480px;
+  height: 420px;
+  top: 25%;
+  right: 0%;
+  animation-delay: 3s;
+}
+
+.laranja {
+  background: #f68700;
+  width: 540px;
+  height: 480px;
+  top: -3%;
+  right: -7%;
+  animation-delay: 6s;
+}
+
+/* ====== ANIMAÇÃO DEFORMAÇÃO SUAVE ====== */
+@keyframes liquido {
+  0% {
+    transform: translate(0, 0) scale(1);
+    border-radius: 60% 40% 45% 55% / 55% 60% 40% 45%;
   }
-  .imagem img{
-    object-fit: contain;
-    max-height: 250px;
+  25% {
+    transform: translate(-20px, 15px) scale(1.02);
+    border-radius: 50% 60% 55% 45% / 60% 45% 50% 55%;
+  }
+  50% {
+    transform: translate(25px, -25px) scale(1.06);
+    border-radius: 65% 35% 50% 50% / 45% 60% 55% 40%;
+  }
+  75% {
+    transform: translate(-10px, 20px) scale(1.03);
+    border-radius: 55% 45% 65% 35% / 50% 55% 45% 60%;
+  }
+  100% {
+    transform: translate(0, 0) scale(1);
+    border-radius: 60% 40% 45% 55% / 55% 60% 40% 45%;
   }
 }
 
+/* ====== BOLA BRANCA ====== */
+.bola {
+  position: absolute;
+  left: 55%;              /* mantém bola à esquerda */
+  top: 50%;
+  transform: translateY(-50%);
+  width: 230px;
+  height: 230px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #ffffff, #d9d9d9 80%);
+  box-shadow:
+    0 20px 40px rgba(0, 0, 0, 0.25),
+    inset -10px -10px 25px rgba(0, 0, 0, 0.1),
+    inset 5px 5px 20px rgba(255, 255, 255, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: flutuar 8s ease-in-out infinite alternate;
+  z-index: 3;
+}
+
+.bola img {
+  width: 120px;
+  height: auto;
+}
+
+/* ====== ANIMAÇÃO DA BOLA ====== */
+@keyframes flutuar {
+  0% { transform: translateY(-50%) translateY(0); }
+  100% { transform: translateY(-50%) translateY(-15px); }
+}
+
+/* ====== TEXTO ====== */
+.texto {
+  position: absolute;
+  left: 25%;  /* 👈 move texto mais à esquerda */
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 4;
+  font-family: "KonkhmerSleokchher", sans-serif;
+  text-align: left;
+}
+
+.texto h1 {
+  font-size: 4rem;
+  font-weight: bold;
+  line-height: 1.1;
+}
+
+.verde-texto { color: #3b913b; }
+.laranja-texto { color: #f68700; }
+
+.texto p {
+  margin-top: 10px;
+  font-size: 1.2rem;
+  color: #333;
+  font-family: "Inter", sans-serif;
+}
+
+/* ====== RESPONSIVO ====== */
+@media (max-width: 900px) {
+  .texto {
+    top: 50%;
+    left: 5%;
+  }
+
+  .texto h1 {
+    font-size: 2.5rem;
+  }
+
+  .bola {
+    width: 180px;
+    height: 180px;
+    left: 5%;
+  }
+
+  .forma {
+    filter: blur(4px);
+  }
+}
