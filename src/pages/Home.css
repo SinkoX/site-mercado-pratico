@@ -46,14 +46,14 @@
 .home-page .produtos {
   width: 100%;
   display: grid;
-  grid-template-columns: repeat(4, 325px);
-  gap: 40px;
+  grid-template-columns: repeat(5, 250px);
+  gap: 20px;
   justify-content: center;
   justify-items: center;
   align-items: center;
 }
 
-.home-page hr {
+.home-page .footer hr {
   width: 1400px;
 }
 

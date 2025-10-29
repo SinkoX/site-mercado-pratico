@@ -27,7 +27,9 @@ a {
 
 .card-produto-text {
   width: 200px;
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .produto {
@@ -38,15 +40,19 @@ a {
 
 .card-produto button {
   all: unset;
-  width: 190px;
+  width: 200px;
   height: 40px;
   background-color: #f56b16;
   text-align: center;
-  border-radius: 10px;
+  border-radius: 5px;
   color: #fff;
   font-family: "Inter";
   margin-bottom: 20px;
   transition: background 0.15s ease;
+  font-size: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .card-produto button:hover {
@@ -54,10 +60,19 @@ a {
 }
 
 .card-produto h3 {
-  font-size: 15px;
+  font-size: 12px;
+  font-weight: 100;
+  text-align: left;
 }
 
 .card-produto p {
   font-size: 18px;
-  color: ;
+  color: #e64242;
+  font-weight: bold;
+  text-align: center;
+}
+
+.card-produto hr {
+  width: 200px;
+  color: #000;
 }
