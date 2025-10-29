@@ -1,154 +1,198 @@
-.main-image {
+/* Importa Inter (opcional — se já tiver local, remover) */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&display=swap');
+
+:root{
+  --green-dark: #2e7d32;
+  --green-light:#7bcf4c;
+  --orange: #f57c00;
+  --text:#333;
+}
+
+/* container */
+.main-image{
   position: relative;
   width: 100%;
   height: 100vh;
+  background: #fff;
   overflow: hidden;
-  background: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
 }
 
-/* ====== FORMAS LÍQUIDAS (DEFORMADAS E SEPARADAS) ====== */
-.forma {
+/* ----- BLOBS (fundo) ----- */
+.blob{
   position: absolute;
-  opacity: 0.9;
-  filter: blur(6px);
-  border-radius: 45% 55% 65% 35% / 55% 45% 55% 45%;
-  animation: liquido 18s ease-in-out infinite alternate;
-  transition: all 2s ease-in-out;
-  z-index: 1;
+  border-radius: 50%;
+  filter: blur(44px);
+  opacity: 0.98;
+  transform-origin: center;
+  z-index: 0;
+  animation: subtle-move 12s ease-in-out infinite alternate;
 }
 
-/* === CORES === */
-.verde {
-  background: #388e3c;
-  width: 500px;
-  height: 460px;
-  top: 8%;
-  right: 12%;
-  animation-delay: 0s;
+/* verde escuro (maior, canto superior direito) */
+.blob.verde{
+  width: 700px;
+  height: 700px;
+  background: var(--green-dark);
+  top: -240px;
+  right: -160px;
+  box-shadow: inset -40px -20px 50px rgba(0,0,0,0.06);
 }
 
-.verde-claro {
-  background: #7ac943;
+/* verde claro (sobreposto à esquerda da verde) */
+.blob.verde-claro{
   width: 480px;
-  height: 420px;
-  top: 25%;
-  right: 0%;
-  animation-delay: 3s;
-}
-
-.laranja {
-  background: #f68700;
-  width: 540px;
   height: 480px;
-  top: -3%;
-  right: -7%;
-  animation-delay: 6s;
+  background: var(--green-light);
+  top: 80px;
+  right: 140px;
+  animation-delay: 1s;
+  box-shadow: inset 20px 10px 30px rgba(0,0,0,0.03);
 }
 
-/* ====== ANIMAÇÃO DEFORMAÇÃO SUAVE ====== */
-@keyframes liquido {
-  0% {
-    transform: translate(0, 0) scale(1);
-    border-radius: 60% 40% 45% 55% / 55% 60% 40% 45%;
-  }
-  25% {
-    transform: translate(-20px, 15px) scale(1.02);
-    border-radius: 50% 60% 55% 45% / 60% 45% 50% 55%;
-  }
-  50% {
-    transform: translate(25px, -25px) scale(1.06);
-    border-radius: 65% 35% 50% 50% / 45% 60% 55% 40%;
-  }
-  75% {
-    transform: translate(-10px, 20px) scale(1.03);
-    border-radius: 55% 45% 65% 35% / 50% 55% 45% 60%;
-  }
-  100% {
-    transform: translate(0, 0) scale(1);
-    border-radius: 60% 40% 45% 55% / 55% 60% 40% 45%;
-  }
+/* laranja (canto superior direito, atrás da bola) */
+.blob.laranja{
+  width: 520px;
+  height: 520px;
+  background: var(--orange);
+  top: -160px;
+  right: 20px;
+  animation-delay: 2s;
 }
 
-/* ====== BOLA BRANCA ====== */
-.bola {
+/* movimento sutil das blobs */
+@keyframes subtle-move{
+  0% { transform: translate3d(0,0,0) scale(1) rotate(0deg); border-radius: 60% 40% 65% 35% / 35% 65% 40% 60%; }
+  50% { transform: translate3d(-10px,12px,0) scale(1.03) rotate(2deg); border-radius: 50% 50% 45% 55% / 55% 45% 60% 40%; }
+  100% { transform: translate3d(6px,-8px,0) scale(1) rotate(-2deg); border-radius: 65% 35% 55% 45% / 45% 55% 50% 50%; }
+}
+
+/* ----- BOLA BRANCA COM LOGO ----- */
+.bola{
   position: absolute;
-  left: 55%;              /* mantém bola à esquerda */
+  right: 300px;            /* deslocada para a direita como na imagem */
   top: 50%;
   transform: translateY(-50%);
-  width: 230px;
-  height: 230px;
+  width: 210px;
+  height: 210px;
+  background: #fff;
   border-radius: 50%;
-  background: radial-gradient(circle at 30% 30%, #ffffff, #d9d9d9 80%);
-  box-shadow:
-    0 20px 40px rgba(0, 0, 0, 0.25),
-    inset -10px -10px 25px rgba(0, 0, 0, 0.1),
-    inset 5px 5px 20px rgba(255, 255, 255, 0.3);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  animation: flutuar 8s ease-in-out infinite alternate;
+  display:flex;
+  align-items:center;
+  justify-content:center;
   z-index: 3;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.18);
+  border: 6px solid rgba(255,255,255,0.98); /* leve contorno para recortar do blur */
 }
 
-.bola img {
-  width: 120px;
+/* logo dentro da bola */
+.bola img{
+  width: 140px;
   height: auto;
+  display:block;
 }
 
-/* ====== ANIMAÇÃO DA BOLA ====== */
-@keyframes flutuar {
-  0% { transform: translateY(-50%) translateY(0); }
-  100% { transform: translateY(-50%) translateY(-15px); }
-}
-
-/* ====== TEXTO ====== */
-.texto {
+/* ----- TEXTO PRINCIPAL ----- */
+.texto{
   position: absolute;
-  left: 25%;  /* 👈 move texto mais à esquerda */
+  left: 120px;         /* mais para a esquerda como na imagem */
   top: 50%;
   transform: translateY(-50%);
   z-index: 4;
-  font-family: "KonkhmerSleokchher", sans-serif;
-  text-align: left;
+  max-width: 720px;
 }
 
-.texto h1 {
-  font-size: 4rem;
-  font-weight: bold;
-  line-height: 1.1;
+.texto h1{
+  margin: 0;
+  font-size: 84px;     /* grande como na arte */
+  line-height: 0.95;
+  font-weight: 800;
+  letter-spacing: -1px;
 }
 
-.verde-texto { color: #3b913b; }
-.laranja-texto { color: #f68700; }
+.verde-texto { color: var(--green-dark); display:inline-block; }
+.laranja-texto { color: var(--orange); display:inline-block; }
 
-.texto p {
-  margin-top: 10px;
-  font-size: 1.2rem;
-  color: #333;
-  font-family: "Inter", sans-serif;
+.tagline{
+  margin-top: 12px;
+  color: #6b6b6b;
+  font-size: 14px;
+  font-weight: 500;
 }
 
-/* ====== RESPONSIVO ====== */
-@media (max-width: 900px) {
-  .texto {
-    top: 50%;
-    left: 5%;
-  }
+/* ----- FAIXA LARANJA INFERIOR ----- */
+.bottom-bar{
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 92px;
+  background: var(--orange);
+  z-index: 2;
+ 
+  display: flex;
+  align-items: center;
+  padding-left: 36px;  /* espaço onde fica o pill e o rodapé */
+}
 
-  .texto h1 {
-    font-size: 2.5rem;
-  }
+/* pill verde pousada sobre a faixa laranja (do lado esquerdo) */
+.pill{
+  width: 320px;
+  height: 38px;
+  background: var(--green-dark);
+  border-radius: 20px;
+  position: absolute;
+  left: 0px;
+  bottom: 79px; /* fica “encostada” na faixa — aparece sobre a margem superior da faixa */
+  box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+  z-index: 4;
+}
 
-  .bola {
-    width: 180px;
-    height: 180px;
-    left: 5%;
-  }
+/* rodapé — ícone e url no canto inferior esquerdo */
+.footer-left{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  margin-left: 10px;
+  z-index: 4;
+}
 
-  .forma {
-    filter: blur(4px);
-  }
+/* pequeno círculo que representa o globo */
+.globe{
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.12);
+  display:inline-block;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.18);
+}
+
+/* URL */
+.site{
+  text-transform:none;
+  opacity: 0.95;
+}
+
+/* ----- RESPONSIVIDADE ----- */
+@media (max-width: 1100px){
+  .texto h1 { font-size: 52px; }
+  .bola{ right: 180px; width:200px; height:200px; }
+  .bola img{ width:120px; }
+  .blob.verde{ width:560px; height:560px; top:-200px; right:-140px; }
+  .blob.verde-claro{ width:420px; height:420px; right:120px; }
+  .blob.laranja{ width:420px; height:420px; right:0; top:-140px; }
+}
+
+@media (max-width: 760px){
+  .main-image{ height: 820px; } /* aumenta vertical pra caber conteúdo */
+  .texto{ left: 30px; top: 24%; transform:none; }
+  .texto h1 { font-size: 44px; }
+  .tagline { font-size: 13px; }
+  .bola{ right: 26px; top: 28%; transform:none; }
+  .pill { display:none; }
+  .bottom-bar{ height: 78px; padding-left: 18px; }
 }
