@@ -1,8 +1,8 @@
 import React from "react";
 import { useAuth } from "../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
-import "./PerfilUsuario.css";
 import { FaHome } from "react-icons/fa";
+import "./PerfilUsuario.css";
 
 function PerfilUsuario() {
   const { user, logout } = useAuth();
@@ -31,8 +31,6 @@ function PerfilUsuario() {
 
   if (!user) return <p>Carregando perfil...</p>;
 
-  console.log("Endereço do usuário:", user.enderecoUsuario);
-
   return (
     <div className="perfil-page">
       <div className="home-icon" onClick={() => navigate("/")}>
@@ -41,16 +39,12 @@ function PerfilUsuario() {
 
       <div className="profile-header">
         <div className="avatar">
-          <img src="/avatar-placeholder.png" alt="Avatar" />
+          <img src="../src/assets/images/icones/iconeAvatar.jpg" alt="Avatar" />
         </div>
+        <h2>{user.nomeUsuario}</h2>
       </div>
 
       <div className="form">
-        <div className="info-item">
-          <label className="info-label">Nome</label>
-          <span className="info-box">{user.nomeUsuario}</span>
-        </div>
-
         <div className="info-item">
           <label className="info-label">Email</label>
           <span className="info-box">{user.emailUsuario}</span>
@@ -58,9 +52,7 @@ function PerfilUsuario() {
 
         <div className="info-item">
           <label className="info-label">Telefone</label>
-          <span className="info-box">
-            {formatTelefone(user.telefoneUsuario)}
-          </span>
+          <span className="info-box">{formatTelefone(user.telefoneUsuario)}</span>
         </div>
 
         <div className="info-item">
