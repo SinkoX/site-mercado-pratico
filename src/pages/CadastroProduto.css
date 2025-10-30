@@ -119,3 +119,121 @@
   border-color: #54bd54;
   box-shadow: 0 0 6px rgba(84, 189, 84, 0.5);
 }
+
+@media(max-width: 500px){
+  .cadastro-produto-page{
+    padding: 20px 10px;
+  }
+
+  .cadastro-produto-page .form{
+    padding: 25px 15px;
+  }
+
+  .cadastro-produto .titulo{
+    margin-bottom: 25px;
+  }
+
+  .cadastro-produto h1{
+    font-size: 22px;
+  }
+
+  .cadastro-produto h2{
+    font-size: 14px;
+  }
+
+  .cadastro-produto label{
+    font-size: 12px;
+  }
+
+  .cadastro-produto input,
+  .cadastro-produto-page select{
+    height: 42px;
+    font-size: 14px;
+    padding: 0 12px;
+  }
+
+  .cadastro-produto-page textarea{
+    min-height: 100px;
+    font-size: 14px;
+  }
+
+  .cadastro-produto-page button{
+    width: 100%;
+    padding: 14px;
+    font-size: 15px;
+  }
+
+  .cadastro-produto-page .campo{
+    margin-bottom: 12px;
+  }
+}
+
+@media(min-width: 501px) and (max-width: 1023px){
+  .cadastro-produto-page{
+    padding: 30px 20px;
+  }
+
+  .cadastro-produto-page .form{
+    max-width: 500px;
+    padding: 30px 25px;
+  }
+
+  .cadastro-produto h1{
+    font-size: 26px;
+  }
+
+  .cadastro-produto h2{
+    font-size: 16px;
+  }
+
+  .cadastro-produto input,
+  .cadastro-produto-page select{
+    height: 42px;
+  }
+
+  .cadastro-produto-page textarea{
+    min-height: 110px;
+  }
+
+  .cadastro-produto-page button{
+    width: 300px;
+    font-size: 15px;
+  }
+}
+
+@media(min-width: 1023px){
+  .cadastro-produto-page{
+    padding-top:50px;
+  }
+
+  .cadastro-produto-page .form{
+    max-width: 550px;
+    padding: 40px 30px;
+  }
+
+  .cadastro-produto h1{
+    font-size: 28px;
+  }
+
+  .cadastro-produto h2{
+    font-size: 18px;
+  }
+
+  .cadastro-produto label{
+    font-size: 12px;
+  }
+
+  .cadastro-produto input,
+  .cadastro-produto-page select{
+    height: 44px;
+  }
+
+  .cadastro-produto-page textarea{
+    min-height: 120px;
+  }
+
+  .cadastro-produto-page button{
+    width: 350px;
+    font-size: 16px;
+  }
+}

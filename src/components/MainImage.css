@@ -1,6 +1,5 @@
 /* Importa Inter (opcional — se já tiver local, remover) */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&display=swap');
-
 :root{
   --green-dark: #2e7d32;
   --green-light:#7bcf4c;
@@ -22,8 +21,8 @@
 .blob{
   position: absolute;
   border-radius: 50%;
-  filter: blur(44px);
-  opacity: 0.98;
+  filter: blur(13px);
+  opacity: 1;
   transform-origin: center;
   z-index: 0;
   animation: subtle-move 12s ease-in-out infinite alternate;
@@ -56,9 +55,11 @@
   height: 520px;
   background: var(--orange);
   top: -160px;
-  right: 20px;
+  right: 40px;
   animation-delay: 2s;
 }
+
+
 
 /* movimento sutil das blobs */
 @keyframes subtle-move{
