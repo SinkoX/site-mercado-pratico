@@ -5,14 +5,17 @@ import { useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import "./Carrinho.css";
+import PlaceHolder from "../assets/images/categorias/placeholder.png";
 
-// Tipos do DTO do backend
 interface ItemCarrinhoDTO {
   idItemCarrinho: number;
-  idProduto: number; // ⚠️ Necessário para remover
+  idProduto: number;
   nomeProduto: string;
   quantidade: number;
   subTotal: number;
+  imgUrl?: string;
+  img_url?: string;
+  imagemProdutoBase64?: string;
 }
 
 interface CarrinhoDTO {
@@ -29,7 +32,6 @@ function Carrinho() {
   const [carrinho, setCarrinho] = useState<CarrinhoDTO | null>(null);
   const [loading, setLoading] = useState(true);
 
-  // Busca o carrinho ao carregar a página
   const fetchCarrinho = async () => {
     if (!user) return;
     setLoading(true);
@@ -47,44 +49,69 @@ function Carrinho() {
     fetchCarrinho();
   }, [user]);
 
-  // Atualiza quantidade do item manualmente
+  const atualizarEstadoItem = (idItem: number, novaQuantidade: number) => {
+    if (!carrinho) return;
+
+    const itensAtualizados = carrinho.itens.map(item =>
+      item.idItemCarrinho === idItem
+        ? {
+            ...item,
+            subTotal: (item.subTotal / item.quantidade) * novaQuantidade,
+            quantidade: novaQuantidade,
+          }
+        : item
+    );
+
+    const valorTotalAtualizado = itensAtualizados.reduce((sum, item) => sum + item.subTotal, 0);
+    const quantidadeTotalAtualizada = itensAtualizados.reduce((sum, item) => sum + item.quantidade, 0);
+
+    setCarrinho({
+      ...carrinho,
+      itens: itensAtualizados,
+      valorTotal: valorTotalAtualizado,
+      quantidadeTotal: quantidadeTotalAtualizada,
+    });
+  };
+
   const handleAtualizarQuantidade = async (idItem: number, quantidade: number) => {
     if (!user || quantidade < 1) return;
+
     try {
-      await api.put(
-        `/itens-carrinho/${user.idUsuario}/atualizar/${idItem}?quantidade=${quantidade}`
-      );
-      fetchCarrinho();
+      await api.put(`/itens-carrinho/${user.idUsuario}/atualizar/${idItem}?quantidade=${quantidade}`);
+      atualizarEstadoItem(idItem, quantidade);
     } catch (err) {
       console.error(err);
     }
   };
 
-  // Remove ou decrementa item do carrinho
-  const handleRemoverItem = async (idProduto: number, quantidadeAtual: number, idItemCarrinho: number) => {
+  const handleRemoverItem = async (idProduto: number, idItemCarrinho: number) => {
     if (!user) return;
+
     try {
-      if (quantidadeAtual > 1) {
-        // Se tiver mais de 1 unidade, decrementa 1
-        await api.put(
-          `/itens-carrinho/${user.idUsuario}/atualizar/${idItemCarrinho}?quantidade=${quantidadeAtual - 1}`
-        );
-      } else {
-        // Se tiver 1 unidade, remove totalmente
-        await api.delete(`/carrinho/${user.idUsuario}/remover/${idProduto}`);
+      await api.delete(`/carrinho/${user.idUsuario}/remover/${idProduto}`);
+      if (carrinho) {
+        const itensRestantes = carrinho.itens.filter(item => item.idItemCarrinho !== idItemCarrinho);
+        const valorTotalAtualizado = itensRestantes.reduce((sum, item) => sum + item.subTotal, 0);
+        const quantidadeTotalAtualizada = itensRestantes.reduce((sum, item) => sum + item.quantidade, 0);
+
+        setCarrinho({
+          ...carrinho,
+          itens: itensRestantes,
+          valorTotal: valorTotalAtualizado,
+          quantidadeTotal: quantidadeTotalAtualizada,
+        });
       }
-      fetchCarrinho();
     } catch (err) {
       console.error(err);
     }
   };
 
-  // Limpa todo o carrinho
   const handleLimparCarrinho = async () => {
     if (!user) return;
+
     try {
       await api.delete(`/carrinho/${user.idUsuario}/limpar`);
-      fetchCarrinho();
+      setCarrinho({ ...carrinho!, itens: [], valorTotal: 0, quantidadeTotal: 0 });
     } catch (err) {
       console.error(err);
     }
@@ -92,14 +119,22 @@ function Carrinho() {
 
   if (!user) return <p>Você precisa estar logado para acessar o carrinho.</p>;
   if (loading) return <p>Carregando carrinho...</p>;
+
   if (!carrinho || carrinho.itens.length === 0)
     return (
       <div className="carrinho-page">
         <Header />
         <div className="carrinho-vazio">
-          <h2>🛒 Seu carrinho está vazio!</h2>
-          <p>Adicione produtos e eles aparecerão aqui. 😄</p>
-          <button onClick={() => navigate("/")}>Voltar para a Home</button>
+          <div className="icone-vazio-container">
+            <img
+              src="https://cdn-icons-png.flaticon.com/512/891/891462.png"
+              alt="Carrinho vazio"
+              className="icone-vazio"
+            />
+          </div>
+          <h2>Seu carrinho está vazio</h2>
+          <p>Adicione produtos e volte aqui para finalizar sua compra.</p>
+          <button onClick={() => navigate("/")}>Ver produtos</button>
         </div>
         <Footer />
       </div>
@@ -108,53 +143,56 @@ function Carrinho() {
   return (
     <div className="carrinho-page">
       <Header />
-      <h1>Carrinho de {carrinho.nomeUsuario}</h1>
+      <h1 className="titulo-carrinho">Meu Carrinho</h1>
+      <div className="carrinho-itens">
+        {carrinho.itens.map((item) => {
+          const imagemFinal =
+            item.imgUrl?.trim() || item.img_url?.trim() || (item.imagemProdutoBase64 ? `data:image/png;base64,${item.imagemProdutoBase64}` : PlaceHolder);
 
-      <table className="carrinho-table">
-        <thead>
-          <tr>
-            <th>Produto</th>
-            <th>Quantidade</th>
-            <th>Subtotal</th>
-            <th>Ações</th>
-          </tr>
-        </thead>
-        <tbody>
-          {carrinho.itens.map((item) => (
-            <tr key={item.idItemCarrinho}>
-              <td>{item.nomeProduto}</td>
-              <td>
-                <input
-                  type="number"
-                  value={item.quantidade}
-                  min={1}
-                  onChange={(e) =>
-                    handleAtualizarQuantidade(item.idItemCarrinho, Number(e.target.value))
-                  }
-                />
-              </td>
-              <td>R$ {item.subTotal.toFixed(2)}</td>
-              <td>
-                <button
-                  onClick={() =>
-                    handleRemoverItem(item.idProduto, item.quantidade, item.idItemCarrinho)
-                  }
-                >
-                  Remover
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-
-      <div className="carrinho-total">
-        <p>Total de itens: {carrinho.quantidadeTotal}</p>
-        <p>Valor total: R$ {carrinho.valorTotal.toFixed(2)}</p>
+          return (
+            <div className="item-card" key={item.idItemCarrinho}>
+              <img src={imagemFinal} alt={item.nomeProduto} className="item-img" />
+              <div className="item-info">
+                <h3>{item.nomeProduto}</h3>
+                <p className="item-preco">R$ {item.subTotal.toFixed(2)}</p>
+                <div className="item-controles">
+                  <button
+                    className="btn-qtd"
+                    onClick={() => handleAtualizarQuantidade(item.idItemCarrinho, item.quantidade - 1)}
+                  >
+                    –
+                  </button>
+                  <span>{item.quantidade}</span>
+                  <button
+                    className="btn-qtd"
+                    onClick={() => handleAtualizarQuantidade(item.idItemCarrinho, item.quantidade + 1)}
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
+              <button
+                className="btn-remover"
+                onClick={() => handleRemoverItem(item.idProduto, item.idItemCarrinho)}
+              >
+                Remover
+              </button>
+            </div>
+          );
+        })}
       </div>
 
-      <div className="carrinho-acoes">
-        <button onClick={handleLimparCarrinho}>Limpar Carrinho</button>
+      <div className="resumo-carrinho">
+        <p>Total de itens: <strong>{carrinho.quantidadeTotal}</strong></p>
+        <h2>Total: R$ {carrinho.valorTotal.toFixed(2)}</h2>
+        <div className="botoes-carrinho">
+          <button className="btn-limpar" onClick={handleLimparCarrinho}>
+            Limpar
+          </button>
+          <button className="btn-finalizar" onClick={() => navigate("/checkout")}>
+            Finalizar Compra
+          </button>
+        </div>
       </div>
 
       <Footer />

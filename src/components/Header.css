@@ -1,44 +1,21 @@
 .header { 
-  justify-content: space-between; 
-  align-items: end;
   display: grid;
   grid-template-columns: auto 1fr auto;
   gap: 16px;
   padding: 14px 16px;
   background-color: #fff;
   width: 100%;
+  align-items: center; /* centraliza verticalmente */
+  justify-content: space-between;
 }
 
-
-.header__burger {
-  display: none;
-  width: 40px;
-  height: 40px;
-  border-radius: 8px;
-  border: 1px solid #e5e7eb;
-  background: #ffffff;
-  align-items: center;
-  justify-content: center;
+/* Logo */
+.logo {
+  width: 90px;
+  height: auto;
 }
-.header__burger-lines {
-  display: inline-block;
-  width: 18px;
-  height: 2px;
-  background: #111827;
-  position: relative;
-}
-.header__burger-lines::before,
-.header__burger-lines::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: #111827;
-  }
-.header__burger-lines::before { top: -6px; }
-.header__burger-lines::after { top: 6px; }
 
+/* Busca */
 .procura {
   display: flex;
   align-items: center;
@@ -48,6 +25,7 @@
   background-color: #f7f7f7;
   gap: 8px;
   padding: 0 8px;
+  flex: 1; /* ocupa espaço central */
 }
 
 .procura > * {
@@ -72,7 +50,13 @@
   font-size: 18px;
 }
 
-.logo { width: 90px; height: auto; }
+/* User + carrinho */
+.user-icons {
+  display: flex;
+  align-items: center;
+  gap: 16px; /* distância entre carrinho e avatar */
+  position: relative; /* para dropdown */
+}
 
 .user {
   width: 50px;
@@ -81,8 +65,7 @@
   background-color: rgb(231, 231, 231);
   display: flex;
   justify-content: center;
-  align-items: center;
-  gap: 20px;
+  align-items:center;
 }
 
 .user a {
@@ -90,6 +73,83 @@
   height: 25px;
 }
 
+.carrinho-icon {
+  cursor: pointer;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.contador {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background: var(--vermelho, red);
+  color: white;
+  border-radius: 50%;
+  padding: 2px 6px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+/* Dropdown carrinho */
+.dropdown-carrinho {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  width: 250px;
+  margin-top: 8px;
+  padding: 12px;
+  z-index: 10;
+}
+
+.item-dropdown {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.item-dropdown:last-child {
+  border-bottom: none;
+}
+
+/* Burger menu (mobile) */
+.header__burger {
+  display: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  background: #ffffff;
+  align-items: center;
+  justify-content: center;
+}
+
+.header__burger-lines {
+  display: inline-block;
+  width: 18px;
+  height: 2px;
+  background: #111827;
+  position: relative;
+}
+.header__burger-lines::before,
+.header__burger-lines::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: #111827;
+}
+.header__burger-lines::before { top: -6px; }
+.header__burger-lines::after { top: 6px; }
+
+/* Ícones internos */
 #icon-perfil {
   width: 25px;
   height: 25px;
@@ -100,13 +160,13 @@
   height: 20px;
 }
 
+/* Responsivo */
 @media (min-width: 1024px) {
   .header {
     grid-template-columns: auto minmax(360px, 720px) auto;
     padding: 16px 24px;
   }
 }
-
 
 @media (min-width: 501px) and (max-width: 1023px) {
   .header {
@@ -115,16 +175,14 @@
   }
 }
 
-
 @media (max-width: 500px) {
   .header {
     grid-template-columns: auto 1fr auto;
     gap: 4px;
     padding: 10px 12px;
   }
+
   .header__burger { display: inline-flex; }
   .procura { min-width: 0; }
-  .logo{
-    display: none;
-  }
+  .logo { display: none; }
 }
