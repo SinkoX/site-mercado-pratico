@@ -1,11 +1,21 @@
-.pagina-produto {
+.produto-container {
+  background-color: #f9f9f9;
+  padding: 60px 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.produto-card {
   display: flex;
   flex-wrap: wrap;
-  gap: 40px;
-  justify-content: center;
-  align-items: flex-start;
+  gap: 50px;
+  background: #fff;
   padding: 40px;
-  background-color: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.08);
+  max-width: 1200px;
+  width: 100%;
 }
 
 .imagem-container {
@@ -19,53 +29,74 @@
 
 .product-image {
   width: 100%;
-  max-width: 550px;
-  border-radius: 10px;
+  border-radius: 12px;
   object-fit: cover;
-  background-color: #f3f3f3;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
 }
 
 .detalhes-produto {
   flex: 1;
-  min-width: 300px;
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 1.1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  font-family: "Poppins", sans-serif;
+}
+
+.nome-produto {
+  font-size: 2rem;
+  font-weight: 600;
+  color: #333;
 }
 
 .preco {
-  margin-top: 20px;
+  margin-top: 15px;
   font-weight: bold;
   color: #e64242;
-  font-size: 26px;
+  font-size: 1.8rem;
 }
 
+/* Descrição logo junto da área de compra */
+.descricao-junta {
+  margin-top: 15px;
+  color: #555;
+  font-size: 1rem;
+  line-height: 1.6;
+  white-space: pre-line;
+  text-align: justify;
+  max-width: 500px;
+}
+
+/* Quantidade */
 .quantidade {
-  margin-top: 30px;
-  border: 1px solid #ddd;
-  width: 170px;
-  height: 60px;
-  border-radius: 10px;
+  margin-top: 25px;
   display: flex;
   align-items: center;
   justify-content: space-around;
+  border: 1px solid #ddd;
+  width: 180px;
+  height: 55px;
+  border-radius: 10px;
+  background-color: #fff;
 }
 
 .quantidade button {
-  background-color: #ff6969;
-  border-radius: 5px;
+  background-color: #ff6b6b;
+  border-radius: 6px;
   border: none;
   width: 45px;
   height: 40px;
   color: white;
-  font-size: 25px;
+  font-size: 22px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 .quantidade button:hover {
-  background-color: #f0a4a4;
+  background-color: #ff8585;
+  transform: scale(1.05);
 }
 
+/* Botão vermelho antigo (mantido) */
 .button-add {
   margin-top: 20px;
   background-color: #ff6969;
@@ -76,16 +107,56 @@
   height: 50px;
   width: 170px;
   font-size: 20px;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 .button-add:hover {
-  background-color: #f0a4a4;
+  background-color: #f07a7a;
+  transform: translateY(-2px);
 }
 
-.descricao {
+.loading {
+  text-align: center;
+  margin-top: 50px;
+  font-size: 1.2rem;
+  color: #555;
+}
+/* ===========================
+   TOAST DE CONFIRMAÇÃO
+=========================== */
+.toast-carrinho {
+  position: fixed;
+  bottom: 30px;
+  right: -400px; /* começa fora da tela */
+  background-color: #ff6969;
+  color: #fff;
+  padding: 16px 25px;
+  border-radius: 8px;
   font-size: 1rem;
-  color: #666;
-  margin-top: 20px;
-  line-height: 1.5;
+  font-weight: 500;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+  animation: slideIn 0.6s forwards, fadeOut 0.6s 2.4s forwards;
+  z-index: 9999;
+}
+
+@keyframes slideIn {
+  from {
+    right: -400px;
+    opacity: 0;
+  }
+  to {
+    right: 30px;
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    right: 30px;
+    opacity: 1;
+  }
+  to {
+    right: -400px;
+    opacity: 0;
+  }
 }

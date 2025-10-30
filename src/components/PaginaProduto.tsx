@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { api } from "../api";
 import { useAuth } from "../hooks/useAuth";
 import Header from "../components/Header";
@@ -19,54 +19,56 @@ interface Produto {
 const PaginaProduto: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const { user } = useAuth();
-  const navigate = useNavigate();
   const [produto, setProduto] = useState<Produto | null>(null);
   const [quantidade, setQuantidade] = useState(1);
   const [loading, setLoading] = useState(true);
+  const [showToast, setShowToast] = useState(false);
 
   useEffect(() => {
     if (!id) return;
 
     setLoading(true);
-    api.get(`/produto/${id}`)
-      .then(res => {
+    api
+      .get(`/produto/${id}`)
+      .then((res) => {
         const data = res.data;
         setProduto({ ...data, precoProduto: Number(data.precoProduto) });
       })
-      .catch(err => console.error("Erro ao buscar produto:", err))
+      .catch((err) => console.error("Erro ao buscar produto:", err))
       .finally(() => setLoading(false));
   }, [id]);
 
-  const aumentar = () => setQuantidade(q => q + 1);
-  const diminuir = () => setQuantidade(q => (q > 1 ? q - 1 : 1));
+  const aumentar = () => setQuantidade((q) => q + 1);
+  const diminuir = () => setQuantidade((q) => (q > 1 ? q - 1 : 1));
 
-const adicionarAoCarrinho = async () => {
-  if (!user) {
-    alert("Você precisa estar logado para adicionar produtos ao carrinho.");
-    return;
-  }
-  if (!produto) return;
+  const adicionarAoCarrinho = async () => {
+    if (!user) {
+      alert("Você precisa estar logado para adicionar produtos ao carrinho.");
+      return;
+    }
+    if (!produto) return;
 
-  try {
-    console.log("Usuário logado:", user);
-    console.log("Produto selecionado:", produto);
+    try {
+      await api.post(
+        `/carrinho/${user.idUsuario}/adicionar/${produto.idProduto}`,
+        null,
+        { params: { quantidade } }
+      );
 
-    // URL completa garantida
-    const url = `/carrinho/${user.idUsuario}/adicionar/${produto.idProduto}`;
-    console.log("Requisição POST para:", url, "quantidade:", quantidade);
+      // Mostra o toast animado
+      setShowToast(true);
+      setTimeout(() => setShowToast(false), 3000); // desaparece depois de 3s
+    } catch (err) {
+      console.error("Erro ao adicionar produto ao carrinho:", err);
+      alert("Erro ao adicionar produto ao carrinho.");
+    }
+  };
 
-    await api.post(url, null, { params: { quantidade } });
+  if (loading)
+    return <p className="loading">Carregando produto...</p>;
 
-    alert(`Produto adicionado ao carrinho! Quantidade: ${quantidade}`);
-  } catch (err) {
-    console.error("Erro ao adicionar produto ao carrinho:", err);
-    alert("Erro ao adicionar produto ao carrinho.");
-  }
-};
-
-
-  if (loading) return <p style={{ textAlign: "center", marginTop: "50px" }}>Carregando produto...</p>;
-  if (!produto) return <p style={{ textAlign: "center", marginTop: "50px" }}>Produto não encontrado.</p>;
+  if (!produto)
+    return <p className="loading">Produto não encontrado.</p>;
 
   const imagemFinal =
     produto.imgUrl && produto.imgUrl.trim() !== ""
@@ -80,28 +82,45 @@ const adicionarAoCarrinho = async () => {
       <Header />
       <MenuCategoria />
 
-      <div className="pagina-produto">
-        <div className="imagem-container">
-          <img src={imagemFinal} alt={produto.nomeProduto} className="product-image" />
-        </div>
-
-        <div className="detalhes-produto">
-          <h2>{produto.nomeProduto}</h2>
-          <p className="preco">R$ {(produto.precoProduto * quantidade).toFixed(2)}</p>
-
-          <div className="quantidade">
-            <button onClick={diminuir}>-</button>
-            <span>{quantidade}</span>
-            <button onClick={aumentar}>+</button>
+      <div className="produto-container">
+        <div className="produto-card">
+          <div className="imagem-container">
+            <img
+              src={imagemFinal}
+              alt={produto.nomeProduto}
+              className="product-image"
+            />
           </div>
 
-          <button className="button-add" onClick={adicionarAoCarrinho}>
-            Adicionar ao Carrinho
-          </button>
+          <div className="detalhes-produto">
+            <h1 className="nome-produto">{produto.nomeProduto}</h1>
+            <p className="preco">
+              R$ {(produto.precoProduto * quantidade).toFixed(2)}
+            </p>
 
-          {produto.descricao && <p className="descricao">{produto.descricao}</p>}
+            {produto.descricaoProduto && (
+              <p className="descricao-junta">{produto.descricaoProduto}</p>
+            )}
+
+            <div className="quantidade">
+              <button onClick={diminuir}>−</button>
+              <span>{quantidade}</span>
+              <button onClick={aumentar}>+</button>
+            </div>
+
+            <button className="button-add" onClick={adicionarAoCarrinho}>
+              Adicionar ao Carrinho
+            </button>
+          </div>
         </div>
       </div>
+
+      {/* Toast animado */}
+      {showToast && (
+        <div className="toast-carrinho">
+          🛒 Item adicionado ao carrinho!
+        </div>
+      )}
 
       <Footer />
     </div>

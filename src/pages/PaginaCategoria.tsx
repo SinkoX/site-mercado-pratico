@@ -29,64 +29,81 @@ export default function PaginaCategoria() {
   const [loading, setLoading] = useState(true);
 
   const [filtroSubcategoria, setFiltroSubcategoria] = useState<number | null>(null);
-  const [filtroDisponibilidade, setFiltroDisponibilidade] = useState<boolean | null>(null);
-  const [filtroPreco, setFiltroPreco] = useState<{ min: number; max: number }>({ min: 0, max: 10000 });
+  const [precoMin, setPrecoMin] = useState(0);
+  const [precoMax, setPrecoMax] = useState(10000);
 
+  const STEP = 1; // passo do slider
+
+  // Busca produtos e subcategorias
   useEffect(() => {
     const parametro = termo || nomeCategoria;
     if (!parametro) return;
 
     setLoading(true);
 
-    // URL para buscar produtos
     const url = termo
       ? `http://localhost:8080/produto/busca?nome=${encodeURIComponent(parametro)}`
       : `http://localhost:8080/categorias/${encodeURIComponent(parametro)}/produtos`;
 
-    axios.get(url)
-      .then(res => setProdutos(Array.isArray(res.data) ? res.data : []))
-      .catch(err => console.error("Erro ao buscar produtos:", err))
+    axios
+      .get(url)
+      .then((res) => setProdutos(Array.isArray(res.data) ? res.data : []))
+      .catch((err) => console.error("Erro ao buscar produtos:", err))
       .finally(() => setLoading(false));
 
-    // Se for categoria, tenta carregar subcategorias
     if (nomeCategoria) {
-      axios.get(`http://localhost:8080/categorias/${encodeURIComponent(nomeCategoria)}`)
-        .then(res => setSubcategorias(Array.isArray(res.data) ? res.data : []))
-        .catch(err => console.warn("Sem subcategorias para esta categoria:", err));
+      axios
+        .get(`http://localhost:8080/categorias/${encodeURIComponent(nomeCategoria)}`)
+        .then((res) => setSubcategorias(Array.isArray(res.data) ? res.data : []))
+        .catch((err) => console.warn("Sem subcategorias para esta categoria:", err));
     }
   }, [nomeCategoria, termo]);
 
-  // Filtra produtos conforme filtros
-  const produtosFiltrados = produtos.filter(prod => {
+  // Filtra produtos automaticamente com base em subcategoria e faixa de preço
+  const produtosFiltrados = produtos.filter((prod) => {
     const atendeSub = filtroSubcategoria ? prod.idSubcategoria === filtroSubcategoria : true;
-    const atendeDisp =
-      filtroDisponibilidade !== null
-        ? filtroDisponibilidade
-          ? prod.quantidade > 0
-          : prod.quantidade === 0
-        : true;
-    const atendePreco = prod.precoProduto >= filtroPreco.min && prod.precoProduto <= filtroPreco.max;
-    return atendeSub && atendeDisp && atendePreco;
+    const atendePreco = prod.precoProduto >= precoMin && prod.precoProduto <= precoMax;
+    return atendeSub && atendePreco;
   });
+
+  // Sliders
+  const handleSliderMinChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const valor = Number(e.target.value);
+    setPrecoMin(Math.min(valor, precoMax - STEP));
+  };
+
+  const handleSliderMaxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const valor = Number(e.target.value);
+    setPrecoMax(Math.max(valor, precoMin + STEP));
+  };
+
+  // Inputs numéricos
+  const handleInputMinChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const valorNumerico = Number(e.target.value.replace(/\D/g, ""));
+    setPrecoMin(Math.min(valorNumerico, precoMax - STEP));
+  };
+
+  const handleInputMaxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const valorNumerico = Number(e.target.value.replace(/\D/g, ""));
+    setPrecoMax(Math.max(valorNumerico, precoMin + STEP));
+  };
 
   return (
     <div>
       <Header />
 
       <div className="container">
-        <h2>{nomeCategoria || termo}</h2>
-
         {loading ? (
           <p>Carregando produtos...</p>
-        ) : produtosFiltrados.length === 0 ? (
-          <p>Nenhum produto encontrado.</p>
         ) : (
           <div className="pagina-com-filtros">
             <aside className="filtros">
+              <h2 className="titulo-categoria">{nomeCategoria || termo || "Produtos"}</h2>
+
               {subcategorias.length > 0 && (
                 <div className="filtro">
                   <strong>Subcategorias</strong>
-                  {subcategorias.map(sub => (
+                  {subcategorias.map((sub) => (
                     <label key={sub.idSubcategoria}>
                       <input
                         type="radio"
@@ -102,48 +119,75 @@ export default function PaginaCategoria() {
               )}
 
               <div className="filtro">
-                <strong>Disponibilidade</strong>
-                <label>
-                  <input
-                    type="radio"
-                    checked={filtroDisponibilidade === true}
-                    onChange={() => setFiltroDisponibilidade(true)}
-                  /> Em estoque
-                </label>
-                <label>
-                  <input
-                    type="radio"
-                    checked={filtroDisponibilidade === false}
-                    onChange={() => setFiltroDisponibilidade(false)}
-                  /> Esgotado
-                </label>
-                <button onClick={() => setFiltroDisponibilidade(null)}>Limpar</button>
-              </div>
-
-              <div className="filtro">
                 <strong>Faixa de preço</strong>
-                <input
-                  type="number"
-                  placeholder="Min"
-                  value={filtroPreco.min}
-                  onChange={e => setFiltroPreco({ ...filtroPreco, min: Number(e.target.value) })}
-                />
-                <input
-                  type="number"
-                  placeholder="Max"
-                  value={filtroPreco.max}
-                  onChange={e => setFiltroPreco({ ...filtroPreco, max: Number(e.target.value) })}
-                />
+                <div className="slider-container">
+                  {/* Sliders */}
+                  <input
+                    type="range"
+                    min={0}
+                    max={10000}
+                    step={STEP}
+                    value={precoMin}
+                    onChange={handleSliderMinChange}
+                    className="slider slider-min"
+                  />
+                  <input
+                    type="range"
+                    min={0}
+                    max={10000}
+                    step={STEP}
+                    value={precoMax}
+                    onChange={handleSliderMaxChange}
+                    className="slider slider-max"
+                  />
+
+                  {/* Track ativo */}
+                  <div
+                    className="slider-track-active"
+                    style={{
+                      left: `${(precoMin / 10000) * 100}%`,
+                      width: `${((precoMax - precoMin) / 10000) * 100}%`,
+                    }}
+                  />
+
+                  {/* Inputs numéricos formatados */}
+                  <div className="valores-preco">
+                    <input
+                      type="text"
+                      value={precoMin.toLocaleString("pt-BR", {
+                        style: "currency",
+                        currency: "BRL",
+                      })}
+                      onChange={handleInputMinChange}
+                      onBlur={(e) => {
+                        if (!e.target.value) setPrecoMin(0);
+                      }}
+                    />
+                    <span>—</span>
+                    <input
+                      type="text"
+                      value={precoMax.toLocaleString("pt-BR", {
+                        style: "currency",
+                        currency: "BRL",
+                      })}
+                      onChange={handleInputMaxChange}
+                      onBlur={(e) => {
+                        if (!e.target.value) setPrecoMax(10000);
+                      }}
+                    />
+                  </div>
+                </div>
               </div>
             </aside>
 
             <section className="produtos-lista">
-              {produtosFiltrados.map(prod => (
-                <CardProduto
-                  key={prod.idProduto}
-                  produto={prod}
-                />
-              ))}
+              {produtosFiltrados.length === 0 ? (
+                <p>Nenhum produto encontrado.</p>
+              ) : (
+                produtosFiltrados.map((prod) => (
+                  <CardProduto key={prod.idProduto} produto={prod} />
+                ))
+              )}
             </section>
           </div>
         )}
