@@ -141,10 +141,7 @@ export default function PaginaCategoria() {
               {produtosFiltrados.map(prod => (
                 <CardProduto
                   key={prod.idProduto}
-                  produto={{
-                    ...prod,
-                    imgUrl: prod.imgUrl && prod.imgUrl.trim() !== "" ? prod.imgUrl : "/placeholder.png"
-                  }}
+                  produto={prod}
                 />
               ))}
             </section>

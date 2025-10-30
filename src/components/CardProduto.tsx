@@ -1,14 +1,15 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import "./CardProduto.css";
 import PlaceHolder from "../assets/images/categorias/placeholder.png";
+import { FaShoppingCart } from "react-icons/fa"; 
+import { FaPlus } from "react-icons/fa6";
 
 interface CardProdutoProps {
   produto: {
     idProduto: number;
     nomeProduto: string;
     precoProduto: number;
-    descricaoProduto?: string;
     imgUrl?: string;
     img_url?: string;
     imagemProdutoBase64?: string;
@@ -16,8 +17,6 @@ interface CardProdutoProps {
 }
 
 const CardProduto: React.FC<CardProdutoProps> = ({ produto }) => {
-  const navigate = useNavigate();
-
   // Escolhe a imagem correta
   const imagemFinal =
     produto.imgUrl && produto.imgUrl.trim() !== ""
@@ -28,21 +27,17 @@ const CardProduto: React.FC<CardProdutoProps> = ({ produto }) => {
       ? `data:image/png;base64,${produto.imagemProdutoBase64}`
       : PlaceHolder;
 
-  // Redireciona para a página de produto individual
-  const irParaProduto = () => {
-    navigate(`/produto/${produto.idProduto}`);
-  };
-
   return (
-    <div className="card-produto">
-      <img src={imagemFinal} alt={produto.nomeProduto} className="produto" />
-      <div className="card-produto-text">
-        <h3>{produto.nomeProduto}</h3>
-        {produto.descricaoProduto && <p>{produto.descricaoProduto}</p>}
-        <p>Preço: R$ {Number(produto.precoProduto).toFixed(2)}</p>
+    <Link to={`/produto/${produto.idProduto}`}>
+      <div className="card-produto">
+        <img src={imagemFinal} alt={produto.nomeProduto} className="produto" />
+        <div className="card-produto-text">
+          <h3>{produto.nomeProduto}</h3>
+          <p>R${Number(produto.precoProduto).toFixed(2)}</p>
+        </div>
+        <button><FaShoppingCart /><FaPlus /></button>
       </div>
-      <button onClick={irParaProduto}>Visualizar</button>
-    </div>
+    </Link>
   );
 };
 

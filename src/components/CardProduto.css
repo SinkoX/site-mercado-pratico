@@ -7,17 +7,29 @@
   width: 230px;
   height: 300px;
   border-radius: 10px;
-  border: 1px solid rgba(0, 0, 0, 0.33);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
   font-family: "Inter", sans-serif;
+  transition: transform 0.3s ease;
+  transition: border 0.3s ease;
+  color: #000;
+}
+
+.card-produto:hover {
+  border: 1px solid #f56b16;
+}
+
+a {
+  text-decoration: none;
 }
 
 .card-produto-text {
   width: 200px;
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .produto {
@@ -28,20 +40,39 @@
 
 .card-produto button {
   all: unset;
-  width: 190px;
+  width: 200px;
   height: 40px;
-  background-color: #54bd54;
+  background-color: #f56b16;
   text-align: center;
-  border-radius: 10px;
+  border-radius: 5px;
   color: #fff;
   font-family: "Inter";
   margin-bottom: 20px;
+  transition: background 0.15s ease;
+  font-size: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.card-produto button:hover {
+  background-color: #f56c16b3;
 }
 
 .card-produto h3 {
-  font-size: 15px;
+  font-size: 12px;
+  font-weight: 100;
+  text-align: left;
 }
 
 .card-produto p {
-  font-size: 12px;
+  font-size: 18px;
+  color: #e64242;
+  font-weight: bold;
+  text-align: center;
+}
+
+.card-produto hr {
+  width: 200px;
+  color: #000;
 }
