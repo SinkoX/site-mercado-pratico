@@ -6,6 +6,7 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import CardProduto from "../components/CardProduto";
 import "./PaginaCategoria.css";
+import { api } from "../api";
 
 interface Produto {
   idProduto: number;
@@ -23,14 +24,19 @@ interface Subcategoria {
 }
 
 export default function PaginaCategoria() {
-  const { nomeCategoria, termo } = useParams<{ nomeCategoria?: string; termo?: string }>();
+  const { nomeCategoria, termo } = useParams<{
+    nomeCategoria?: string;
+    termo?: string;
+  }>();
   const [produtos, setProdutos] = useState<Produto[]>([]);
   const [subcategorias, setSubcategorias] = useState<Subcategoria[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const [filtroSubcategoria, setFiltroSubcategoria] = useState<number | null>(null);
+  const [filtroSubcategoria, setFiltroSubcategoria] = useState<number | null>(
+    null
+  );
   const [precoMin, setPrecoMin] = useState(0);
-  const [precoMax, setPrecoMax] = useState(10000);
+  const [precoMax, setPrecoMax] = useState(1000);
 
   const STEP = 1; // passo do slider
 
@@ -42,8 +48,12 @@ export default function PaginaCategoria() {
     setLoading(true);
 
     const url = termo
-      ? `http://localhost:8080/produto/busca?nome=${encodeURIComponent(parametro)}`
-      : `http://localhost:8080/categorias/${encodeURIComponent(parametro)}/produtos`;
+      ? `http://localhost:8080/produto/busca?nome=${encodeURIComponent(
+          parametro
+        )}`
+      : `http://localhost:8080/categorias/${encodeURIComponent(
+          parametro
+        )}/produtos`;
 
     axios
       .get(url)
@@ -52,17 +62,31 @@ export default function PaginaCategoria() {
       .finally(() => setLoading(false));
 
     if (nomeCategoria) {
-      axios
-        .get(`http://localhost:8080/categorias/${encodeURIComponent(nomeCategoria)}`)
-        .then((res) => setSubcategorias(Array.isArray(res.data) ? res.data : []))
-        .catch((err) => console.warn("Sem subcategorias para esta categoria:", err));
+      api
+        .get(`/categorias/${encodeURIComponent(nomeCategoria)}`)
+        .then((res) => {
+          const data = res.data;
+          const subcats = Array.isArray(data)
+            ? data
+            : Array.isArray(data.subcategorias)
+            ? data.subcategorias
+            : [];
+            console.log("Subcategorias carregadas:", subcats);
+          setSubcategorias(subcats);
+        })
+        .catch((err) =>
+          console.warn("Sem subcategorias para esta categoria:", err)
+        );
     }
   }, [nomeCategoria, termo]);
 
   // Filtra produtos automaticamente com base em subcategoria e faixa de preço
   const produtosFiltrados = produtos.filter((prod) => {
-    const atendeSub = filtroSubcategoria ? prod.idSubcategoria === filtroSubcategoria : true;
-    const atendePreco = prod.precoProduto >= precoMin && prod.precoProduto <= precoMax;
+    const atendeSub = filtroSubcategoria
+      ? prod.idSubcategoria === filtroSubcategoria
+      : true;
+    const atendePreco =
+      prod.precoProduto >= precoMin && prod.precoProduto <= precoMax;
     return atendeSub && atendePreco;
   });
 
@@ -98,7 +122,9 @@ export default function PaginaCategoria() {
         ) : (
           <div className="pagina-com-filtros">
             <aside className="filtros">
-              <h2 className="titulo-categoria">{nomeCategoria || termo || "Produtos"}</h2>
+              <h2 className="titulo-categoria">
+                {nomeCategoria || termo || "Produtos"}
+              </h2>
 
               {subcategorias.length > 0 && (
                 <div className="filtro">
@@ -109,12 +135,16 @@ export default function PaginaCategoria() {
                         type="radio"
                         name="subcategoria"
                         checked={filtroSubcategoria === sub.idSubcategoria}
-                        onChange={() => setFiltroSubcategoria(sub.idSubcategoria)}
+                        onChange={() =>
+                          setFiltroSubcategoria(sub.idSubcategoria)
+                        }
                       />
                       {sub.nomeSubcategoria}
                     </label>
                   ))}
-                  <button onClick={() => setFiltroSubcategoria(null)}>Limpar</button>
+                  <button onClick={() => setFiltroSubcategoria(null)}>
+                    Limpar
+                  </button>
                 </div>
               )}
 
@@ -125,7 +155,7 @@ export default function PaginaCategoria() {
                   <input
                     type="range"
                     min={0}
-                    max={10000}
+                    max={1000}
                     step={STEP}
                     value={precoMin}
                     onChange={handleSliderMinChange}
@@ -134,7 +164,7 @@ export default function PaginaCategoria() {
                   <input
                     type="range"
                     min={0}
-                    max={10000}
+                    max={1000}
                     step={STEP}
                     value={precoMax}
                     onChange={handleSliderMaxChange}
@@ -145,8 +175,8 @@ export default function PaginaCategoria() {
                   <div
                     className="slider-track-active"
                     style={{
-                      left: `${(precoMin / 10000) * 100}%`,
-                      width: `${((precoMax - precoMin) / 10000) * 100}%`,
+                      left: `${(precoMin / 1000) * 100}%`,
+                      width: `${((precoMax - precoMin) / 1000) * 100}%`,
                     }}
                   />
 
@@ -172,7 +202,7 @@ export default function PaginaCategoria() {
                       })}
                       onChange={handleInputMaxChange}
                       onBlur={(e) => {
-                        if (!e.target.value) setPrecoMax(10000);
+                        if (!e.target.value) setPrecoMax(1000);
                       }}
                     />
                   </div>

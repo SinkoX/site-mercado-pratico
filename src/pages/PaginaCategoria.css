@@ -1,5 +1,5 @@
 .container {
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
   padding: 20px;
 }
@@ -115,7 +115,7 @@
   width: 100%;
   background: #ddd;
   border-radius: 5px;
-  top: 7px;
+  top: 0px;
   left: 0;
   z-index: 1;
 }
@@ -124,10 +124,14 @@
 .slider-track-active {
   position: absolute;
   height: 6px;
-  background: linear-gradient(to right, #ff6969, #ffd1d1);
+  background: linear-gradient(to right, #ff6969, #ffb0b0);
   border-radius: 5px;
-  top: 7px;
-  z-index: 2;
+  top: 0px;
+  z-index: 1;
+}
+
+.slider-max::-webkit-slider-thumb {
+  background-color: #ffb0b0;
 }
 
 /* Valores de preço */
@@ -150,8 +154,9 @@
   padding: 6px 8px;
   font-size: 0.95rem;
   border: 1px solid #ccc;
+  display: flex;
   border-radius: 6px;
-  text-align: right;
+  text-align: center;
   background: #fff;
   outline: none;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;

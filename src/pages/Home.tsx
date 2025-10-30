@@ -20,7 +20,6 @@ import bannerSecundario2 from "../assets/images/banner/bannerSecundario2.png";
 import "./Home.css";
 
 function Home() {
-  const { user } = useAuth();
   const [produtos, setProdutos] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
