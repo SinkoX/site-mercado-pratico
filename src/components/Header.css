@@ -54,7 +54,7 @@
 .user-icons {
   display: flex;
   align-items: center;
-  gap: 16px; /* distância entre carrinho e avatar */
+  gap: 35px; /* distância entre carrinho e avatar */
   position: relative; /* para dropdown */
 }
 

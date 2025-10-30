@@ -23,6 +23,7 @@ const PaginaProduto: React.FC = () => {
   const [quantidade, setQuantidade] = useState(1);
   const [loading, setLoading] = useState(true);
   const [showToast, setShowToast] = useState(false);
+  const [showLoginPopup, setShowLoginPopup] = useState(false); // Estado para controlar o popup
 
   useEffect(() => {
     if (!id) return;
@@ -43,7 +44,7 @@ const PaginaProduto: React.FC = () => {
 
   const adicionarAoCarrinho = async () => {
     if (!user) {
-      alert("Você precisa estar logado para adicionar produtos ao carrinho.");
+      setShowLoginPopup(true); // Exibe o popup se o usuário não estiver logado
       return;
     }
     if (!produto) return;
@@ -55,20 +56,20 @@ const PaginaProduto: React.FC = () => {
         { params: { quantidade } }
       );
 
-      // Mostra o toast animado
       setShowToast(true);
-      setTimeout(() => setShowToast(false), 3000); // desaparece depois de 3s
+      setTimeout(() => setShowToast(false), 3000); // Desaparece depois de 3s
     } catch (err) {
       console.error("Erro ao adicionar produto ao carrinho:", err);
       alert("Erro ao adicionar produto ao carrinho.");
     }
   };
 
-  if (loading)
-    return <p className="loading">Carregando produto...</p>;
+  const fecharPopup = () => {
+    setShowLoginPopup(false); // Fecha o popup
+  };
 
-  if (!produto)
-    return <p className="loading">Produto não encontrado.</p>;
+  if (loading) return <p className="loading">Carregando produto...</p>;
+  if (!produto) return <p className="loading">Produto não encontrado.</p>;
 
   const imagemFinal =
     produto.imgUrl && produto.imgUrl.trim() !== ""
@@ -94,13 +95,13 @@ const PaginaProduto: React.FC = () => {
 
           <div className="detalhes-produto">
             <h1 className="nome-produto">{produto.nomeProduto}</h1>
-            <p className="preco">
-              R$ {(produto.precoProduto * quantidade).toFixed(2)}
-            </p>
-
             {produto.descricaoProduto && (
               <p className="descricao-junta">{produto.descricaoProduto}</p>
             )}
+
+            <p className="preco">
+              R$ {(produto.precoProduto * quantidade).toFixed(2)}
+            </p>
 
             <div className="quantidade">
               <button onClick={diminuir}>−</button>
@@ -119,6 +120,28 @@ const PaginaProduto: React.FC = () => {
       {showToast && (
         <div className="toast-carrinho">
           🛒 Item adicionado ao carrinho!
+        </div>
+      )}
+
+      {/* Popup de Login */}
+      {showLoginPopup && (
+        <div className="login-popup-overlay">
+          <div className="login-popup">
+            <span className="close-popup" onClick={fecharPopup}>
+              ✖
+            </span>
+            <h2>Você precisa estar logado para adicionar o produto ao carrinho.</h2>
+            <p>
+              <button className="button-popup" onClick={() => alert("Ir para Login")}>
+                Fazer Login
+              </button>
+            </p>
+            <p>
+              <button className="button-popup" onClick={() => alert("Ir para Cadastro")}>
+                Cadastrar-se
+              </button>
+            </p>
+          </div>
         </div>
       )}
 
