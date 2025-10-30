@@ -1,14 +1,15 @@
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import "./CardProduto.css";
 import PlaceHolder from "../assets/images/categorias/placeholder.png";
+import { FaShoppingCart } from "react-icons/fa"; 
+import { FaPlus } from "react-icons/fa6";
 
 interface CardProdutoProps {
   produto: {
     idProduto: number;
     nomeProduto: string;
     precoProduto: number;
-    descricaoProduto?: string;
     imgUrl?: string;
     img_url?: string;
     imagemProdutoBase64?: string;
@@ -16,8 +17,6 @@ interface CardProdutoProps {
 }
 
 const CardProduto: React.FC<CardProdutoProps> = ({ produto }) => {
-  const navigate = useNavigate();
-
   // Escolhe a imagem correta
   const imagemFinal =
     produto.imgUrl && produto.imgUrl.trim() !== ""
@@ -34,10 +33,9 @@ const CardProduto: React.FC<CardProdutoProps> = ({ produto }) => {
         <img src={imagemFinal} alt={produto.nomeProduto} className="produto" />
         <div className="card-produto-text">
           <h3>{produto.nomeProduto}</h3>
-          {produto.descricaoProduto && <p>{produto.descricaoProduto}</p>}
           <p>R${Number(produto.precoProduto).toFixed(2)}</p>
         </div>
-        <button>Visualizar</button>
+        <button><FaShoppingCart /><FaPlus /></button>
       </div>
     </Link>
   );

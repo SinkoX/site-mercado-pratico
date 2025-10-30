@@ -130,3 +130,95 @@
   color: #1e02d0;
   text-decoration: underline;
 }
+
+@media (max-width: 500px) {
+  .cadastro-usuario-page {
+    padding: 15px 10px;
+  }
+
+  .cadastro-usuario-page .form {
+    padding: 20px 15px;
+  }
+
+  .cadastro-usuario-page .titulo h1 {
+    font-size: 22px;
+  }
+
+  .cadastro-usuario-page .subtitulo {
+    font-size: 14px;
+  }
+
+  .cadastro-usuario-page .campo {
+    width: 100%;
+  }
+
+  .cadastro-usuario-page .campo input {
+    height: 42px;
+    font-size: 14px;
+  }
+
+  .cadastro-usuario-page button {
+    width: 100%;
+    padding: 12px;
+    font-size: 14px;
+  }
+
+  .cadastro-usuario-page .conta {
+    font-size: 12px;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+
+}
+
+@media (min-width: 501px) and (max-width: 1023px) {
+  .cadastro-usuario-page .form {
+    max-width: 500px;
+    padding: 25px;
+  }
+
+  .cadastro-usuario-page .titulo h1 {
+    font-size: 26px;
+  }
+
+  .cadastro-usuario-page .subtitulo {
+    font-size: 16px;
+  }
+
+  .cadastro-usuario-page .campo {
+    width: 90%;
+  }
+
+  .cadastro-usuario-page button {
+    width: 70%;
+    padding: 10px;
+    font-size: 14px;
+  }
+
+
+}
+@media (min-width: 501px) and (max-width: 1023px) {
+  .cadastro-usuario-page .form {
+    padding: 25px;
+  }
+
+  .cadastro-usuario-page .titulo h1 {
+    font-size: 26px;
+  }
+
+  .cadastro-usuario-page .subtitulo {
+    font-size: 16px;
+  }
+
+  .cadastro-usuario-page .campo {
+    width: 90%;
+  }
+
+  .cadastro-usuario-page button {
+    width: 70%;
+    padding: 10px;
+    font-size: 14px;
+  }
+
+}

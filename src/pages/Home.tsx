@@ -102,7 +102,7 @@ function Home() {
             <p>Nenhum produto encontrado.</p>
           ) : (
             <div className="produtos">
-              {produtos.slice(0, 8).map((produto) => (
+              {produtos.slice(0, 10).map((produto) => (
                 <CardProduto key={produto.idProduto} produto={produto} />
               ))}
             </div>
@@ -117,7 +117,7 @@ function Home() {
               <p>Nenhum produto encontrado.</p>
           ) : (
             <div className="produtos">
-              {produtos.slice(8, 16).map((produto) => (
+              {produtos.slice(10, 20).map((produto) => (
                 <CardProduto key={produto.idProduto} produto={produto} />
               ))}
             </div>

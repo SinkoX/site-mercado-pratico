@@ -2,8 +2,18 @@ import React, { createContext, useContext, useState } from "react";
 
 // Tipos do usuário
 export interface TipoUsuario {
-  id: number;
+  idTipoUsuario: number;
   nomeTipoUsuario: "Usuario" | "Admin";
+}
+
+export interface Endereco {
+  idEndereco: number;
+  cep: string;
+  rua: string;
+  numero: string;
+  bairro: string;
+  cidade: string;
+  complento?: string;
 }
 
 export interface User {
@@ -14,6 +24,7 @@ export interface User {
   telefoneUsuario: string;
   cpfUsuario: string;
   tipoUsuario: TipoUsuario;
+  enderecoUsuario: Endereco[];
 }
 
 interface AuthContextType {
@@ -48,8 +59,9 @@ const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       emailUsuario: newUser.emailUsuario,
       cpfUsuario: newUser.cpfUsuario,
       telefoneUsuario: newUser.telefoneUsuario,
-      tipoUsuario: newUser.tipoUsuario,
       senhaUsuario: newUser.senhaUsuario,
+      tipoUsuario: newUser.tipoUsuario,
+      enderecoUsuario: newUser.enderecoUsuario
     };
 
     setUser(usuarioLimpo);

@@ -33,7 +33,12 @@ const PaginaLogin: React.FC<LoginProps> = ({ loginFn }) => {
 
     try {
       const res = await api.post("/usuario/login", formData);
-      const user: User = res.data;
+      const user = {
+        ...res.data,
+        enderecoUsuario: res.data.endereco || [],
+      };
+
+      console.log(res.data);
 
       if (!user) {
         alert("Email ou senha inválidos!");
@@ -41,7 +46,6 @@ const PaginaLogin: React.FC<LoginProps> = ({ loginFn }) => {
       }
 
       loginFn(user);
-      localStorage.setItem("usuarioLogado", JSON.stringify(user));
       navigate("/perfil");
     } catch (error) {
       console.error("Erro ao fazer login:", error);
