@@ -18,9 +18,8 @@ body {
 
 /* Container principal da página do carrinho */
 .carrinho-page {
-  max-width: 1200px;  
+  max-width: 100%;  
   margin: 0 auto;  
-  padding: 20px;
 }
 
 /* Título do Carrinho */

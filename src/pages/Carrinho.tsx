@@ -52,7 +52,7 @@ function Carrinho() {
   const atualizarEstadoItem = (idItem: number, novaQuantidade: number) => {
     if (!carrinho) return;
 
-    const itensAtualizados = carrinho.itens.map(item =>
+    const itensAtualizados = carrinho.itens.map((item) =>
       item.idItemCarrinho === idItem
         ? {
             ...item,
@@ -62,8 +62,14 @@ function Carrinho() {
         : item
     );
 
-    const valorTotalAtualizado = itensAtualizados.reduce((sum, item) => sum + item.subTotal, 0);
-    const quantidadeTotalAtualizada = itensAtualizados.reduce((sum, item) => sum + item.quantidade, 0);
+    const valorTotalAtualizado = itensAtualizados.reduce(
+      (sum, item) => sum + item.subTotal,
+      0
+    );
+    const quantidadeTotalAtualizada = itensAtualizados.reduce(
+      (sum, item) => sum + item.quantidade,
+      0
+    );
 
     setCarrinho({
       ...carrinho,
@@ -73,26 +79,42 @@ function Carrinho() {
     });
   };
 
-  const handleAtualizarQuantidade = async (idItem: number, quantidade: number) => {
+  const handleAtualizarQuantidade = async (
+    idItem: number,
+    quantidade: number
+  ) => {
     if (!user || quantidade < 1) return;
 
     try {
-      await api.put(`/itens-carrinho/${user.idUsuario}/atualizar/${idItem}?quantidade=${quantidade}`);
+      await api.put(
+        `/itens-carrinho/${user.idUsuario}/atualizar/${idItem}?quantidade=${quantidade}`
+      );
       atualizarEstadoItem(idItem, quantidade);
     } catch (err) {
       console.error(err);
     }
   };
 
-  const handleRemoverItem = async (idProduto: number, idItemCarrinho: number) => {
+  const handleRemoverItem = async (
+    idProduto: number,
+    idItemCarrinho: number
+  ) => {
     if (!user) return;
 
     try {
       await api.delete(`/carrinho/${user.idUsuario}/remover/${idProduto}`);
       if (carrinho) {
-        const itensRestantes = carrinho.itens.filter(item => item.idItemCarrinho !== idItemCarrinho);
-        const valorTotalAtualizado = itensRestantes.reduce((sum, item) => sum + item.subTotal, 0);
-        const quantidadeTotalAtualizada = itensRestantes.reduce((sum, item) => sum + item.quantidade, 0);
+        const itensRestantes = carrinho.itens.filter(
+          (item) => item.idItemCarrinho !== idItemCarrinho
+        );
+        const valorTotalAtualizado = itensRestantes.reduce(
+          (sum, item) => sum + item.subTotal,
+          0
+        );
+        const quantidadeTotalAtualizada = itensRestantes.reduce(
+          (sum, item) => sum + item.quantidade,
+          0
+        );
 
         setCarrinho({
           ...carrinho,
@@ -111,7 +133,12 @@ function Carrinho() {
 
     try {
       await api.delete(`/carrinho/${user.idUsuario}/limpar`);
-      setCarrinho({ ...carrinho!, itens: [], valorTotal: 0, quantidadeTotal: 0 });
+      setCarrinho({
+        ...carrinho!,
+        itens: [],
+        valorTotal: 0,
+        quantidadeTotal: 0,
+      });
     } catch (err) {
       console.error(err);
     }
@@ -140,6 +167,8 @@ function Carrinho() {
       </div>
     );
 
+    console.log(carrinho)
+
   return (
     <div className="carrinho-page">
       <Header />
@@ -147,25 +176,43 @@ function Carrinho() {
       <div className="carrinho-itens">
         {carrinho.itens.map((item) => {
           const imagemFinal =
-            item.imgUrl?.trim() || item.img_url?.trim() || (item.imagemProdutoBase64 ? `data:image/png;base64,${item.imagemProdutoBase64}` : PlaceHolder);
-
+            (item.imgUrl && item.imgUrl.trim() !== "" && item.imgUrl) ||
+            (item.img_url && item.img_url.trim() !== "" && item.img_url) ||
+            (item.imagemProdutoBase64
+              ? `data:image/png;base64,${item.imagemProdutoBase64}`
+              : PlaceHolder);
+          console.log(item);
           return (
             <div className="item-card" key={item.idItemCarrinho}>
-              <img src={imagemFinal} alt={item.nomeProduto} className="item-img" />
+              <img
+                src={imagemFinal}
+                alt={item.nomeProduto}
+                className="item-img"
+              />
               <div className="item-info">
                 <h3>{item.nomeProduto}</h3>
                 <p className="item-preco">R$ {item.subTotal.toFixed(2)}</p>
                 <div className="item-controles">
                   <button
                     className="btn-qtd"
-                    onClick={() => handleAtualizarQuantidade(item.idItemCarrinho, item.quantidade - 1)}
+                    onClick={() =>
+                      handleAtualizarQuantidade(
+                        item.idItemCarrinho,
+                        item.quantidade - 1
+                      )
+                    }
                   >
                     –
                   </button>
                   <span>{item.quantidade}</span>
                   <button
                     className="btn-qtd"
-                    onClick={() => handleAtualizarQuantidade(item.idItemCarrinho, item.quantidade + 1)}
+                    onClick={() =>
+                      handleAtualizarQuantidade(
+                        item.idItemCarrinho,
+                        item.quantidade + 1
+                      )
+                    }
                   >
                     +
                   </button>
@@ -173,7 +220,9 @@ function Carrinho() {
               </div>
               <button
                 className="btn-remover"
-                onClick={() => handleRemoverItem(item.idProduto, item.idItemCarrinho)}
+                onClick={() =>
+                  handleRemoverItem(item.idProduto, item.idItemCarrinho)
+                }
               >
                 Remover
               </button>
@@ -183,13 +232,18 @@ function Carrinho() {
       </div>
 
       <div className="resumo-carrinho">
-        <p>Total de itens: <strong>{carrinho.quantidadeTotal}</strong></p>
+        <p>
+          Total de itens: <strong>{carrinho.quantidadeTotal}</strong>
+        </p>
         <h2>Total: R$ {carrinho.valorTotal.toFixed(2)}</h2>
         <div className="botoes-carrinho">
           <button className="btn-limpar" onClick={handleLimparCarrinho}>
             Limpar
           </button>
-          <button className="btn-finalizar" onClick={() => navigate("/checkout")}>
+          <button
+            className="btn-finalizar"
+            onClick={() => navigate("/checkout")}
+          >
             Finalizar Compra
           </button>
         </div>
