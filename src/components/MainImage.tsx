@@ -9,6 +9,7 @@ export default function MainImage() {
       <div className="blob verde-claro" aria-hidden="true" />
       <div className="blob laranja" aria-hidden="true" />
 
+
       {/* círculo branco com logo */}
       <div className="bola">
         <img src={logoCarrinho} alt="Logo Mercado Prático" />
