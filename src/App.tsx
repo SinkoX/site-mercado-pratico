@@ -10,6 +10,7 @@ import PaginaCategoria from "./pages/PaginaCategoria";
 import { useAuth } from "./hooks/useAuth";
 import Carrinho from "./pages/Carrinho";
 import Produtos from "./pages/Produtos"; 
+import Checkout from "./pages/Checkout";
 import "./App.css";
 
 function App() {
@@ -32,6 +33,7 @@ function App() {
       {/* ✅ Rota de busca usando o mesmo componente */}
       <Route path="/busca/:termo" element={<PaginaCategoria />} />
       <Route path="/produtos" element={<Produtos />} />
+      <Route path="/checkout" element={<Checkout />} />
     </Routes>
   );
 }
