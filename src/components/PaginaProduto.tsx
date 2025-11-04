@@ -3,8 +3,8 @@ import { useParams } from "react-router-dom";
 import { api } from "../api";
 import { useAuth } from "../hooks/useAuth";
 import Header from "../components/Header";
-import MenuCategoria from "../components/MenuCategoria";
 import Footer from "../components/Footer";
+import MenuCategoria from "../components/MenuCategoria";
 import "../pages/PaginaProduto.css";
 
 interface Produto {

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./Header.css";
 import iconPerfil from "../assets/images/icones/iconPerfil.png";
 import iconPesquisa from "../assets/images/icones/iconPesquisa.png";
-import { FaShoppingCart } from "react-icons/fa"; 
+import { FaShoppingCart } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 import { api } from "../api";
@@ -31,41 +31,38 @@ function Header() {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [carrinho, setCarrinho] = useState<CarrinhoDTO | null>(null);
-  const [mostrarDropdown, setMostrarDropdown] = useState(false);
+  const [mostrarDropdownCarrinho, setMostrarDropdownCarrinho] = useState(false);
+  const [mostrarDropdownPerfil, setMostrarDropdownPerfil] = useState(false);
 
-const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
 
-  const buscaTratada = busca.toLowerCase().replace(/\s+/g, "");
-  if (!buscaTratada) {
-    alert("Digite algo para buscar!");
-    return;
-  }
-
-  // Se for categoria existente
-  if (categoriasDisponiveis.includes(buscaTratada)) {
-    navigate(`/categoria/${buscaTratada}`);
-    setBusca("");
-    return;
-  }
-
-  try {
-    // Verifica se há produtos correspondentes antes de navegar
-    const response = await api.get(`/produto/busca?nome=${buscaTratada}`);
-
-    if (response.data && response.data.length > 0) {
-      navigate(`/busca/${buscaTratada}`);
-    } else {
-      alert("Nenhum produto encontrado para essa busca.");
+    const buscaTratada = busca.toLowerCase().replace(/\s+/g, "");
+    if (!buscaTratada) {
+      alert("Digite algo para buscar!");
+      return;
     }
-  } catch (error) {
-    console.error("Erro ao buscar produtos:", error);
-    alert("Ocorreu um erro ao realizar a busca. Tente novamente mais tarde.");
-  }
 
-  setBusca("");
-};
+    if (categoriasDisponiveis.includes(buscaTratada)) {
+      navigate(`/categoria/${buscaTratada}`);
+      setBusca("");
+      return;
+    }
 
+    try {
+      const response = await api.get(`/produto/busca?nome=${buscaTratada}`);
+      if (response.data && response.data.length > 0) {
+        navigate(`/busca/${buscaTratada}`);
+      } else {
+        alert("Nenhum produto encontrado para essa busca.");
+      }
+    } catch (error) {
+      console.error("Erro ao buscar produtos:", error);
+      alert("Ocorreu um erro ao realizar a busca. Tente novamente mais tarde.");
+    }
+
+    setBusca("");
+  };
 
   useEffect(() => {
     if (!user?.idUsuario) return;
@@ -78,12 +75,28 @@ const handleSubmit = async (e: React.FormEvent) => {
     navigate("/carrinho");
   };
 
+  const toggleDropdownPerfil = () => {
+    setMostrarDropdownPerfil(prev => !prev);
+  };
+
+  // Fecha o dropdown ao clicar fora
+  useEffect(() => {
+    const handleClickFora = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (!target.closest(".user")) {
+        setMostrarDropdownPerfil(false);
+      }
+    };
+    document.addEventListener("click", handleClickFora);
+    return () => document.removeEventListener("click", handleClickFora);
+  }, []);
+
   return (
     <header className="header">
       <Link to={"/"}>
-      <div className="logo">
-        <img src="/logo.png" className="logo" alt="logo"/>
-      </div>
+        <div className="logo">
+          <img src="/logo.png" className="logo" alt="logo" />
+        </div>
       </Link>
 
       <form className="procura" onSubmit={handleSubmit}>
@@ -101,15 +114,15 @@ const handleSubmit = async (e: React.FormEvent) => {
         {user && (
           <div
             className="carrinho-icon"
-            onMouseEnter={() => setMostrarDropdown(true)}
-            onMouseLeave={() => setMostrarDropdown(false)}
+            onMouseEnter={() => setMostrarDropdownCarrinho(true)}
+            onMouseLeave={() => setMostrarDropdownCarrinho(false)}
             onClick={irParaCarrinho}
           >
             <FaShoppingCart size={34} />
             {carrinho && carrinho.quantidadeTotal > 0 && (
               <span className="contador">{carrinho.quantidadeTotal}</span>
             )}
-            {mostrarDropdown && carrinho && carrinho.itens.length > 0 && (
+            {mostrarDropdownCarrinho && carrinho && carrinho.itens.length > 0 && (
               <div className="dropdown-carrinho">
                 {carrinho.itens.map(item => (
                   <div key={item.idItemCarrinho} className="item-dropdown">
@@ -121,11 +134,31 @@ const handleSubmit = async (e: React.FormEvent) => {
             )}
           </div>
         )}
-        <Link to={user ? "/perfil" : "/login"}>
-          <div className="user">
+
+        {/* PERFIL COM DROPDOWN POR CLIQUE */}
+        {user ? (
+          <div className="user" onClick={toggleDropdownPerfil}>
             <img src={iconPerfil} alt="icon perfil" id="icon-perfil" />
+            {mostrarDropdownPerfil && (
+              <div className="dropdown-carrinho">
+                <div className="item-dropdown">
+                  <Link to="/perfil">Perfil</Link>
+                </div>
+                {user?.tipoUsuario?.idTipoUsuario === 2 && (
+  <div className="item-dropdown">
+    <Link to="/paginaAdmin">Gerenciar</Link>
+  </div>
+)}
+              </div>
+            )}
           </div>
-        </Link>
+        ) : (
+          <Link to="/login">
+            <div className="user">
+              <img src={iconPerfil} alt="icon perfil" id="icon-perfil" />
+            </div>
+          </Link>
+        )}
       </div>
     </header>
   );

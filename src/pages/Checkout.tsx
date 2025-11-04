@@ -49,24 +49,35 @@ function Checkout() {
 
     const fetchDados = async () => {
       try {
+        console.log("🔄 Buscando dados do carrinho...");
+
         const resCarrinho = await api.get(`/carrinho/${user.idUsuario}`);
         const dadosCarrinho = resCarrinho.data;
-        console.log("Dados do carrinho:", dadosCarrinho);
+        console.log("🛒 Dados do carrinho recebidos:", dadosCarrinho);
+
+        if (!dadosCarrinho || !dadosCarrinho.itens) {
+          console.warn("⚠️ Nenhum item encontrado no carrinho!");
+          setLoading(false);
+          return;
+        }
+
+        const valorFrete = 15;
+        const valorDesconto = 0;
+        const valorFinalCalculado = (dadosCarrinho.valorTotal || 0) + valorFrete;
 
         setPedido({
           idPedidoUsuario: dadosCarrinho.idCarrinho,
           itens: dadosCarrinho.itens,
-          frete: 15,
-          desconto: 0,
-          valorTotal: dadosCarrinho.valorTotal,
-          valorFinal: dadosCarrinho.valorTotal + 15,
+          frete: valorFrete,
+          desconto: valorDesconto,
+          valorTotal: dadosCarrinho.valorTotal || 0,
+          valorFinal: valorFinalCalculado,
           enderecoEntrega: dadosCarrinho.enderecoEntrega || null,
         });
 
         const resEnderecos = await api.get(`/enderecos/${user.idUsuario}`);
-        console.log("Endereços retornados do backend:", resEnderecos.data);
+        console.log("🏠 Endereços retornados do backend:", resEnderecos.data);
 
-        // Se for objeto único, converte para array
         let enderecosArray: any[] = [];
         if (Array.isArray(resEnderecos.data)) {
           enderecosArray = resEnderecos.data;
@@ -88,10 +99,10 @@ function Checkout() {
 
         if (enderecosFormatados.length > 0) {
           setEnderecoSelecionado(enderecosFormatados[0]);
-          console.log("Endereço selecionado padrão:", enderecosFormatados[0]);
+          console.log("✅ Endereço selecionado padrão:", enderecosFormatados[0]);
         }
       } catch (err) {
-        console.error(err);
+        console.error("❌ Erro ao buscar dados:", err);
       } finally {
         setLoading(false);
       }
@@ -102,13 +113,18 @@ function Checkout() {
 
   const handleSelecionarEndereco = (idEndereco: number) => {
     const endereco = enderecos.find(e => e.idEndereco === idEndereco) || null;
+    console.log("📦 Endereço selecionado:", endereco);
     setEnderecoSelecionado(endereco);
   };
 
   const handleFinalizarCompra = async () => {
-    if (!pedido || !enderecoSelecionado) return;
+    if (!pedido || !enderecoSelecionado) {
+      alert("Selecione um endereço antes de finalizar a compra.");
+      return;
+    }
 
     try {
+      console.log("💳 Enviando dados para pagamento...");
       const pagamentoDTO = {
         idEnderecoEntrega: enderecoSelecionado.idEndereco,
         frete: pedido.frete,
@@ -120,11 +136,14 @@ function Checkout() {
           subTotal: item.subTotal,
         })),
       };
+      console.log("🧾 PagamentoDTO:", pagamentoDTO);
 
       const res = await api.post(`/pagamentos/finalizar/${user.idUsuario}`, pagamentoDTO);
+      console.log("✅ Resposta do backend:", res.data);
+
       window.location.href = res.data.checkoutUrl;
     } catch (err) {
-      console.error(err);
+      console.error("❌ Erro ao finalizar compra:", err);
       alert("Erro ao finalizar compra. Tente novamente.");
     }
   };
@@ -162,10 +181,9 @@ function Checkout() {
           )}
 
           <div className="resumo-financeiro">
-            <p>Subtotal: R$ {pedido.valorTotal.toFixed(2)}</p>
-            <p>Frete: R$ {pedido.frete.toFixed(2)}</p>
-            <p>Desconto: R$ {pedido.desconto.toFixed(2)}</p>
-            <h3>Total: R$ {pedido.valorFinal.toFixed(2)}</h3>
+            <p>Valor: R$ {(pedido.valorTotal || 0).toFixed(2)}</p>
+            <p>Frete: R$ {(pedido.frete || 0).toFixed(2)}</p>
+            <h3>Valor Final: R$ {(pedido.valorFinal || 0).toFixed(2)}</h3>
           </div>
 
           <button className="btn-finalizar-checkout" onClick={handleFinalizarCompra}>

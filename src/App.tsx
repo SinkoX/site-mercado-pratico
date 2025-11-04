@@ -11,6 +11,9 @@ import { useAuth } from "./hooks/useAuth";
 import Carrinho from "./pages/Carrinho";
 import Produtos from "./pages/Produtos"; 
 import Checkout from "./pages/Checkout";
+import PaginaAdmin from "./pages/PaginaAdmin";
+import GerenciarPedidos from "./pages/GerenciarPedidos";
+import GerenciarFornecedores from "./pages/GerenciarFornecedores";
 import "./App.css";
 
 function App() {
@@ -18,22 +21,29 @@ function App() {
 
   return (
     <Routes>
+      {/* 🏠 Páginas principais */}
       <Route path="/" element={<Home />} />
+      <Route path="/login" element={<PaginaLogin loginFn={login} />} />
+      <Route path="/perfil" element={<Perfil />} />
+      <Route path="/produto/:id" element={<Produto />} />
+      <Route path="/produtos" element={<Produtos />} />
+      <Route path="/carrinho" element={<Carrinho />} />
+      <Route path="/checkout" element={<Checkout />} />
+
+      {/* 🔍 Categorias e busca */}
+      <Route path="/categoria/:nomeCategoria" element={<PaginaCategoria />} />
+      <Route path="/busca/:termo" element={<PaginaCategoria />} />
+
+      {/* ⚙️ Administração */}
+      <Route path="/paginaAdmin" element={<PaginaAdmin />} />
+      <Route path="/gerenciar/pedidos" element={<GerenciarPedidos />} />
+      <Route path="/gerenciar/fornecedores" element={<GerenciarFornecedores />}
+      />
+
+      {/* 📝 Cadastros */}
       <Route path="/cadastro/usuario" element={<CadastroUsuario />} />
       <Route path="/cadastro/endereco" element={<CadastroEndereco />} />
       <Route path="/cadastro/produto" element={<CadastroProduto />} />
-      <Route path="/login" element={<PaginaLogin loginFn={login}/>} />
-      <Route path="/perfil" element={<Perfil />} />
-      <Route path="/produto/:id" element={<Produto />} />
-       <Route path="/carrinho" element={<Carrinho />} />
-
-      {/* ✅ Rota única e correta para categorias */}
-      <Route path="/categoria/:nomeCategoria" element={<PaginaCategoria />} />
-
-      {/* ✅ Rota de busca usando o mesmo componente */}
-      <Route path="/busca/:termo" element={<PaginaCategoria />} />
-      <Route path="/produtos" element={<Produtos />} />
-      <Route path="/checkout" element={<Checkout />} />
     </Routes>
   );
 }

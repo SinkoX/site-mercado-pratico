@@ -1,239 +1,210 @@
+/* === BASE === */
+html {
+  scroll-behavior: smooth; /* 🔹 Rolagem suave */
+}
+
 .cadastro-produto-page {
   display: flex;
   justify-content: center;
-  align-items: flex-start; /* agora alinha no topo */
-  padding-top: 50px; /* ajusta a distância do topo */
-  min-height: 100vh;
+  align-items: flex-start;
+  flex-direction: column;
+  padding-top: 60px;
+  padding-bottom: 60px; /* 🔹 Espaço extra no final */
+  min-height: calc(100vh - 40px);
   margin: 0;
-  background-color: #fff7f7;
-  font-family: Arial, Helvetica, sans-serif;
+  background: linear-gradient(135deg, #fef7f7 0%, #fff 100%);
+  font-family: "Inter", sans-serif;
+  position: relative;
+  overflow-x: hidden;
 }
 
+/* 🔹 Gradiente suave no final da tela */
+.cadastro-produto-page::after {
+  content: "";
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 60px;
+  pointer-events: none;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.05), transparent);
+  z-index: 1;
+}
+
+/* === FORM CONTAINER === */
 .cadastro-produto-page .form {
   background-color: #ffffff;
-  border-radius: 20px;
+  border-radius: 16px;
   width: 550px;
-  border: 0.5px solid rgba(0, 0, 0, 0.323);
-  padding: 30px 20px;
+  padding: 35px 30px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  border: 2px solid rgba(84, 189, 84, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+  margin: 0 auto;
+  z-index: 2;
 }
 
-.cadastro-produto-page .titulo {
+.cadastro-produto-page .form:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+/* === TITULO === */
+.cadastro-produto-page .titulo h1 {
   text-align: center;
-  margin-bottom: 40px;
+  font-size: 1.9rem;
+  font-weight: 700;
+  color: #24613a; /* Verde escuro */
+  margin-bottom: 25px;
+  border-bottom: 3px solid #ff7b00; /* Laranja vibrante */
+  padding-bottom: 8px;
+  width: fit-content;
 }
 
+/* === CAMPOS === */
 .cadastro-produto-page .campo {
-  margin-bottom: 15px;
+  margin-bottom: 18px;
   width: 100%;
 }
 
+/* === LABELS === */
 .cadastro-produto-page label {
   font-size: 14px;
   display: block;
   margin-bottom: 6px;
-  font-weight: bold;
+  font-weight: 600;
   color: #333;
 }
 
-.cadastro-produto-page input {
-  background-color: #fff7f7;
-  border-radius: 10px;
-  height: 40px;
+/* === INPUTS / SELECT / TEXTAREA === */
+.cadastro-produto-page input,
+.cadastro-produto-page select,
+.cadastro-produto-page textarea {
   width: 100%;
-  padding: 0 15px;
-  border: 1px solid rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+  border: 1.5px solid #ccc;
+  background-color: #fdfdfd;
   font-size: 14px;
-  transition: all 0.2s ease-in-out;
+  padding: 10px 14px;
+  transition: all 0.25s ease;
+  color: #333;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.03);
 }
 
-.cadastro-produto-page input:focus {
+.cadastro-produto-page input:focus,
+.cadastro-produto-page select:focus,
+.cadastro-produto-page textarea:focus {
   outline: none;
-  border-color: #54bd54;
-  box-shadow: 0 0 6px rgba(84, 189, 84, 0.5);
+  border-color: #2ecc71; /* Verde */
+  box-shadow: 0 0 6px rgba(46, 204, 113, 0.4);
 }
 
+/* === SELECT === */
+.cadastro-produto-page select {
+  cursor: pointer;
+  background-image: linear-gradient(to bottom, #ffffff, #f9f9f9);
+}
+
+/* === TEXTAREA === */
+.cadastro-produto-page textarea {
+  resize: none;
+  min-height: 110px;
+}
+
+/* === BOTÃO === */
 .cadastro-produto-page button {
   display: block;
   margin: 30px auto 0;
   border-radius: 8px;
   border: none;
-  padding: 12px;
-  width: 350px;
-  background-color: #54bd54;
-  font-size: 14px;
+  padding: 14px;
+  width: 80%;
+  font-size: 16px;
   cursor: pointer;
+  font-weight: 600;
   color: white;
-  transition: background-color 0.2s;
+  background: linear-gradient(135deg, #27ae60, #219150); /* Verde moderno */
+  transition: all 0.25s ease-in-out;
+  box-shadow: 0 4px 10px rgba(39, 174, 96, 0.3);
 }
 
 .cadastro-produto-page button:hover {
-  background-color: #0cd954;
+  background: linear-gradient(135deg, #ff7b00, #ff4d4d); /* Laranja → vermelho */
+  box-shadow: 0 4px 14px rgba(255, 123, 0, 0.4);
+  transform: scale(1.03);
 }
 
-.cadastro-produto-page h2 {
-  font-size: 18px;
-  margin-bottom: 5px;
+/* === PLACEHOLDER === */
+.cadastro-produto-page input::placeholder,
+.cadastro-produto-page textarea::placeholder {
+  color: #aaa;
+  font-size: 13px;
 }
 
-/* Campo Categoria (select) */
-.cadastro-produto-page select {
-  width: 100%;
-  padding: 12px 15px;
-  border-radius: 12px;
-  border: 1px solid rgba(0, 0, 0, 0.3);
-  background-color: #fff7f7;
-  font-size: 14px;
-  color: #555;
-  cursor: pointer;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  transition: all 0.2s ease-in-out;
-}
+/* === RESPONSIVIDADE === */
 
-.cadastro-produto-page select:focus {
-  outline: none;
-  border-color: #54bd54;
-  box-shadow: 0 0 6px rgba(84, 189, 84, 0.5);
-}
-
-/* Campo Descrição (textarea) */
-.cadastro-produto-page textarea {
-  width: 100%;
-  padding: 12px 15px;
-  border-radius: 12px;
-  border: 1px solid rgba(0, 0, 0, 0.3);
-  background-color: #fff7f7;
-  font-size: 14px;
-  color: #555;
-  resize: none;
-  min-height: 120px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  transition: all 0.2s ease-in-out;
-}
-
-.cadastro-produto-page textarea:focus {
-  outline: none;
-  border-color: #54bd54;
-  box-shadow: 0 0 6px rgba(84, 189, 84, 0.5);
-}
-
-@media(max-width: 500px){
-  .cadastro-produto-page{
-    padding: 20px 10px;
+/* 🔹 Celulares pequenos */
+@media (max-width: 480px) {
+  .cadastro-produto-page {
+    padding: 20px 10px 70px;
   }
 
-  .cadastro-produto-page .form{
-    padding: 25px 15px;
-  }
-
-  .cadastro-produto .titulo{
-    margin-bottom: 25px;
-  }
-
-  .cadastro-produto h1{
-    font-size: 22px;
-  }
-
-  .cadastro-produto h2{
-    font-size: 14px;
-  }
-
-  .cadastro-produto label{
-    font-size: 12px;
-  }
-
-  .cadastro-produto input,
-  .cadastro-produto-page select{
-    height: 42px;
-    font-size: 14px;
-    padding: 0 12px;
-  }
-
-  .cadastro-produto-page textarea{
-    min-height: 100px;
-    font-size: 14px;
-  }
-
-  .cadastro-produto-page button{
+  .cadastro-produto-page .form {
     width: 100%;
-    padding: 14px;
-    font-size: 15px;
+    max-width: 360px;
+    padding: 25px 18px;
   }
 
-  .cadastro-produto-page .campo{
-    margin-bottom: 12px;
+  .cadastro-produto-page .titulo h1 {
+    font-size: 1.4rem;
+  }
+
+  .cadastro-produto-page input,
+  .cadastro-produto-page select,
+  .cadastro-produto-page textarea {
+    font-size: 14px;
+    padding: 9px 11px;
+  }
+
+  .cadastro-produto-page button {
+    width: 100%;
+    font-size: 15px;
+    padding: 12px;
   }
 }
 
-@media(min-width: 501px) and (max-width: 1023px){
-  .cadastro-produto-page{
-    padding: 30px 20px;
+/* 🔹 Tablets (modo retrato/paisagem) */
+@media (min-width: 481px) and (max-width: 1024px) {
+  .cadastro-produto-page {
+    padding: 40px 20px 80px;
   }
 
-  .cadastro-produto-page .form{
-    max-width: 500px;
+  .cadastro-produto-page .form {
+    width: 90%;
+    max-width: 480px;
     padding: 30px 25px;
   }
 
-  .cadastro-produto h1{
-    font-size: 26px;
-  }
-
-  .cadastro-produto h2{
-    font-size: 16px;
-  }
-
-  .cadastro-produto input,
-  .cadastro-produto-page select{
-    height: 42px;
-  }
-
-  .cadastro-produto-page textarea{
-    min-height: 110px;
-  }
-
-  .cadastro-produto-page button{
-    width: 300px;
-    font-size: 15px;
+  .cadastro-produto-page .titulo h1 {
+    font-size: 1.7rem;
   }
 }
 
-@media(min-width: 1023px){
-  .cadastro-produto-page{
-    padding-top:50px;
+/* 🔹 Monitores grandes */
+@media (min-width: 1025px) {
+  .cadastro-produto-page .form {
+    width: 550px;
   }
+}
 
-  .cadastro-produto-page .form{
-    max-width: 550px;
-    padding: 40px 30px;
-  }
-
-  .cadastro-produto h1{
-    font-size: 28px;
-  }
-
-  .cadastro-produto h2{
-    font-size: 18px;
-  }
-
-  .cadastro-produto label{
-    font-size: 12px;
-  }
-
-  .cadastro-produto input,
-  .cadastro-produto-page select{
-    height: 44px;
-  }
-
-  .cadastro-produto-page textarea{
-    min-height: 120px;
-  }
-
-  .cadastro-produto-page button{
-    width: 350px;
-    font-size: 16px;
-  }
+/* === TRANSIÇÕES SUAVES === */
+.cadastro-produto-page input,
+.cadastro-produto-page select,
+.cadastro-produto-page textarea,
+.cadastro-produto-page button {
+  transition: all 0.2s ease;
 }

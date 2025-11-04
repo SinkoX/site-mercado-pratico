@@ -1,21 +1,24 @@
-.header { 
+/* ===== HEADER BASE ===== */
+.header {
   display: grid;
   grid-template-columns: auto 1fr auto;
   gap: 16px;
   padding: 14px 16px;
   background-color: #fff;
   width: 100%;
-  align-items: center; /* centraliza verticalmente */
+  align-items: center;
   justify-content: space-between;
+  border-bottom: 1px solid #eee;
 }
 
-/* Logo */
+/* ===== LOGO ===== */
 .logo {
   width: 90px;
   height: auto;
+  cursor: pointer;
 }
 
-/* Busca */
+/* ===== BARRA DE BUSCA ===== */
 .procura {
   display: flex;
   align-items: center;
@@ -25,7 +28,7 @@
   background-color: #f7f7f7;
   gap: 8px;
   padding: 0 8px;
-  flex: 1; /* ocupa espaço central */
+  flex: 1;
 }
 
 .procura > * {
@@ -43,36 +46,43 @@
   margin: 0;
 }
 
-.botao-procura {
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 18px;
+#icon-pesquisa {
+  width: 20px;
+  height: 20px;
+  opacity: 0.8;
 }
 
-/* User + carrinho */
+/* ===== ICONES USER / CARRINHO ===== */
 .user-icons {
   display: flex;
   align-items: center;
-  gap: 35px; /* distância entre carrinho e avatar */
-  position: relative; /* para dropdown */
+  gap: 35px;
+  position: relative;
 }
 
 .user {
   width: 50px;
   height: 50px;
   border-radius: 50%;
-  background-color: rgb(231, 231, 231);
+  background-color: rgb(240, 240, 240);
   display: flex;
   justify-content: center;
-  align-items:center;
+  align-items: center;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  position: relative;
 }
 
-.user a {
+.user:hover {
+  background-color: rgb(225, 225, 225);
+}
+
+#icon-perfil {
   width: 25px;
   height: 25px;
 }
 
+/* ===== CARRINHO ===== */
 .carrinho-icon {
   cursor: pointer;
   position: relative;
@@ -85,7 +95,7 @@
   position: absolute;
   top: -6px;
   right: -6px;
-  background: var(--vermelho, red);
+  background: red;
   color: white;
   border-radius: 50%;
   padding: 2px 6px;
@@ -93,74 +103,76 @@
   font-weight: 700;
 }
 
-/* Dropdown carrinho */
+/* ===== DROPDOWNS (CARRINHO / PERFIL) ===== */
 .dropdown-carrinho {
   position: absolute;
-  top: 100%;
+  top: 60px;
   right: 0;
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-  width: 250px;
-  margin-top: 8px;
-  padding: 12px;
-  z-index: 10;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.15);
+  width: 220px;
+  padding: 10px 0;
+  z-index: 1000;
+  animation: fadeIn 0.2s ease-out;
+}
+
+/* Animação de entrada */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .item-dropdown {
   display: flex;
   justify-content: space-between;
-  padding: 6px 0;
-  border-bottom: 1px solid #eee;
-}
-
-.item-dropdown:last-child {
-  border-bottom: none;
-}
-
-/* Burger menu (mobile) */
-.header__burger {
-  display: none;
-  width: 40px;
-  height: 40px;
-  border-radius: 8px;
-  border: 1px solid #e5e7eb;
-  background: #ffffff;
   align-items: center;
-  justify-content: center;
+  padding: 10px 14px;
+  font-size: 15px;
+  color: #333;
+  transition: background 0.2s ease;
 }
 
-.header__burger-lines {
-  display: inline-block;
-  width: 18px;
-  height: 2px;
-  background: #111827;
-  position: relative;
-}
-.header__burger-lines::before,
-.header__burger-lines::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: #111827;
-}
-.header__burger-lines::before { top: -6px; }
-.header__burger-lines::after { top: 6px; }
-
-/* Ícones internos */
-#icon-perfil {
-  width: 25px;
-  height: 25px;
+.item-dropdown a {
+  text-decoration: none;
+  color: #333;
+  width: 100%;
 }
 
-#icon-pesquisa {
-  width: 20px;
-  height: 20px;
+.item-dropdown:hover {
+  background: #f7f7f7;
 }
 
-/* Responsivo */
+/* ===== ESPECÍFICO DO DROPDOWN PERFIL ===== */
+.user .dropdown-carrinho {
+  right: -10px;
+  width: 180px;
+  text-align: left;
+}
+
+.user .item-dropdown {
+  justify-content: flex-start;
+  padding: 10px 18px;
+  font-weight: 500;
+}
+
+.user .item-dropdown a {
+  color: #444;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.user .item-dropdown:hover a {
+  color: #000;
+}
+
+/* ===== RESPONSIVIDADE ===== */
 @media (min-width: 1024px) {
   .header {
     grid-template-columns: auto minmax(360px, 720px) auto;
@@ -182,7 +194,21 @@
     padding: 10px 12px;
   }
 
-  .header__burger { display: inline-flex; }
-  .procura { min-width: 0; }
-  .logo { display: none; }
+  .logo {
+    display: none;
+  }
+
+  .procura {
+    min-width: 0;
+  }
+
+  .user {
+    width: 42px;
+    height: 42px;
+  }
+
+  .dropdown-carrinho {
+    width: 180px;
+    right: -40px;
+  }
 }
