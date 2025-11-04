@@ -138,7 +138,7 @@ function Checkout() {
       };
       console.log("🧾 PagamentoDTO:", pagamentoDTO);
 
-      const res = await api.post(`/pagamentos/finalizar/${user.idUsuario}`, pagamentoDTO);
+      const res = await api.post(`/pagamentos/finalizar/${user?.idUsuario}`, pagamentoDTO);
       console.log("✅ Resposta do backend:", res.data);
 
       window.location.href = res.data.checkoutUrl;

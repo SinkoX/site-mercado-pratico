@@ -1,28 +1,26 @@
-// src/pages/CadastroUsuarioAdmin.tsx
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { api } from "../api";
 import { FaEye, FaEyeSlash, FaHome } from "react-icons/fa";
-
 import Footer from "../components/Footer";
-import "./CadastroUsuarioAdmin.css";
+import "./CadastroUsuarioAdmin.css"; // CSS atualizado
 
 interface TipoUsuario {
   idTipoUsuario: number;
   nomeTipoUsuario: string;
 }
 
-interface FormData {
+interface FormDataUsuario {
   nomeUsuario: string;
   emailUsuario: string;
   senhaUsuario: string;
   telefoneUsuario: string;
   cpfUsuario: string;
-  tipoUsuarioId?: number; // id do tipo selecionado
+  tipoUsuarioId?: number;
 }
 
-export default function CadastroUsuarioAdmin() {
-  const [formData, setFormData] = useState<FormData>({
+export default function CadastroUsuarioAdmPage() {
+  const [formData, setFormData] = useState<FormDataUsuario>({
     nomeUsuario: "",
     emailUsuario: "",
     senhaUsuario: "",
@@ -35,7 +33,6 @@ export default function CadastroUsuarioAdmin() {
   const [showSenha, setShowSenha] = useState(false);
   const navigate = useNavigate();
 
-  // Busca tipos de usuário
   useEffect(() => {
     api.get("/tipos-usuario")
       .then(res => setTipos(res.data))
@@ -51,7 +48,6 @@ export default function CadastroUsuarioAdmin() {
   };
 
   const toggleSenha = () => setShowSenha(prev => !prev);
-
   const limparCpf = (cpf: string) => cpf.replace(/\D/g, "");
   const limparTelefone = (tel: string) => tel.replace(/\D/g, "");
 
@@ -67,7 +63,7 @@ export default function CadastroUsuarioAdmin() {
       ...formData,
       cpfUsuario: limparCpf(formData.cpfUsuario),
       telefoneUsuario: limparTelefone(formData.telefoneUsuario),
-      tipoUsuario: { idTipoUsuario: formData.tipoUsuarioId } // envia objeto com idTipoUsuario
+      tipoUsuario: { idTipoUsuario: formData.tipoUsuarioId }
     };
 
     try {
@@ -76,7 +72,7 @@ export default function CadastroUsuarioAdmin() {
 
       localStorage.setItem("usuarioId", novoUsuario.idUsuario.toString());
       alert("Usuário cadastrado com sucesso!");
-      navigate("/cadastro/endereco"); // redireciona para endereço
+      navigate("/cadastro/endereco");
     } catch (error) {
       console.error("Erro ao cadastrar:", error);
       alert("Erro ao cadastrar usuário.");
@@ -84,12 +80,12 @@ export default function CadastroUsuarioAdmin() {
   };
 
   return (
-    <div className="cadastro-usuario-admin-page">
-     
+    <div className="cadastro-usuario-adm-page">
       <div className="home-icon" onClick={() => navigate("/")}>
         <FaHome />
       </div>
-      <form className="form" onSubmit={handleSubmit}>
+
+      <form className="formulario-pag-cadastro-usuario-adm" onSubmit={handleSubmit}>
         <div className="titulo">
           <h1>Cadastro de Usuário</h1>
           <div className="subtitulo">
@@ -97,8 +93,8 @@ export default function CadastroUsuarioAdmin() {
           </div>
         </div>
 
-        <div className="campos">
-          <div className="campo">
+        <div className="campos-pag-cadastro-usuario-adm">
+          <div className="campo-pag-cadastro-usuario-adm">
             <label>Nome Completo</label>
             <input
               type="text"
@@ -110,7 +106,7 @@ export default function CadastroUsuarioAdmin() {
             />
           </div>
 
-          <div className="campo">
+          <div className="campo-pag-cadastro-usuario-adm">
             <label>Email</label>
             <input
               type="email"
@@ -122,7 +118,7 @@ export default function CadastroUsuarioAdmin() {
             />
           </div>
 
-          <div className="campo senha-campo">
+          <div className="campo-pag-cadastro-usuario-adm senha-campo">
             <label>Senha</label>
             <div className="senha-wrapper">
               <input
@@ -139,13 +135,13 @@ export default function CadastroUsuarioAdmin() {
             </div>
           </div>
 
-          <div className="campo">
+          <div className="campo-pag-cadastro-usuario-adm">
             <label>Telefone</label>
             <input
               type="tel"
               name="telefoneUsuario"
               value={formData.telefoneUsuario}
-              onChange={(e) =>
+              onChange={e =>
                 setFormData(prev => ({ ...prev, telefoneUsuario: limparTelefone(e.target.value) }))
               }
               required
@@ -153,13 +149,13 @@ export default function CadastroUsuarioAdmin() {
             />
           </div>
 
-          <div className="campo">
+          <div className="campo-pag-cadastro-usuario-adm">
             <label>CPF</label>
             <input
               type="text"
               name="cpfUsuario"
               value={formData.cpfUsuario}
-              onChange={(e) =>
+              onChange={e =>
                 setFormData(prev => ({ ...prev, cpfUsuario: limparCpf(e.target.value) }))
               }
               required
@@ -167,7 +163,7 @@ export default function CadastroUsuarioAdmin() {
             />
           </div>
 
-          <div className="campo">
+          <div className="campo-pag-cadastro-usuario-adm">
             <label>Tipo de Usuário</label>
             <select
               name="tipoUsuarioId"
@@ -185,10 +181,9 @@ export default function CadastroUsuarioAdmin() {
           </div>
         </div>
 
-        <button type="submit" className="button">
-          Cadastrar
-        </button>
+        <button type="submit" className="btn-cadastro-usuario-adm">Cadastrar</button>
       </form>
+
       <Footer />
     </div>
   );

@@ -1,35 +1,34 @@
 import React, { useState } from "react";
-import { api } from "../api"; // usa a mesma API do projeto
+import { api } from "../api";
 import { useNavigate } from "react-router-dom";
 import "./CadastroEndereco.css";
 import { FaHome } from "react-icons/fa";
 
-interface FormData {
+interface FormDataEnderecoUsuario {
   cep: string;
   numero: string;
   rua: string;
   bairro: string;
   cidade: string;
-  idUsuario?: number; // adiciona esse campo opcional
+  idUsuario?: number;
 }
 
-function CadastroEndereco() {
-  const [formData, setFormData] = useState<FormData>({
+function CadastroEnderecoUsuario() {
+  const [formData, setFormData] = useState<FormDataEnderecoUsuario>({
     cep: "",
     numero: "",
     rua: "",
     bairro: "",
     cidade: "",
   });
+
   const navigate = useNavigate();
 
-  // Atualiza os campos normais
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // CEP com máscara e busca automática
   const handleCepChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     let value = e.target.value.replace(/\D/g, "");
 
@@ -41,12 +40,8 @@ function CadastroEndereco() {
       try {
         const response = await fetch(
           `https://viacep.com.br/ws/${value}/json/`,
-          {
-            method: "GET",
-            headers: { "Content-Type": "application/json" },
-          }
+          { method: "GET", headers: { "Content-Type": "application/json" } }
         );
-
         const data = await response.json();
 
         if (data.erro) {
@@ -69,15 +64,14 @@ function CadastroEndereco() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
     try {
       const idUsuario = localStorage.getItem("usuarioId");
-
       if (!idUsuario) {
         alert("Usuário não identificado! Faça login novamente.");
         return;
       }
 
-      // Chama o endpoint correto com o id do usuário
       const response = await api.post(
         `/enderecos/usuario/${idUsuario}`,
         formData
@@ -86,14 +80,7 @@ function CadastroEndereco() {
       console.log("Endereço cadastrado:", response.data);
       alert("Endereço cadastrado com sucesso!");
 
-      setFormData({
-        cep: "",
-        numero: "",
-        rua: "",
-        bairro: "",
-        cidade: "",
-      });
-
+      setFormData({ cep: "", numero: "", rua: "", bairro: "", cidade: "" });
       navigate("/");
     } catch (error) {
       console.error("Erro ao cadastrar endereço:", error);
@@ -116,9 +103,7 @@ function CadastroEndereco() {
 
         <div className="campos">
           <div className="campo">
-            <label htmlFor="cep">
-              <h2>CEP</h2>
-            </label>
+            <label htmlFor="cep"><h2>CEP</h2></label>
             <input
               type="text"
               id="cep"
@@ -132,9 +117,7 @@ function CadastroEndereco() {
           </div>
 
           <div className="campo">
-            <label htmlFor="rua">
-              <h2>Rua</h2>
-            </label>
+            <label htmlFor="rua"><h2>Rua</h2></label>
             <input
               type="text"
               id="rua"
@@ -146,9 +129,7 @@ function CadastroEndereco() {
           </div>
 
           <div className="campo">
-            <label htmlFor="bairro">
-              <h2>Bairro</h2>
-            </label>
+            <label htmlFor="bairro"><h2>Bairro</h2></label>
             <input
               type="text"
               id="bairro"
@@ -160,9 +141,7 @@ function CadastroEndereco() {
           </div>
 
           <div className="campo">
-            <label htmlFor="cidade">
-              <h2>Cidade</h2>
-            </label>
+            <label htmlFor="cidade"><h2>Cidade</h2></label>
             <input
               type="text"
               id="cidade"
@@ -174,9 +153,7 @@ function CadastroEndereco() {
           </div>
 
           <div className="campo">
-            <label htmlFor="numero">
-              <h2>Número</h2>
-            </label>
+            <label htmlFor="numero"><h2>Número</h2></label>
             <input
               type="text"
               id="numero"
@@ -197,4 +174,4 @@ function CadastroEndereco() {
   );
 }
 
-export default CadastroEndereco;
+export default CadastroEnderecoUsuario;

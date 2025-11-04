@@ -1,6 +1,9 @@
+/* ===========================
+   PRODUTO
+=========================== */
 .produto-container {
   background-color: #f9f9f9;
-  padding: 60px 40px;
+  padding: 60px 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -13,7 +16,7 @@
   background: #fff;
   padding: 40px;
   border-radius: 16px;
-  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 6px 30px rgba(0, 0, 0, 0.08);
   max-width: 1200px;
   width: 100%;
 }
@@ -31,14 +34,13 @@
   width: 100%;
   border-radius: 12px;
   object-fit: cover;
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
 }
 
 .detalhes-produto {
   flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
   font-family: "Poppins", sans-serif;
 }
 
@@ -55,7 +57,6 @@
   font-size: 1.8rem;
 }
 
-/* Descrição logo junto da área de compra */
 .descricao-junta {
   margin-top: 15px;
   color: #555;
@@ -96,7 +97,7 @@
   transform: scale(1.05);
 }
 
-/* Botão vermelho antigo (mantido) */
+/* Botão Adicionar */
 .button-add {
   margin-top: 20px;
   background-color: #ff6969;
@@ -105,7 +106,7 @@
   border-radius: 8px;
   cursor: pointer;
   height: 50px;
-  width: 170px;
+  width: 200px;
   font-size: 20px;
   transition: background-color 0.3s ease, transform 0.2s ease;
 }
@@ -121,104 +122,144 @@
   font-size: 1.2rem;
   color: #555;
 }
+
 /* ===========================
-   TOAST DE CONFIRMAÇÃO
+   TOAST
 =========================== */
 .toast-carrinho {
   position: fixed;
   bottom: 30px;
-  right: -400px; /* começa fora da tela */
-  background-color: #ff6969;
+  right: 20px;
+  background: linear-gradient(135deg, #27ae60, #2ecc71);
   color: #fff;
-  padding: 16px 25px;
-  border-radius: 8px;
+  padding: 16px 28px;
+  border-radius: 10px;
   font-size: 1rem;
   font-weight: 500;
-  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
-  animation: slideIn 0.6s forwards, fadeOut 0.6s 2.4s forwards;
+  box-shadow: 0 6px 22px rgba(0,0,0,0.18);
+  animation: slideInToast 0.5s forwards, fadeOutToast 0.5s 2.5s forwards;
   z-index: 9999;
 }
+
+@keyframes slideInToast {
+  from { transform: translateX(120%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes fadeOutToast {
+  to { transform: translateX(120%); opacity: 0; }
+}
+
 /* ===========================
-   POPUP DE LOGIN
+   POPUP MODERNO
 =========================== */
 .login-popup-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5); /* Fundo escuro */
+  inset: 0;
+  background-color: rgba(0,0,0,0.45);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 1000;
+  backdrop-filter: blur(3px);
+  animation: fadeInOverlay 0.3s ease forwards;
 }
 
 .login-popup {
   background-color: #fff;
-  padding: 30px 40px;
-  border-radius: 12px;
-  max-width: 500px;
-  width: 100%;
-  box-shadow: 0px 4px 25px rgba(0, 0, 0, 0.2);
-  text-align: center;
+  border-radius: 16px;
+  max-width: 450px;
+  width: 90%;
+  padding: 30px 25px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.15);
   position: relative;
+  text-align: center;
+  transform: scale(0.95);
+  animation: popupScale 0.3s ease forwards;
 }
 
-.login-popup h2 {
-  font-size: 1.5rem;
-  color: #333;
-  margin-bottom: 20px;
+@keyframes fadeInOverlay {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
-.button-popup {
-  background-color: #ff6b6b;
-  color: white;
-  border: none;
-  padding: 12px 30px;
-  font-size: 1rem;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  margin: 10px;
-}
-
-.button-popup:hover {
-  background-color: #ff8585;
+@keyframes popupScale {
+  from { transform: scale(0.95); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
 }
 
 .close-popup {
   position: absolute;
-  top: 10px;
-  right: 10px;
-  font-size: 20px;
+  top: 12px;
+  right: 12px;
+  font-size: 22px;
   cursor: pointer;
-  color: #333;
+  color: #888;
+  transition: all 0.2s ease;
 }
 
 .close-popup:hover {
   color: #ff6b6b;
 }
 
-
-@keyframes slideIn {
-  from {
-    right: -400px;
-    opacity: 0;
-  }
-  to {
-    right: 30px;
-    opacity: 1;
-  }
+.popup-content h2 {
+  font-size: 1.4rem;
+  color: #333;
+  margin-bottom: 10px;
 }
 
-@keyframes fadeOut {
-  from {
-    right: 30px;
-    opacity: 1;
+.popup-content p {
+  font-size: 1rem;
+  color: #555;
+  margin-bottom: 20px;
+}
+
+.popup-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.button-popup {
+  padding: 12px 25px;
+  font-size: 1rem;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  background-color: #ff6b6b;
+  color: #fff;
+  transition: all 0.3s ease;
+}
+
+.button-popup:hover {
+  background-color: #f07a7a;
+}
+
+.button-popup.secondary {
+  background-color: #fff;
+  color: #ff6b6b;
+  border: 2px solid #ff6b6b;
+}
+
+.button-popup.secondary:hover {
+  background-color: #ff6b6b;
+  color: #fff;
+}
+
+/* RESPONSIVO */
+@media (max-width: 768px) {
+  .produto-card {
+    flex-direction: column;
+    padding: 25px;
   }
-  to {
-    right: -400px;
-    opacity: 0;
+
+  .detalhes-produto {
+    width: 100%;
+  }
+
+  .popup-buttons {
+    flex-direction: column;
+    gap: 12px;
   }
 }

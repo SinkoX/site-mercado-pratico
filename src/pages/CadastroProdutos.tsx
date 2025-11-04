@@ -197,7 +197,7 @@ function CadastroProduto() {
           </div>
         </div>
 
-        <button type="submit" className="button">
+        <button type="submit" className="button-product">
           Cadastrar Produto
         </button>
       </form>

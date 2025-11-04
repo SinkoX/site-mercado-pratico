@@ -21,34 +21,35 @@
   color: #666;
   transition: 0.2s;
 }
+
 .home-icon:hover {
   color: #2f2f2f;
   transform: scale(1.1);
 }
 
 /* Top section */
-.login-top {
+.pagina-login-container .login-top {
   text-align: center;
   margin-bottom: 30px;
 }
 
-.market-name {
+.pagina-login-container .market-name {
   font-size: 48px;
   font-weight: 700;
-  background: linear-gradient(90deg, #27ae60, #219150);
+  background: linear-gradient(90deg, #f18913, #ea1616);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   margin-bottom: 5px;
   text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
 }
 
-.market-slogan {
+.pagina-login-container .market-slogan {
   font-size: 20px;
   color: #887474;
 }
 
 /* Form */
-.login-form {
+.pagina-login-container .login-form {
   background: #fff;
   border-radius: 25px;
   padding: 40px 35px;
@@ -62,11 +63,11 @@
   animation: fadeIn 0.4s ease;
 }
 
-.login-form.shake {
+.pagina-login-container .login-form.shake {
   animation: shake 0.5s;
 }
 
-.login-title {
+.pagina-login-container .login-title {
   font-size: 28px;
   font-weight: bold;
   color: #24613a;
@@ -74,7 +75,7 @@
   text-align: center;
 }
 
-.login-subtitle {
+.pagina-login-container .login-subtitle {
   font-size: 16px;
   color: #f75f13;
   text-align: center;
@@ -82,19 +83,19 @@
 }
 
 /* Input group */
-.input-group {
+.pagina-login-container .input-group {
   display: flex;
   flex-direction: column;
   margin-bottom: 15px;
   position: relative;
 }
 
-.input-group label {
+.pagina-login-container .input-group label {
   font-weight: 600;
   margin-bottom: 5px;
 }
 
-.input-group input {
+.pagina-login-container .input-group input {
   padding: 12px 16px;
   border-radius: 10px;
   border: 1.5px solid #ccc;
@@ -102,17 +103,18 @@
   transition: all 0.25s;
 }
 
-.input-group input:focus {
+.pagina-login-container .input-group input:focus {
   outline: none;
   border-color: #2ecc71;
   box-shadow: 0 0 6px rgba(46,204,113,0.4);
 }
 
 /* Password toggle */
-.senha-wrapper {
+.pagina-login-container .senha-wrapper {
   position: relative;
 }
-.toggle-icon {
+
+.pagina-login-container .toggle-icon {
   position: absolute;
   top: 50%;
   right: 12px;
@@ -120,12 +122,13 @@
   cursor: pointer;
   color: #555;
 }
-.toggle-icon:hover {
+
+.pagina-login-container .toggle-icon:hover {
   color: #000;
 }
 
 /* Error */
-.error-message {
+.pagina-login-container .error-message {
   color: red;
   font-size: 14px;
   margin-top: -10px;
@@ -134,7 +137,7 @@
 }
 
 /* Button */
-.login-button {
+.pagina-login-container .login-button {
   padding: 14px;
   border-radius: 8px;
   border: none;
@@ -145,12 +148,13 @@
   cursor: pointer;
   transition: 0.3s;
 }
-.login-button:hover {
+
+.pagina-login-container .login-button:hover {
   background: linear-gradient(135deg,#2ecc71,#27ae60);
 }
 
 /* Loader */
-.loader {
+.pagina-login-container .loader {
   width: 20px;
   height: 20px;
   border: 3px solid #fff;
@@ -161,21 +165,21 @@
 }
 
 /* Cadastro link */
-.cadastro-text {
+.pagina-login-container .cadastro-text {
   text-align: center;
   font-size: 14px;
   margin-top: 15px;
   color: #666;
 }
 
-.link-cadastro {
+.pagina-login-container .link-cadastro {
   color: #0080ff;
   font-weight: bold;
   cursor: pointer;
   text-decoration: none;
 }
 
-.link-cadastro:hover {
+.pagina-login-container .link-cadastro:hover {
   color: #0056b3;
   text-decoration: underline;
 }
@@ -201,10 +205,10 @@
 /* Responsividade */
 @media(max-width: 500px){
   .pagina-login-container { padding: 60px 15px; }
-  .market-name { font-size: 32px; }
-  .market-slogan { font-size: 16px; }
-  .login-title { font-size: 20px; }
-  .login-subtitle { font-size: 14px; }
-  .login-form { padding: 25px 20px; gap: 15px; }
-  .login-button { font-size: 15px; }
+  .pagina-login-container .market-name { font-size: 32px; }
+  .pagina-login-container .market-slogan { font-size: 16px; }
+  .pagina-login-container .login-title { font-size: 20px; }
+  .pagina-login-container .login-subtitle { font-size: 14px; }
+  .pagina-login-container .login-form { padding: 25px 20px; gap: 15px; }
+  .pagina-login-container .login-button { font-size: 15px; }
 }

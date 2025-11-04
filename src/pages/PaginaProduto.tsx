@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { api } from "../api";
 import { useAuth } from "../hooks/useAuth";
 import Header from "../components/Header";
@@ -11,7 +11,7 @@ interface Produto {
   idProduto: number;
   nomeProduto: string;
   precoProduto: number;
-  descricao?: string;
+  descricaoProduto?: string;
   imgUrl?: string;
   imagemProdutoBase64?: string;
 }
@@ -19,15 +19,15 @@ interface Produto {
 const PaginaProduto: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [produto, setProduto] = useState<Produto | null>(null);
   const [quantidade, setQuantidade] = useState(1);
   const [loading, setLoading] = useState(true);
   const [showToast, setShowToast] = useState(false);
-  const [showLoginPopup, setShowLoginPopup] = useState(false); // Estado para controlar o popup
+  const [showLoginPopup, setShowLoginPopup] = useState(false);
 
   useEffect(() => {
     if (!id) return;
-
     setLoading(true);
     api
       .get(`/produto/${id}`)
@@ -44,7 +44,7 @@ const PaginaProduto: React.FC = () => {
 
   const adicionarAoCarrinho = async () => {
     if (!user) {
-      setShowLoginPopup(true); // Exibe o popup se o usuário não estiver logado
+      setShowLoginPopup(true);
       return;
     }
     if (!produto) return;
@@ -55,18 +55,15 @@ const PaginaProduto: React.FC = () => {
         null,
         { params: { quantidade } }
       );
-
       setShowToast(true);
-      setTimeout(() => setShowToast(false), 3000); // Desaparece depois de 3s
+      setTimeout(() => setShowToast(false), 3000);
     } catch (err) {
       console.error("Erro ao adicionar produto ao carrinho:", err);
       alert("Erro ao adicionar produto ao carrinho.");
     }
   };
 
-  const fecharPopup = () => {
-    setShowLoginPopup(false); // Fecha o popup
-  };
+  const fecharPopup = () => setShowLoginPopup(false);
 
   if (loading) return <p className="loading">Carregando produto...</p>;
   if (!produto) return <p className="loading">Produto não encontrado.</p>;
@@ -117,30 +114,25 @@ const PaginaProduto: React.FC = () => {
       </div>
 
       {/* Toast animado */}
-      {showToast && (
-        <div className="toast-carrinho">
-          🛒 Item adicionado ao carrinho!
-        </div>
-      )}
+      {showToast && <div className="toast-carrinho">🛒 Item adicionado ao carrinho!</div>}
 
       {/* Popup de Login */}
       {showLoginPopup && (
         <div className="login-popup-overlay">
           <div className="login-popup">
-            <span className="close-popup" onClick={fecharPopup}>
-              ✖
-            </span>
-            <h2>Você precisa estar logado para adicionar o produto ao carrinho.</h2>
-            <p>
-              <button className="button-popup" onClick={() => alert("Ir para Login")}>
-                Fazer Login
-              </button>
-            </p>
-            <p>
-              <button className="button-popup" onClick={() => alert("Ir para Cadastro")}>
-                Cadastrar-se
-              </button>
-            </p>
+            <span className="close-popup" onClick={fecharPopup}>✖</span>
+            <div className="popup-content">
+              <h2>Você precisa estar logado</h2>
+              <p>Para adicionar produtos ao carrinho, faça login ou cadastre-se.</p>
+              <div className="popup-buttons">
+                <button className="button-popup" onClick={() => navigate("/login")}>
+                  Fazer Login
+                </button>
+                <button className="button-popup secondary" onClick={() => navigate("/cadastro")}>
+                  Cadastrar-se
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       )}

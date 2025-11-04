@@ -4,7 +4,7 @@ import CadastroUsuario from "./pages/CadastroUsuario";
 import CadastroEndereco from "./pages/CadastroEndereco";
 import CadastroProduto from "./pages/CadastroProdutos";
 import PaginaLogin from "./pages/PaginaLogin";
-import Produto from "./components/PaginaProduto";
+import Produto from "./pages/PaginaProduto";
 import Perfil from "./pages/PerfilUsuario";
 import PaginaCategoria from "./pages/PaginaCategoria";
 import { useAuth } from "./hooks/useAuth";
