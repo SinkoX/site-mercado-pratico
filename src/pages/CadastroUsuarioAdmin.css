@@ -1,0 +1,228 @@
+/* === BASE === */
+html {
+  scroll-behavior: smooth;
+}
+
+.cadastro-usuario-admin-page {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  flex-direction: column;
+  padding-top: 60px;
+  padding-bottom: 60px;
+  min-height: calc(100vh - 40px);
+  margin: 0;
+  background: linear-gradient(135deg, #fef7f7 0%, #fff 100%);
+  font-family: "Inter", sans-serif;
+  position: relative;
+  overflow-x: hidden;
+}
+
+.cadastro-usuario-admin-page::after {
+  content: "";
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 60px;
+  pointer-events: none;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.05), transparent);
+  z-index: 1;
+}
+
+/* === FORM CONTAINER === */
+.cadastro-usuario-admin-page .form {
+  background-color: #ffffff;
+  border-radius: 16px;
+  width: 550px;
+  padding: 35px 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  border: 2px solid rgba(84, 189, 84, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+  margin: 0 auto;
+  z-index: 2;
+}
+
+.cadastro-usuario-admin-page .form:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+/* === TITULO === */
+.cadastro-usuario-admin-page .titulo h1 {
+  text-align: center;
+  font-size: 1.9rem;
+  font-weight: 700;
+  color: #24613a;
+  margin-bottom: 10px;
+  border-bottom: 3px solid #ff7b00;
+  padding-bottom: 8px;
+  width: fit-content;
+}
+
+.cadastro-usuario-admin-page .subtitulo h5 {
+  font-size: 16px;
+  font-weight: 400;
+  color: #666;
+  margin-bottom: 20px;
+}
+
+/* === CAMPOS === */
+.cadastro-usuario-admin-page .campos {
+  width: 100%;
+}
+
+.cadastro-usuario-admin-page .campo {
+  margin-bottom: 18px;
+  width: 100%;
+}
+
+/* === LABELS === */
+.cadastro-usuario-admin-page label {
+  font-size: 14px;
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 600;
+  color: #333;
+}
+
+/* === INPUTS / SELECT === */
+.cadastro-usuario-admin-page input,
+.cadastro-usuario-admin-page select {
+  width: 100%;
+  border-radius: 10px;
+  border: 1.5px solid #ccc;
+  background-color: #fdfdfd;
+  font-size: 14px;
+  padding: 10px 14px;
+  transition: all 0.25s ease;
+  color: #333;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.03);
+}
+
+.cadastro-usuario-admin-page input:focus,
+.cadastro-usuario-admin-page select:focus {
+  outline: none;
+  border-color: #2ecc71;
+  box-shadow: 0 0 6px rgba(46, 204, 113, 0.4);
+}
+
+/* === SENHA COM ÍCONE === */
+.senha-wrapper {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.senha-wrapper input {
+  flex: 1;
+  padding-right: 40px;
+}
+
+.icon-btn {
+  position: absolute;
+  right: 10px;
+  cursor: pointer;
+  color: #666;
+}
+
+/* === BOTÃO === */
+.cadastro-usuario-admin-page button {
+  display: block;
+  margin: 30px auto 0;
+  border-radius: 8px;
+  border: none;
+  padding: 14px;
+  width: 80%;
+  font-size: 16px;
+  cursor: pointer;
+  font-weight: 600;
+  color: white;
+  background: linear-gradient(135deg, #27ae60, #219150);
+  transition: all 0.25s ease-in-out;
+  box-shadow: 0 4px 10px rgba(39, 174, 96, 0.3);
+}
+
+.cadastro-usuario-admin-page button:hover {
+  background: linear-gradient(135deg, #ff7b00, #ff4d4d);
+  box-shadow: 0 4px 14px rgba(255, 123, 0, 0.4);
+  transform: scale(1.03);
+}
+
+/* === PLACEHOLDER === */
+.cadastro-usuario-admin-page input::placeholder {
+  color: #aaa;
+  font-size: 13px;
+}
+
+/* === HOME ICON === */
+.home-icon {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  font-size: 1.8rem;
+  color: #24613a;
+  cursor: pointer;
+}
+
+/* === RESPONSIVIDADE === */
+@media (max-width: 480px) {
+  .cadastro-usuario-admin-page {
+    padding: 20px 10px 70px;
+  }
+
+  .cadastro-usuario-admin-page .form {
+    width: 100%;
+    max-width: 360px;
+    padding: 25px 18px;
+  }
+
+  .cadastro-usuario-admin-page .titulo h1 {
+    font-size: 1.4rem;
+  }
+
+  .cadastro-usuario-admin-page input,
+  .cadastro-usuario-admin-page select {
+    font-size: 14px;
+    padding: 9px 11px;
+  }
+
+  .cadastro-usuario-admin-page button {
+    width: 100%;
+    font-size: 15px;
+    padding: 12px;
+  }
+}
+
+@media (min-width: 481px) and (max-width: 1024px) {
+  .cadastro-usuario-admin-page {
+    padding: 40px 20px 80px;
+  }
+
+  .cadastro-usuario-admin-page .form {
+    width: 90%;
+    max-width: 480px;
+    padding: 30px 25px;
+  }
+
+  .cadastro-usuario-admin-page .titulo h1 {
+    font-size: 1.7rem;
+  }
+}
+
+@media (min-width: 1025px) {
+  .cadastro-usuario-admin-page .form {
+    width: 550px;
+  }
+}
+
+/* === TRANSIÇÕES SUAVES === */
+.cadastro-usuario-admin-page input,
+.cadastro-usuario-admin-page select,
+.cadastro-usuario-admin-page button {
+  transition: all 0.2s ease;
+}

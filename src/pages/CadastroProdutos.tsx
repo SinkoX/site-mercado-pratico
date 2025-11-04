@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
-import "./CadastroProduto.css";
+import { useNavigate } from "react-router-dom";
+import { FaHome } from "react-icons/fa";
 import { api } from "../api";
+import "./CadastroProduto.css";
 
 interface Categoria {
   idCategoria: number;
@@ -9,6 +10,8 @@ interface Categoria {
 }
 
 function CadastroProduto() {
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     nomeProduto: "",
     quantidadeProduto: "",
@@ -23,10 +26,9 @@ function CadastroProduto() {
   const [categorias, setCategorias] = useState<Categoria[]>([]);
 
   useEffect(() => {
-    axios
-      .get("http://localhost:8080/categorias")
-      .then((response) => setCategorias(response.data))
-      .catch((error) => console.error("Erro ao buscar categorias:", error));
+    api.get("/categorias")
+      .then(res => setCategorias(res.data))
+      .catch(err => console.error(err));
   }, []);
 
   const handleChange = (
@@ -35,69 +37,37 @@ function CadastroProduto() {
     const { name, value, files } = e.target as HTMLInputElement;
 
     if (name === "precoProduto") {
-      // Formata o valor para duas casas decimais se for número válido
       if (!isNaN(Number(value)) && value.trim() !== "") {
-        setFormData((prev) => ({
-          ...prev,
-          [name]: parseFloat(value).toFixed(2),
-        }));
+        setFormData(prev => ({ ...prev, [name]: parseFloat(value).toFixed(2) }));
       } else {
-        setFormData((prev) => ({ ...prev, [name]: "" }));
+        setFormData(prev => ({ ...prev, [name]: "" }));
       }
     } else if (e.target.type === "file" && files) {
-      const file = files[0];
       const reader = new FileReader();
       reader.onloadend = () => {
-        setFormData((prev) => ({
-          ...prev,
-          imagemProduto: reader.result as string,
-        }));
+        setFormData(prev => ({ ...prev, imagemProduto: reader.result as string }));
       };
-      reader.readAsDataURL(file);
+      reader.readAsDataURL(files[0]);
     } else {
-      setFormData((prev) => ({
-        ...prev,
-        [name]: value,
-      }));
+      setFormData(prev => ({ ...prev, [name]: value }));
     }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Validações básicas
-    if (!formData.nomeProduto.trim()) {
-      alert("Por favor, insira o nome do produto.");
-      return;
-    }
+    if (!formData.nomeProduto.trim()) return alert("Informe o nome do produto.");
+    if (!formData.quantidadeProduto || Number(formData.quantidadeProduto) <= 0)
+      return alert("Informe uma quantidade válida.");
+    if (!formData.precoProduto || Number(formData.precoProduto) <= 0)
+      return alert("Informe um preço válido.");
+    if (!formData.categoriaProduto) return alert("Selecione uma categoria.");
+    if (!formData.descricao.trim()) return alert("Informe a descrição.");
 
-    const quantidadeNum = Number(formData.quantidadeProduto);
-    if (isNaN(quantidadeNum) || quantidadeNum <= 0) {
-      alert("Por favor, insira uma quantidade válida.");
-      return;
-    }
-
-    const precoNum = parseFloat(formData.precoProduto);
-    if (isNaN(precoNum) || precoNum <= 0) {
-      alert("Por favor, insira um preço válido.");
-      return;
-    }
-
-    if (!formData.categoriaProduto) {
-      alert("Por favor, selecione uma categoria.");
-      return;
-    }
-
-    if (!formData.descricao.trim()) {
-      alert("Por favor, insira uma descrição do produto.");
-      return;
-    }
-
-    // Preparar objeto conforme ProdutoDTO
     const produto = {
       nomeProduto: formData.nomeProduto.trim(),
-      quantidade: quantidadeNum,
-      precoProduto: precoNum,
+      quantidade: Number(formData.quantidadeProduto),
+      precoProduto: Number(formData.precoProduto),
       dataValidade: formData.dataValidade || null,
       idCategoria: Number(formData.categoriaProduto),
       descricaoProduto: formData.descricao.trim(),
@@ -105,18 +75,9 @@ function CadastroProduto() {
       imgUrl: formData.imgUrl?.trim() || null,
     };
 
-    console.log("JSON enviado para backend:", JSON.stringify(produto, null, 2));
-
     try {
-      console.log("📦 Dados enviados:", formData);
-
-      const response = await api.post("/produto/cadastro", produto);
-      
-
-      console.log("✅ Produto cadastrado com sucesso:", response.data);
+      await api.post("/produto/cadastro", produto);
       alert("Produto cadastrado com sucesso!");
-
-      // Resetar formulário
       setFormData({
         nomeProduto: "",
         quantidadeProduto: "",
@@ -127,117 +88,117 @@ function CadastroProduto() {
         imagemProduto: "",
         imgUrl: "",
       });
-    } catch (error) {
-      console.error("❌ Erro ao cadastrar produto:", error);
-      alert("Erro ao cadastrar produto. Verifique os dados e tente novamente.");
+    } catch (err) {
+      console.error(err);
+      alert("Erro ao cadastrar produto. Verifique os dados.");
     }
   };
 
   return (
     <div className="cadastro-produto-page">
+      {/* Ícone de voltar */}
+      <div className="home-icon" onClick={() => navigate("/")}>
+        <FaHome />
+      </div>
+
       <form className="form" onSubmit={handleSubmit}>
-        <h1>Cadastro Produto</h1>
-
-        <div className="campo">
-          <label htmlFor="nomeProduto">Nome do Produto</label>
-          <input
-            type="text"
-            id="nomeProduto"
-            name="nomeProduto"
-            value={formData.nomeProduto}
-            onChange={handleChange}
-            placeholder="Digite o nome do produto"
-            required
-          />
+        <div className="titulo">
+          <h1>Cadastro de Produto</h1>
+          <div className="subtitulo">
+            <h5>Preencha os dados do novo produto</h5>
+          </div>
         </div>
 
-        <div className="campo">
-          <label htmlFor="quantidadeProduto">Quantidade</label>
-          <input
-            type="number"
-            id="quantidadeProduto"
-            name="quantidadeProduto"
-            value={formData.quantidadeProduto}
-            onChange={handleChange}
-            placeholder="Digite a quantidade"
-            required
-          />
-        </div>
+        <div className="campos">
+          <div className="campo">
+            <label>Nome do Produto</label>
+            <input
+              type="text"
+              name="nomeProduto"
+              value={formData.nomeProduto}
+              onChange={handleChange}
+              placeholder="Nome do produto"
+              required
+            />
+          </div>
 
-        <div className="campo">
-          <label htmlFor="categoriaproduto">Categoria</label>
-          <select
-            id="categoriaProduto"
-            name="categoriaProduto"
-            value={formData.categoriaProduto}
-            onChange={handleChange}
-            required
-          >
-            <option value="">Selecione uma categoria</option>
-            {categorias.map((cat) => (
-              <option key={cat.idCategoria} value={cat.idCategoria}>
-                {cat.nomeCategoria}
-              </option>
-            ))}
-          </select>
-        </div>
+          <div className="campo">
+            <label>Quantidade</label>
+            <input
+              type="number"
+              name="quantidadeProduto"
+              value={formData.quantidadeProduto}
+              onChange={handleChange}
+              placeholder="Quantidade disponível"
+              required
+            />
+          </div>
 
-        <div className="campo">
-          <label htmlFor="precoProduto">Preço</label>
-          <input
-            type="number"
-            step="0.01"
-            id="precoProduto"
-            name="precoProduto"
-            value={formData.precoProduto}
-            onChange={handleChange}
-            placeholder="Digite o preço (ex: 12.50)"
-            required
-          />
-        </div>
+          <div className="campo">
+            <label>Categoria</label>
+            <select
+              name="categoriaProduto"
+              value={formData.categoriaProduto}
+              onChange={handleChange}
+              required
+            >
+              <option value="">Selecione uma categoria</option>
+              {categorias.map(cat => (
+                <option key={cat.idCategoria} value={cat.idCategoria}>
+                  {cat.nomeCategoria}
+                </option>
+              ))}
+            </select>
+          </div>
 
-        <div className="campo">
-          <label htmlFor="dataValidade">Data de Validade</label>
-          <input
-            type="date"
-            id="dataValidade"
-            name="dataValidade"
-            value={formData.dataValidade}
-            onChange={handleChange}
-          />
-        </div>
+          <div className="campo">
+            <label>Preço</label>
+            <input
+              type="number"
+              step="0.01"
+              name="precoProduto"
+              value={formData.precoProduto}
+              onChange={handleChange}
+              placeholder="Ex: 12.50"
+              required
+            />
+          </div>
 
-        <div className="campo">
-          <label htmlFor="descricao">Descrição</label>
-          <textarea
-            id="descricao"
-            name="descricao"
-            value={formData.descricao}
-            onChange={handleChange}
-            placeholder="Digite a descrição do produto"
-            required
-          />
-        </div>
+          <div className="campo">
+            <label>Data de Validade</label>
+            <input type="date" name="dataValidade" value={formData.dataValidade} onChange={handleChange} />
+          </div>
 
-        <div className="campo">
-          <label htmlFor="imgUrl">URL da Imagem (opcional)</label>
-          <input
-            type="text"
-            id="imgUrl"
-            name="imgUrl"
-            value={formData.imgUrl}
-            onChange={handleChange}
-            placeholder="https://exemplo.com/imagem.jpg"
-          />
-        </div>
+          <div className="campo">
+            <label>Descrição</label>
+            <textarea
+              name="descricao"
+              value={formData.descricao}
+              onChange={handleChange}
+              placeholder="Descrição detalhada do produto"
+              required
+            />
+          </div>
 
-        <div className="campo">
-          <label htmlFor="imagemProduto">Imagem do Produto</label>
-          <input type="file" id="imagemProduto" name="imagemProduto" onChange={handleChange} />
+          <div className="campo">
+            <label>URL da Imagem (opcional)</label>
+            <input
+              type="text"
+              name="imgUrl"
+              value={formData.imgUrl}
+              onChange={handleChange}
+              placeholder="https://exemplo.com/imagem.jpg"
+            />
+          </div>
+
+          <div className="campo">
+            <label>Imagem do Produto</label>
+            <input type="file" name="imagemProduto" onChange={handleChange} />
+          </div>
         </div>
 
         <button type="submit" className="button">
-          Registrar Produto
+          Cadastrar Produto
         </button>
       </form>
     </div>

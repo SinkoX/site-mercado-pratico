@@ -6,123 +6,111 @@ import { FaEye, FaEyeSlash, FaHome } from "react-icons/fa";
 import "./PaginaLogin.css";
 
 interface LoginProps {
-  loginFn: (user: User) => void; // salva usuário no contexto global
+  loginFn: (user: User) => void;
 }
 
 const PaginaLogin: React.FC<LoginProps> = ({ loginFn }) => {
   const navigate = useNavigate();
   const [showSenha, setShowSenha] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const [formData, setFormData] = useState({
     emailUsuario: "",
     senhaUsuario: "",
   });
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
+    setFormData(prev => ({ ...prev, [name]: value }));
+    setError("");
   };
 
-  const toggleSenha = () => setShowSenha((prev) => !prev);
+  const toggleSenha = () => setShowSenha(prev => !prev);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true);
+    setError("");
 
     try {
       const res = await api.post("/usuario/login", formData);
-      const user = {
-        ...res.data,
-        enderecoUsuario: res.data.endereco || [],
-      };
-
-      console.log(res.data);
+      const user: User = { ...res.data, enderecoUsuario: res.data.endereco || [] };
 
       if (!user) {
-        alert("Email ou senha inválidos!");
+        setError("Email ou senha inválidos!");
+        setLoading(false);
         return;
       }
 
       loginFn(user);
       navigate("/perfil");
-    } catch (error) {
-      console.error("Erro ao fazer login:", error);
-      alert("Email ou senha incorretos.");
+    } catch (err) {
+      console.error(err);
+      setError("Email ou senha incorretos.");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="login-page">
+    <div className="pagina-login-container">
       <div className="home-icon" onClick={() => navigate("/")}>
         <FaHome />
       </div>
-      <div className="top-part-login">
-        <h1 className="nome-mercado">Mercado Prático</h1>
-        <p className="mensagem">Seu mercado de confiança desde 1975</p>
+
+      <div className="login-top">
+        <h1 className="market-name">Mercado Prático</h1>
+        <p className="market-slogan">Seu mercado de confiança desde 1975</p>
       </div>
 
-      <form className="form" onSubmit={handleSubmit}>
-        <div className="titulo">
-          <h1>Bem-vindo de Volta!</h1>
-          <div className="subtitulo">
-            <h5>Entre em sua conta para continuar comprando</h5>
-          </div>
+      <form className={`login-form ${error ? "shake" : ""}`} onSubmit={handleSubmit}>
+        <h2 className="login-title">Bem-vindo de volta!</h2>
+        <p className="login-subtitle">Entre em sua conta para continuar comprando</p>
+
+        <div className="input-group">
+          <label htmlFor="emailUsuario">Email</label>
+          <input
+            type="email"
+            id="emailUsuario"
+            name="emailUsuario"
+            value={formData.emailUsuario}
+            onChange={handleChange}
+            placeholder="Digite seu email"
+            required
+          />
         </div>
 
-        <div className="campos">
-          <div className="campo">
-            <label htmlFor="emailUsuario">Email</label>
+        <div className="input-group">
+          <label htmlFor="senhaUsuario">Senha</label>
+          <div className="senha-wrapper">
             <input
-              type="email"
-              id="idEmailUsuario"
-              name="emailUsuario"
-              value={formData.emailUsuario}
+              type={showSenha ? "text" : "password"}
+              id="senhaUsuario"
+              name="senhaUsuario"
+              value={formData.senhaUsuario}
               onChange={handleChange}
+              placeholder="Digite sua senha"
               required
-              placeholder="Digite seu email"
             />
-          </div>
-
-          <div className="campo senha-campo">
-            <label htmlFor="senhaUsuario">Senha</label>
-            <div className="senha-wrapper">
-              <input
-                type={showSenha ? "text" : "password"}
-                id="idSenhaUsuario"
-                name="senhaUsuario"
-                value={formData.senhaUsuario}
-                onChange={handleChange}
-                required
-                placeholder="Digite sua senha"
-              />
-              <span
-                className="icon-btn"
-                onClick={toggleSenha}
-                tabIndex={-1} // pra não atrapalhar a navegação
-              >
-                {showSenha ? <FaEye /> : <FaEyeSlash />}
-              </span>
-            </div>
+            <span className="toggle-icon" onClick={toggleSenha}>
+              {showSenha ? <FaEye /> : <FaEyeSlash />}
+            </span>
           </div>
         </div>
 
-        <button className="button" type="submit">
-          Entrar
+        {error && <p className="error-message">{error}</p>}
+
+        <button type="submit" className="login-button" disabled={loading}>
+          {loading ? <span className="loader"></span> : "Entrar"}
         </button>
 
-        <div className="conta">
-          <p className="cadastro-link">
-            Não tem uma conta?{" "}
-            <span
-              onClick={() => navigate("/cadastro/usuario")}
-              className="cadastrar-se"
-            >
-              Cadastre-se
-            </span>
-          </p>
-        </div>
+        <p className="cadastro-text">
+          Não tem uma conta?{" "}
+          <span className="link-cadastro" onClick={() => navigate("/cadastro/usuario")}>
+            Cadastre-se
+          </span>
+        </p>
       </form>
     </div>
   );

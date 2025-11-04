@@ -14,6 +14,7 @@ import Checkout from "./pages/Checkout";
 import PaginaAdmin from "./pages/PaginaAdmin";
 import GerenciarPedidos from "./pages/GerenciarPedidos";
 import GerenciarFornecedores from "./pages/GerenciarFornecedores";
+import CadastroUsuarioAdm from "./pages/CadastroUsuarioAdmin";
 import "./App.css";
 
 function App() {
@@ -44,6 +45,7 @@ function App() {
       <Route path="/cadastro/usuario" element={<CadastroUsuario />} />
       <Route path="/cadastro/endereco" element={<CadastroEndereco />} />
       <Route path="/cadastro/produto" element={<CadastroProduto />} />
+      <Route path="/gerenciar/cadastro-usuario-adm" element={<CadastroUsuarioAdm />} />
     </Routes>
   );
 }

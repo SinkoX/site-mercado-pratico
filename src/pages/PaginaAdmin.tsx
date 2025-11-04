@@ -32,7 +32,7 @@ export default function PaginaAdmin() {
             </div>
             <h2>Cadastro Usuário</h2>
             <p>Gerencie usuários e permissões do sistema</p>
-            <button onClick={() => navigate("/cadastro/usuario")}>
+            <button onClick={() => navigate("/gerenciar/cadastro-usuario-adm")}>
               Acessar
             </button>
           </div>

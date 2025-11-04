@@ -1,210 +1,104 @@
-/* === BASE === */
-html {
-  scroll-behavior: smooth; /* 🔹 Rolagem suave */
-}
-
 .cadastro-produto-page {
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  flex-direction: column;
-  padding-top: 60px;
-  padding-bottom: 60px; /* 🔹 Espaço extra no final */
-  min-height: calc(100vh - 40px);
-  margin: 0;
-  background: linear-gradient(135deg, #fef7f7 0%, #fff 100%);
-  font-family: "Inter", sans-serif;
-  position: relative;
-  overflow-x: hidden;
-}
-
-/* 🔹 Gradiente suave no final da tela */
-.cadastro-produto-page::after {
-  content: "";
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 60px;
-  pointer-events: none;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.05), transparent);
-  z-index: 1;
-}
-
-/* === FORM CONTAINER === */
-.cadastro-produto-page .form {
-  background-color: #ffffff;
-  border-radius: 16px;
-  width: 550px;
-  padding: 35px 30px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
-  border: 2px solid rgba(84, 189, 84, 0.1);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  padding: 80px 20px;
+  min-height: 100vh;
+  background: #fdf6f0;
+  font-family: 'Arial', sans-serif;
   position: relative;
-  margin: 0 auto;
-  z-index: 2;
 }
 
-.cadastro-produto-page .form:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+/* Ícone de voltar */
+.home-icon {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  font-size: 28px;
+  color: #27ae60;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.home-icon:hover {
+  color: #2ecc71;
+  transform: scale(1.1);
 }
 
-/* === TITULO === */
-.cadastro-produto-page .titulo h1 {
+/* Formulário */
+.form {
+  background: #fff;
+  border-radius: 20px;
+  padding: 40px 30px;
+  width: 100%;
+  max-width: 600px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+}
+
+.titulo h1 {
+  font-size: 28px;
+  color: #24613a;
   text-align: center;
-  font-size: 1.9rem;
-  font-weight: 700;
-  color: #24613a; /* Verde escuro */
+  margin-bottom: 5px;
+}
+.subtitulo h5 {
+  font-weight: 400;
+  color: #888;
+  text-align: center;
   margin-bottom: 25px;
-  border-bottom: 3px solid #ff7b00; /* Laranja vibrante */
-  padding-bottom: 8px;
-  width: fit-content;
 }
 
-/* === CAMPOS === */
-.cadastro-produto-page .campo {
-  margin-bottom: 18px;
-  width: 100%;
+.campos {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
 }
 
-/* === LABELS === */
-.cadastro-produto-page label {
-  font-size: 14px;
-  display: block;
-  margin-bottom: 6px;
-  font-weight: 600;
-  color: #333;
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
 
-/* === INPUTS / SELECT / TEXTAREA === */
-.cadastro-produto-page input,
-.cadastro-produto-page select,
-.cadastro-produto-page textarea {
-  width: 100%;
+.campo input,
+.campo select,
+.campo textarea {
+  padding: 12px 15px;
   border-radius: 10px;
   border: 1.5px solid #ccc;
-  background-color: #fdfdfd;
   font-size: 14px;
-  padding: 10px 14px;
-  transition: all 0.25s ease;
-  color: #333;
-  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.03);
+  transition: all 0.3s;
 }
 
-.cadastro-produto-page input:focus,
-.cadastro-produto-page select:focus,
-.cadastro-produto-page textarea:focus {
+.campo input:focus,
+.campo select:focus,
+.campo textarea:focus {
   outline: none;
-  border-color: #2ecc71; /* Verde */
-  box-shadow: 0 0 6px rgba(46, 204, 113, 0.4);
+  border-color: #2ecc71;
+  box-shadow: 0 0 8px rgba(46, 204, 113, 0.3);
 }
 
-/* === SELECT === */
-.cadastro-produto-page select {
-  cursor: pointer;
-  background-image: linear-gradient(to bottom, #ffffff, #f9f9f9);
-}
-
-/* === TEXTAREA === */
-.cadastro-produto-page textarea {
+.campo textarea {
   resize: none;
-  min-height: 110px;
+  min-height: 120px;
 }
 
-/* === BOTÃO === */
-.cadastro-produto-page button {
-  display: block;
-  margin: 30px auto 0;
+/* Botão Cadastrar */
+.button {
+  margin-top: 20px;
+  padding: 15px;
   border-radius: 8px;
   border: none;
-  padding: 14px;
-  width: 80%;
+  background: linear-gradient(135deg,#27ae60,#219150);
+  color: #fff;
+  font-weight: 600;
   font-size: 16px;
   cursor: pointer;
-  font-weight: 600;
-  color: white;
-  background: linear-gradient(135deg, #27ae60, #219150); /* Verde moderno */
-  transition: all 0.25s ease-in-out;
-  box-shadow: 0 4px 10px rgba(39, 174, 96, 0.3);
+  transition: all 0.3s;
 }
-
-.cadastro-produto-page button:hover {
-  background: linear-gradient(135deg, #ff7b00, #ff4d4d); /* Laranja → vermelho */
-  box-shadow: 0 4px 14px rgba(255, 123, 0, 0.4);
-  transform: scale(1.03);
-}
-
-/* === PLACEHOLDER === */
-.cadastro-produto-page input::placeholder,
-.cadastro-produto-page textarea::placeholder {
-  color: #aaa;
-  font-size: 13px;
-}
-
-/* === RESPONSIVIDADE === */
-
-/* 🔹 Celulares pequenos */
-@media (max-width: 480px) {
-  .cadastro-produto-page {
-    padding: 20px 10px 70px;
-  }
-
-  .cadastro-produto-page .form {
-    width: 100%;
-    max-width: 360px;
-    padding: 25px 18px;
-  }
-
-  .cadastro-produto-page .titulo h1 {
-    font-size: 1.4rem;
-  }
-
-  .cadastro-produto-page input,
-  .cadastro-produto-page select,
-  .cadastro-produto-page textarea {
-    font-size: 14px;
-    padding: 9px 11px;
-  }
-
-  .cadastro-produto-page button {
-    width: 100%;
-    font-size: 15px;
-    padding: 12px;
-  }
-}
-
-/* 🔹 Tablets (modo retrato/paisagem) */
-@media (min-width: 481px) and (max-width: 1024px) {
-  .cadastro-produto-page {
-    padding: 40px 20px 80px;
-  }
-
-  .cadastro-produto-page .form {
-    width: 90%;
-    max-width: 480px;
-    padding: 30px 25px;
-  }
-
-  .cadastro-produto-page .titulo h1 {
-    font-size: 1.7rem;
-  }
-}
-
-/* 🔹 Monitores grandes */
-@media (min-width: 1025px) {
-  .cadastro-produto-page .form {
-    width: 550px;
-  }
-}
-
-/* === TRANSIÇÕES SUAVES === */
-.cadastro-produto-page input,
-.cadastro-produto-page select,
-.cadastro-produto-page textarea,
-.cadastro-produto-page button {
-  transition: all 0.2s ease;
+.button:hover {
+  background: linear-gradient(135deg,#2ecc71,#27ae60);
+  transform: scale(1.05);
 }
