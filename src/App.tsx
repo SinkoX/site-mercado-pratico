@@ -15,6 +15,7 @@ import PaginaAdmin from "./pages/PaginaAdmin";
 import GerenciarPedidos from "./pages/GerenciarPedidos";
 import GerenciarFornecedores from "./pages/GerenciarFornecedores";
 import CadastroUsuarioAdm from "./pages/CadastroUsuarioAdmin";
+import GerenciarCategorias from "./pages/GerenciarCategorias"; // 👈 importa a nova página
 import "./App.css";
 
 function App() {
@@ -38,8 +39,8 @@ function App() {
       {/* ⚙️ Administração */}
       <Route path="/paginaAdmin" element={<PaginaAdmin />} />
       <Route path="/gerenciar/pedidos" element={<GerenciarPedidos />} />
-      <Route path="/gerenciar/fornecedores" element={<GerenciarFornecedores />}
-      />
+      <Route path="/gerenciar/fornecedores" element={<GerenciarFornecedores />} />
+      <Route path="/gerenciar/categorias" element={<GerenciarCategorias />} /> {/* 👈 nova rota */}
 
       {/* 📝 Cadastros */}
       <Route path="/cadastro/usuario" element={<CadastroUsuario />} />

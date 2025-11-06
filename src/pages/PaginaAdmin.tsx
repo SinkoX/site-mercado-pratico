@@ -84,6 +84,17 @@ export default function PaginaAdmin() {
               Acessar
             </button>
           </div>
+
+          {/* Card 7 - Gerenciar Categorias */}
+          <div className="admin-card">
+            <div className="admin-icon">
+                  <Boxes size={32} />
+            </div>
+            <h2>Gerenciar Categorias</h2>
+              <p>Crie, edite e remova categorias e subcategorias</p>
+              <button onClick={() => navigate("/gerenciar/categorias")}>Acessar</button>
+                </div>
+
         </div>
       </main>
 
