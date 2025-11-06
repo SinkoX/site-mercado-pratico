@@ -46,7 +46,7 @@ function App() {
       <Route path="/cadastro/usuario" element={<CadastroUsuario />} />
       <Route path="/cadastro/endereco" element={<CadastroEndereco />} />
       <Route path="/cadastro/produto" element={<CadastroProduto />} />
-      <Route path="/gerenciar/cadastro-usuario-adm" element={<CadastroUsuarioAdm />} />
+      <Route path="/gerenciar/cadastro-usuario" element={<CadastroUsuarioAdm />} />
     </Routes>
   );
 }

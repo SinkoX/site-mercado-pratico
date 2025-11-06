@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { api } from "../api";
-import { useAuth } from "../hooks/useAuth";
 
 import Header from "../components/Header";
 import MainImage from "../components/MainImage";

@@ -31,6 +31,8 @@ function PerfilUsuario() {
 
   if (!user) return <p>Carregando perfil...</p>;
 
+  console.log(user);
+
   return (
     <div className="perfil-page">
       <div className="home-icon" onClick={() => navigate("/")}>

@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { api } from "../api";
 import { FaEye, FaEyeSlash, FaHome } from "react-icons/fa";
-import "./CadastroUsuario.css";
+import "./CadastroUsuario.css"; // CSS atualizado
 
-interface FormData {
+interface FormDataUsuario {
   nomeUsuario: string;
   emailUsuario: string;
   senhaUsuario: string;
@@ -12,23 +12,24 @@ interface FormData {
   cpfUsuario: string;
 }
 
-const CadastroUsuario: React.FC = () => {
-  const [formData, setFormData] = useState<FormData>({
+export default function CadastroUsuarioAdmPage() {
+  const [formData, setFormData] = useState<FormDataUsuario>({
     nomeUsuario: "",
     emailUsuario: "",
     senhaUsuario: "",
     telefoneUsuario: "",
     cpfUsuario: "",
   });
-
   const [showSenha, setShowSenha] = useState(false);
   const navigate = useNavigate();
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
-    setFormData((prevState) => ({
-      ...prevState,
-      [name]: value,
+    setFormData((prev) => ({
+      ...prev,
+      [name]: name === "tipoUsuarioId" ? Number(value) : value,
     }));
   };
 
@@ -66,17 +67,17 @@ const CadastroUsuario: React.FC = () => {
 
     const usuarioLimpo = {
       ...formData,
-      telefoneUsuario: limparTelefone(formData.telefoneUsuario),
       cpfUsuario: limparCpf(formData.cpfUsuario),
+      telefoneUsuario: limparTelefone(formData.telefoneUsuario),
     };
 
     try {
       const response = await api.post("/usuario/cadastro", usuarioLimpo);
-
       const novoUsuario = response.data;
-      localStorage.setItem("usuarioId", novoUsuario.idUsuario);
+
+      localStorage.setItem("usuarioId", novoUsuario.idUsuario.toString());
       alert("Usuário cadastrado com sucesso!");
-      navigate("/cadastro/endereco");
+      navigate("/");
     } catch (error) {
       console.error("Erro ao cadastrar:", error);
       alert("Erro ao cadastrar usuário.");
@@ -88,37 +89,32 @@ const CadastroUsuario: React.FC = () => {
       <div className="home-icon" onClick={() => navigate("/")}>
         <FaHome />
       </div>
-      <form className="form" onSubmit={handleSubmit}>
+
+      <form className="formulario-pag-cadastro-usuario" onSubmit={handleSubmit}>
         <div className="titulo">
-          <h1>Seja Bem-Vindo!</h1>
+          <h1>Seja Bem-Vindo</h1>
           <div className="subtitulo">
             <h5>Cadastre-se e aproveite as oportunidades imperdíveis</h5>
           </div>
         </div>
 
-        <div className="campos">
-          <div className="campo">
-            <label htmlFor="idNomeUsuario">
-              <h2>Nome Completo</h2>
-            </label>
+        <div className="campos-pag-cadastro-usuario">
+          <div className="campo-pag-cadastro-usuario">
+            <label>Nome Completo</label>
             <input
               type="text"
-              id="idNomeUsuario"
               name="nomeUsuario"
               value={formData.nomeUsuario}
               onChange={handleChange}
               required
-              placeholder="Digite seu nome completo"
+              placeholder="Nome completo"
             />
           </div>
 
-          <div className="campo">
-            <label htmlFor="idEmailUsuario">
-              <h2>Email</h2>
-            </label>
+          <div className="campo-pag-cadastro-usuario">
+            <label>Email</label>
             <input
               type="email"
-              id="idEmailUsuario"
               name="emailUsuario"
               value={formData.emailUsuario}
               onChange={handleChange}
@@ -127,66 +123,52 @@ const CadastroUsuario: React.FC = () => {
             />
           </div>
 
-          <div className="campo senha-campo">
-            <label htmlFor="idSenhaUsuario">
-              <h2>Senha</h2>
-            </label>
+          <div className="campo-pag-cadastro-usuario senha-campo">
+            <label>Senha</label>
             <div className="senha-wrapper">
               <input
                 type={showSenha ? "text" : "password"}
-                id="idSenhaUsuario"
                 name="senhaUsuario"
                 value={formData.senhaUsuario}
                 onChange={handleChange}
                 required
-                placeholder="Digite sua senha"
+                placeholder="Senha"
               />
-              <span
-                className="icon-btn"
-                onClick={toggleSenha}
-                tabIndex={-1} // pra não atrapalhar a navegação
-              >
+              <span className="icon-btn" onClick={toggleSenha}>
                 {showSenha ? <FaEye /> : <FaEyeSlash />}
               </span>
             </div>
           </div>
 
-          <div className="campo">
-            <label htmlFor="idTelefoneUsuario">
-              <h2>Telefone</h2>
-            </label>
+          <div className="campo-pag-cadastro-usuario">
+            <label>Telefone</label>
             <input
               type="tel"
-              id="idTelefoneUsuario"
               name="telefoneUsuario"
               value={formData.telefoneUsuario}
               onChange={handleTelChange}
-              maxLength={15}
               required
               placeholder="(00) 00000-0000"
             />
           </div>
 
-          <div className="campo">
-            <label htmlFor="idCpfUsuario">
-              <h2>CPF</h2>
-            </label>
+          <div className="campo-pag-cadastro-usuario">
+            <label>CPF</label>
             <input
               type="text"
-              id="idCpfUsuario"
               name="cpfUsuario"
               value={formData.cpfUsuario}
               onChange={handleCpfChange}
-              maxLength={14}
               required
               placeholder="000.000.000-00"
             />
           </div>
         </div>
 
-        <button className="button" type="submit">
-          <h1>Cadastrar</h1>
+        <button type="submit" className="btn-cadastro-usuario">
+          Cadastrar
         </button>
+
         <div className="conta">
           <p className="login-link">
             Possui uma conta?{" "}
@@ -198,6 +180,4 @@ const CadastroUsuario: React.FC = () => {
       </form>
     </div>
   );
-};
-
-export default CadastroUsuario;
+}

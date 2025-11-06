@@ -3,7 +3,7 @@ import React, { createContext, useContext, useState } from "react";
 // Tipos do usuário
 export interface TipoUsuario {
   idTipoUsuario: number;
-  nomeTipoUsuario: "Usuario" | "Admin";
+  nomeTipoUsuario: "Usuario" | "Administrador";
 }
 
 export interface Endereco {
@@ -31,6 +31,7 @@ interface AuthContextType {
   user: User | null;
   login: (user: User) => void;
   logout: () => void;
+  setUser: React.Dispatch<React.SetStateAction<User | null>>;
 }
 
 // Criação do contexto
@@ -75,7 +76,7 @@ const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={{ user, login, logout, setUser }}>
       {children}
     </AuthContext.Provider>
   );

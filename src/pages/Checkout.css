@@ -142,6 +142,32 @@
   background-size: 12px 12px;
 }
 
+.checkout-page .popup-buttons {
+  display: flex;
+  flex-direction: column;
+}
+
+.checkout-page .campos-principal {
+  display: flex;
+}
+
+.checkout-page .campo-principal {
+  display: flex;
+  flex-direction: row;
+  font-size: 18px;
+  justify-content: center;
+  align-items: center;
+}
+
+.checkout-page .campo-principal input {
+  width: 70%;
+}
+
+.checkout-page .campo input {
+  font-size: 13px;
+  padding: 8px;
+}
+
 /* Responsivo */
 @media (max-width: 768px) {
   .checkout-container {

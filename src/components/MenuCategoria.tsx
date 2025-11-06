@@ -3,9 +3,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './MenuCategoria.css';
 
-interface MenuCategoriaProps {}
-
-const MenuCategoria: React.FC<MenuCategoriaProps> = () => {
+const MenuCategoria: React.FC = () => {
     const [categoriaAtiva, setCategoriaAtiva] = useState('Super Ofertas');
     const navigate = useNavigate();
 

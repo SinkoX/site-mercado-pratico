@@ -22,8 +22,14 @@ interface CarrinhoDTO {
 }
 
 const categoriasDisponiveis = [
-  "hortifruti", "bebidas", "mercearia", "limpeza",
-  "açougue", "higiene", "padaria", "petshop"
+  "hortifruti",
+  "bebidas",
+  "mercearia",
+  "limpeza",
+  "açougue",
+  "higiene",
+  "padaria",
+  "petshop",
 ];
 
 function Header() {
@@ -66,9 +72,10 @@ function Header() {
 
   useEffect(() => {
     if (!user?.idUsuario) return;
-    api.get(`/carrinho/${user.idUsuario}`)
-      .then(res => setCarrinho(res.data))
-      .catch(err => console.error(err));
+    api
+      .get(`/carrinho/${user.idUsuario}`)
+      .then((res) => setCarrinho(res.data))
+      .catch((err) => console.error(err));
   }, [user]);
 
   const irParaCarrinho = () => {
@@ -76,7 +83,7 @@ function Header() {
   };
 
   const toggleDropdownPerfil = () => {
-    setMostrarDropdownPerfil(prev => !prev);
+    setMostrarDropdownPerfil((prev) => !prev);
   };
 
   // Fecha o dropdown ao clicar fora
@@ -122,16 +129,18 @@ function Header() {
             {carrinho && carrinho.quantidadeTotal > 0 && (
               <span className="contador">{carrinho.quantidadeTotal}</span>
             )}
-            {mostrarDropdownCarrinho && carrinho && carrinho.itens.length > 0 && (
-              <div className="dropdown-carrinho">
-                {carrinho.itens.map(item => (
-                  <div key={item.idItemCarrinho} className="item-dropdown">
-                    <span>{item.nomeProduto}</span>
-                    <span>Qtd: {item.quantidade}</span>
-                  </div>
-                ))}
-              </div>
-            )}
+            {mostrarDropdownCarrinho &&
+              carrinho &&
+              carrinho.itens.length > 0 && (
+                <div className="dropdown-carrinho">
+                  {carrinho.itens.map((item) => (
+                    <div key={item.idItemCarrinho} className="item-dropdown">
+                      <span>{item.nomeProduto}</span>
+                      <span>Qtd: {item.quantidade}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
           </div>
         )}
 
@@ -141,14 +150,14 @@ function Header() {
             <img src={iconPerfil} alt="icon perfil" id="icon-perfil" />
             {mostrarDropdownPerfil && (
               <div className="dropdown-carrinho">
-                <div className="item-dropdown">
-                  <Link to="/perfil">Perfil</Link>
-                </div>
+                <Link to="/perfil">
+                  <div className="item-dropdown">Perfil</div>
+                </Link>
                 {user?.tipoUsuario?.idTipoUsuario === 2 && (
-  <div className="item-dropdown">
-    <Link to="/paginaAdmin">Gerenciar</Link>
-  </div>
-)}
+                  <Link to="/paginaAdmin">
+                    <div className="item-dropdown">Gerenciar</div>
+                  </Link>
+                )}
               </div>
             )}
           </div>

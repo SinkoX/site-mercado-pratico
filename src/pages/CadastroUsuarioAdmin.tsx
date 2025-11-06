@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { api } from "../api";
 import { FaEye, FaEyeSlash, FaHome } from "react-icons/fa";
-import Footer from "../components/Footer";
 import "./CadastroUsuarioAdmin.css"; // CSS atualizado
 
 interface TipoUsuario {
@@ -183,8 +182,6 @@ export default function CadastroUsuarioAdmPage() {
 
         <button type="submit" className="btn-cadastro-usuario-adm">Cadastrar</button>
       </form>
-
-      <Footer />
     </div>
   );
 }

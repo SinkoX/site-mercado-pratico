@@ -5,7 +5,7 @@ const Footer = () => {
     <div className="footer">
       <div className="infos">
         <div className="info1">
-          <h1>Mercado do Bairro</h1>
+          <h1>Mercado D'Tereza</h1>
           <p>
             Seu mercado de confiança há mais de .... anos. Produtos frescos e
             qualidade garantida.

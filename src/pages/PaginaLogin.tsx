@@ -28,30 +28,40 @@ const PaginaLogin: React.FC<LoginProps> = ({ loginFn }) => {
 
   const toggleSenha = () => setShowSenha(prev => !prev);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    setError("");
+const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+  setLoading(true);
+  setError("");
 
-    try {
-      const res = await api.post("/usuario/login", formData);
-      const user: User = { ...res.data, enderecoUsuario: res.data.endereco || [] };
+  try {
+    const res = await api.post("/usuario/login", formData);
 
-      if (!user) {
-        setError("Email ou senha inválidos!");
-        setLoading(false);
-        return;
-      }
-
-      loginFn(user);
-      navigate("/perfil");
-    } catch (err) {
-      console.error(err);
-      setError("Email ou senha incorretos.");
-    } finally {
+    // Verifica se veio algo válido do backend
+    if (!res.data || !res.data.idUsuario) {
+      setError("Email ou senha inválidos!");
       setLoading(false);
+      return;
     }
-  };
+
+    const user: User = {
+      ...res.data,
+      enderecoUsuario: res.data.endereco || [],
+    };
+
+    loginFn(user);
+    navigate("/perfil");
+  } catch (err: any) {
+    console.error(err);
+
+    if (err.response && err.response.status === 401) {
+      setError("Email ou senha incorretos.");
+    } else {
+      setError("Erro ao conectar com o servidor. Tente novamente.");
+    }
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div className="pagina-login-container">
