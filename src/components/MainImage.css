@@ -59,8 +59,6 @@
   animation-delay: 2s;
 }
 
-
-
 /* movimento sutil das blobs */
 @keyframes subtle-move{
   0% { transform: translate3d(0,0,0) scale(1) rotate(0deg); border-radius: 60% 40% 65% 35% / 35% 65% 40% 60%; }

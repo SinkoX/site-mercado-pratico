@@ -1,4 +1,3 @@
-// src/components/ImageCard.tsx
 import React from "react";
 import "./CardSuperOferta.css";
 

@@ -2,10 +2,11 @@ import React, { useState, useEffect } from "react";
 import "./Header.css";
 import iconPerfil from "../assets/images/icones/iconPerfil.png";
 import iconPesquisa from "../assets/images/icones/iconPesquisa.png";
-import { FaShoppingCart } from "react-icons/fa";
+import { FaShoppingCart, FaBars } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 import { api } from "../api";
+import Sidebar from "./Sidebar";
 
 interface ItemCarrinhoDTO {
   idItemCarrinho: number;
@@ -39,6 +40,7 @@ function Header() {
   const [carrinho, setCarrinho] = useState<CarrinhoDTO | null>(null);
   const [mostrarDropdownCarrinho, setMostrarDropdownCarrinho] = useState(false);
   const [mostrarDropdownPerfil, setMostrarDropdownPerfil] = useState(false);
+  const [sidebarAberta, setSidebarAberta] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -86,7 +88,10 @@ function Header() {
     setMostrarDropdownPerfil((prev) => !prev);
   };
 
-  // Fecha o dropdown ao clicar fora
+  const toggleSidebar = () => {
+    setSidebarAberta(prev => !prev);
+  };
+
   useEffect(() => {
     const handleClickFora = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
@@ -99,23 +104,28 @@ function Header() {
   }, []);
 
   return (
-    <header className="header">
-      <Link to={"/"}>
-        <div className="logo">
-          <img src="/logo.png" className="logo" alt="logo" />
-        </div>
-      </Link>
+    <>
+      <header className="header">
+        <button className="menu-hamburger" onClick={toggleSidebar}>
+          <FaBars size={24} />
+        </button>
 
-      <form className="procura" onSubmit={handleSubmit}>
-        <img src={iconPesquisa} alt="icon pesquisa" id="icon-pesquisa" />
-        <input
-          type="text"
-          placeholder="Buscar Produtos..."
-          className="procura-input"
-          value={busca}
-          onChange={(e) => setBusca(e.target.value)}
-        />
-      </form>
+        <Link to={"/"}>
+          <div className="logo">
+            <img src="/logo.png" className="logo" alt="logo" />
+          </div>
+        </Link>
+
+        <form className="procura" onSubmit={handleSubmit}>
+          <img src={iconPesquisa} alt="icon pesquisa" id="icon-pesquisa" />
+          <input
+            type="text"
+            placeholder="Buscar Produtos..."
+            className="procura-input"
+            value={busca}
+            onChange={(e) => setBusca(e.target.value)}
+          />
+        </form>
 
       <div className="user-icons">
         {user && (
@@ -129,18 +139,16 @@ function Header() {
             {carrinho && carrinho.quantidadeTotal > 0 && (
               <span className="contador">{carrinho.quantidadeTotal}</span>
             )}
-            {mostrarDropdownCarrinho &&
-              carrinho &&
-              carrinho.itens.length > 0 && (
-                <div className="dropdown-carrinho">
-                  {carrinho.itens.map((item) => (
-                    <div key={item.idItemCarrinho} className="item-dropdown">
-                      <span>{item.nomeProduto}</span>
-                      <span>Qtd: {item.quantidade}</span>
-                    </div>
-                  ))}
-                </div>
-              )}
+            {mostrarDropdownCarrinho && carrinho && carrinho.itens.length > 0 && (
+              <div className="dropdown-carrinho">
+                {carrinho.itens.map(item => (
+                  <div key={item.idItemCarrinho} className="item-dropdown">
+                    <span>{item.nomeProduto}</span>
+                    <span>Qtd: {item.quantidade}</span>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         )}
 
@@ -150,14 +158,14 @@ function Header() {
             <img src={iconPerfil} alt="icon perfil" id="icon-perfil" />
             {mostrarDropdownPerfil && (
               <div className="dropdown-carrinho">
-                <Link to="/perfil">
-                  <div className="item-dropdown">Perfil</div>
-                </Link>
+                <div className="item-dropdown">
+                  <Link to="/perfil">Perfil</Link>
+                </div>
                 {user?.tipoUsuario?.idTipoUsuario === 2 && (
-                  <Link to="/paginaAdmin">
-                    <div className="item-dropdown">Gerenciar</div>
-                  </Link>
-                )}
+  <div className="item-dropdown">
+    <Link to="/paginaAdmin">Gerenciar</Link>
+  </div>
+)}
               </div>
             )}
           </div>
