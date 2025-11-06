@@ -84,3 +84,9 @@
 .categoria-card:hover {
   transform: scale(1.05);
 }
+
+@media(max-width: 500px){
+  .categorias-home{
+    display: none;
+  }
+}

@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { api } from "../api";
-import { useAuth } from "../hooks/useAuth";
 
 import Header from "../components/Header";
 import MainImage from "../components/MainImage";
@@ -22,8 +21,26 @@ import "./Home.css";
 function Home() {
   const [produtos, setProdutos] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [indiceOferta, setIndiceOferta] = useState(0);
 
-  // Função para remover loops recursivos
+  const superOfertas = [
+    { id: 1, src: superOferta1, alt: "Super Oferta 1" },
+    { id: 2, src: superOferta2, alt: "Super Oferta 2" },
+    { id: 3, src: superOferta3, alt: "Super Oferta 3" },
+  ];
+
+  const proximaOferta = () => {
+    setIndiceOferta((prev) =>
+      prev === superOfertas.length - 1 ? 0 : prev + 1
+    );
+  };
+
+  const anteriorOferta = () => {
+    setIndiceOferta((prev) =>
+      prev === 0 ? superOfertas.length - 1 : prev - 1
+    );
+  };
+
   const limparProduto = (produto: any) => {
     const copia = { ...produto };
     delete copia.itensCarrinho;
@@ -36,23 +53,14 @@ function Home() {
       setLoading(true);
       try {
         const response = await api.get("/produto");
-
         const data = response.data;
         let listaProdutos: any[] = [];
 
-        // Verifica se é um array direto
-        if (Array.isArray(data)) {
-          listaProdutos = data;
-        } else if (Array.isArray(data.produtos)) {
-          listaProdutos = data.produtos;
-        } else if (Array.isArray(data.data)) {
-          listaProdutos = data.data;
-        } else {
-          console.warn("⚠️ Formato inesperado de resposta da API:", data);
-          listaProdutos = [];
-        }
+        if (Array.isArray(data)) listaProdutos = data;
+        else if (Array.isArray(data.produtos)) listaProdutos = data.produtos;
+        else if (Array.isArray(data.data)) listaProdutos = data.data;
+        else listaProdutos = [];
 
-        // Limpa loops e padroniza imagem
         const produtosFormatados = listaProdutos.map((p: any) => ({
           ...limparProduto(p),
           imgUrl: p.imgUrl || p.img_url || "/placeholder.png",
@@ -83,12 +91,51 @@ function Home() {
           <CategoriasHome />
         </section>
 
+        {/* ===== SUPER OFERTAS ===== */}
         <section id="section-super-ofertas">
-          <CardSuperOferta src={superOferta1} alt="imagem super oferta 1" />
-          <CardSuperOferta src={superOferta2} alt="imagem super oferta 2" />
-          <CardSuperOferta src={superOferta3} alt="imagem super oferta 3" />
+          {/* Mobile carrossel */}
+          <div className="super-ofertas-carrossel">
+            <button
+              className="seta-oferta"
+              onClick={anteriorOferta}
+              aria-label="Oferta anterior"
+            >
+              &#8249;
+            </button>
+
+            <div className="ofertas-container">
+              {superOfertas.map((oferta, index) => (
+                <div
+                  key={oferta.id}
+                  className={`oferta-item ${
+                    index === indiceOferta ? "active" : ""
+                  }`}
+                >
+                  <CardSuperOferta src={oferta.src} alt={oferta.alt} />
+                </div>
+              ))}
+            </div>
+
+            <button
+              className="seta-oferta"
+              onClick={proximaOferta}
+              aria-label="Próxima oferta"
+            >
+              &#8250;
+            </button>
+          </div>
+
+          {/* Desktop layout */}
+          <div className="ofertas-container desktop-ofertas">
+            {superOfertas.map((oferta) => (
+              <div key={`desktop-${oferta.id}`} className="oferta-item">
+                <CardSuperOferta src={oferta.src} alt={oferta.alt} />
+              </div>
+            ))}
+          </div>
         </section>
 
+        {/* ===== PRODUTOS DESTAQUE ===== */}
         <section id="section-produtos-destaque">
           <div className="titulo-destaque">
             <h1>Produtos em Destaque</h1>
@@ -109,11 +156,10 @@ function Home() {
 
           <Image src={bannerSecundario1} alt="banner" />
 
-          
           {loading ? (
             <p>Carregando produtos...</p>
           ) : produtos.length === 0 ? (
-              <p>Nenhum produto encontrado.</p>
+            <p>Nenhum produto encontrado.</p>
           ) : (
             <div className="produtos">
               {produtos.slice(10, 20).map((produto) => (
