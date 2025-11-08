@@ -15,7 +15,9 @@ import PaginaAdmin from "./pages/PaginaAdmin";
 import GerenciarPedidos from "./pages/GerenciarPedidos";
 import GerenciarFornecedores from "./pages/GerenciarFornecedores";
 import CadastroUsuarioAdm from "./pages/CadastroUsuarioAdmin";
-import GerenciarCategorias from "./pages/GerenciarCategorias"; // 👈 importa a nova página
+import GerenciarCategorias from "./pages/GerenciarCategorias"; 
+import SucessoPedido from "./pages/SucessoPedido";
+
 import "./App.css";
 
 function App() {
@@ -47,6 +49,9 @@ function App() {
       <Route path="/cadastro/endereco" element={<CadastroEndereco />} />
       <Route path="/cadastro/produto" element={<CadastroProduto />} />
       <Route path="/gerenciar/cadastro-usuario" element={<CadastroUsuarioAdm />} />
+
+      <Route path="/sucesso" element={<SucessoPedido />} />
+
     </Routes>
   );
 }

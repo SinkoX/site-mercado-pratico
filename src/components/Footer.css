@@ -6,12 +6,12 @@
 .footer {
   display: flex;
   flex-direction: column;
-  background-color: #54BD54;
+  background-color: #54bd54;
   color: #fff;
   width: 100%;
-  padding: 24px;
-  gap: 32px;
-  font-family: "Inter"; 
+  padding: 32px 20px;
+  gap: 40px;
+  font-family: "Inter", sans-serif;
   margin-top: 100px;
 }
 
@@ -19,75 +19,224 @@
   display: grid;
   grid-template-columns: 1fr;
   align-items: start;
-  gap: 24px;
+  gap: 28px;
   max-width: 1280px;
   margin: 0 auto;
 }
 
-.infos h1 {
-    font-size: 30px;
+.info h1 {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 8px;
 }
 
-.info1 {
+.info p {
+  font-size: 16px;
+  font-weight: 300;
+  line-height: 1.6;
+}
+
+/* Links Rápidos com cursor */
+.info2 p {
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.info2 p:hover {
+  color: #e1ffe1;
+}
+
+/* MAPA */
+.info4 iframe {
   width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+  max-width: 350px;
+  height: 250px;
+  border-radius: 12px;
+  border: none;
 }
 
-.info2, .info3 {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;    
-}
-
-iframe {
-    width: 350px;
-    height: 250px;
-    border-radius: 15px;
-}
-
-.info1 p, .info2 p, .info3 p, .info4 p, .direitos p {
-    font-family: "Inter";
-    font-weight: 100;
-}
-
-.direitos p {
-    font-size: 20px;
-}
-
+/* DIREITOS */
 .direitos {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 24px;
+  gap: 16px;
+  text-align: center;
 }
 
 .direitos hr {
   width: 100%;
   max-width: 1280px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
 }
 
-/* Tablet */
-@media (min-width: 501px) and (max-width: 1023px) {
+.direitos p {
+  font-size: 15px;
+  font-weight: 300;
+  color: #f9f9f9;
+}
+
+/* ===========================
+   MOBILE (até 500px)
+=========================== */
+@media (max-width: 500px) {
+  .footer {
+    padding: 32px 20px;
+    text-align: center;
+    gap: 40px;
+    background: linear-gradient(180deg, #54bd54 0%, #3fae3f 100%);
+  }
+
   .infos {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: 1fr;
+    gap: 36px;
+    justify-items: center;
+  }
+
+  .info h1 {
+    font-size: 22px;
+    margin-bottom: 6px;
+  }
+
+  .info p {
+    font-size: 15px;
+    line-height: 1.5;
+    color: #f9f9f9;
+  }
+
+  .info2 p {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 8px 0;
+    border-radius: 6px;
+    transition: background 0.3s ease, transform 0.2s ease;
+  }
+
+  .info2 p:hover {
+    background: rgba(255, 255, 255, 0.25);
+    transform: scale(1.05);
+  }
+
+  .info4 iframe {
+    width: 100%;
+    max-width: 280px;
+    height: 200px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+  }
+
+  .direitos {
+    gap: 16px;
+  }
+
+  .direitos p {
+    font-size: 13px;
+    color: #f1f1f1;
+    opacity: 0.9;
   }
 }
 
-/* Desktop */
+/* ===========================
+   TABLET (501px – 1023px)
+=========================== */
+@media (min-width: 501px) and (max-width: 1023px) {
+  .footer {
+    padding: 40px;
+    background: linear-gradient(180deg, #54bd54 0%, #47a847 100%);
+  }
+
+  .infos {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 40px;
+    justify-items: center;
+  }
+
+  .info {
+    text-align: left;
+  }
+
+  .info h1 {
+    font-size: 24px;
+  }
+
+  .info p {
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  .info4 iframe {
+    width: 100%;
+    max-width: 320px;
+    height: 220px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  }
+
+  .direitos p {
+    font-size: 14px;
+    color: #f0f0f0;
+  }
+}
+
+/* ===========================
+   DESKTOP (>=1024px)
+=========================== */
 @media (min-width: 1024px) {
-  .footer { padding: 32px; }
+  .footer {
+    padding: 48px 80px;
+    background: linear-gradient(180deg, #54bd54 0%, #3b963b 100%);
+  }
+
   .infos {
     grid-template-columns: 2fr 1fr 1fr 1fr;
-    gap: 48px;
+    gap: 60px;
+  }
+
+  .info h1 {
+    font-size: 26px;
+  }
+
+  .info p {
+    font-size: 16px;
+    color: #f9f9f9;
+  }
+
+  .info4 iframe {
+    width: 100%;
+    max-width: 380px;
+    height: 260px;
+    border-radius: 14px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+  }
+
+  .direitos p {
+    font-size: 15px;
+    color: #eaeaea;
   }
 }
 
-@media(max-width: 500px){
-  iframe{
-    width: 250px;
+/* ===========================
+   TELAS MUITO PEQUENAS (<=350px)
+=========================== */
+@media (max-width: 350px) {
+  .footer {
+    padding: 24px 14px;
+  }
+
+  .info h1 {
+    font-size: 20px;
+  }
+
+  .info p {
+    font-size: 14px;
+  }
+
+  .info4 iframe {
+    max-width: 220px;
+    height: 160px;
+  }
+
+  .direitos p {
+    font-size: 12px;
   }
 }

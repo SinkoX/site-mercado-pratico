@@ -41,6 +41,14 @@ function Header() {
   const [mostrarDropdownCarrinho, setMostrarDropdownCarrinho] = useState(false);
   const [mostrarDropdownPerfil, setMostrarDropdownPerfil] = useState(false);
   const [sidebarAberta, setSidebarAberta] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
+  // Atualiza quando redimensiona a tela
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 768);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -80,18 +88,13 @@ function Header() {
       .catch((err) => console.error(err));
   }, [user]);
 
-  const irParaCarrinho = () => {
-    navigate("/carrinho");
-  };
+  const irParaCarrinho = () => navigate("/carrinho");
 
-  const toggleDropdownPerfil = () => {
-    setMostrarDropdownPerfil((prev) => !prev);
-  };
+  const toggleDropdownPerfil = () => setMostrarDropdownPerfil((prev) => !prev);
 
-  const toggleSidebar = () => {
-    setSidebarAberta(prev => !prev);
-  };
+  const toggleSidebar = () => setSidebarAberta((prev) => !prev);
 
+  // Fecha o dropdown do perfil se clicar fora
   useEffect(() => {
     const handleClickFora = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
@@ -106,9 +109,11 @@ function Header() {
   return (
     <>
       <header className="header">
-        <button className="menu-hamburger" onClick={toggleSidebar}>
-          <FaBars size={24} />
-        </button>
+        {isMobile && (
+          <button className="menu-hamburger" onClick={toggleSidebar}>
+            <FaBars size={24} />
+          </button>
+        )}
 
         <Link to={"/"}>
           <div className="logo">
@@ -127,57 +132,65 @@ function Header() {
           />
         </form>
 
-      <div className="user-icons">
-        {user && (
-          <div
-            className="carrinho-icon"
-            onMouseEnter={() => setMostrarDropdownCarrinho(true)}
-            onMouseLeave={() => setMostrarDropdownCarrinho(false)}
-            onClick={irParaCarrinho}
-          >
-            <FaShoppingCart size={34} />
-            {carrinho && carrinho.quantidadeTotal > 0 && (
-              <span className="contador">{carrinho.quantidadeTotal}</span>
-            )}
-            {mostrarDropdownCarrinho && carrinho && carrinho.itens.length > 0 && (
-              <div className="dropdown-carrinho">
-                {carrinho.itens.map(item => (
-                  <div key={item.idItemCarrinho} className="item-dropdown">
-                    <span>{item.nomeProduto}</span>
-                    <span>Qtd: {item.quantidade}</span>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* PERFIL COM DROPDOWN POR CLIQUE */}
-        {user ? (
-          <div className="user" onClick={toggleDropdownPerfil}>
-            <img src={iconPerfil} alt="icon perfil" id="icon-perfil" />
-            {mostrarDropdownPerfil && (
-              <div className="dropdown-carrinho">
-                <div className="item-dropdown">
-                  <Link to="/perfil">Perfil</Link>
+        <div className="user-icons">
+          {user && (
+            <div
+              className="carrinho-icon"
+              onMouseEnter={() => setMostrarDropdownCarrinho(true)}
+              onMouseLeave={() => setMostrarDropdownCarrinho(false)}
+              onClick={irParaCarrinho}
+            >
+              <FaShoppingCart size={34} />
+              {carrinho && carrinho.quantidadeTotal > 0 && (
+                <span className="contador">{carrinho.quantidadeTotal}</span>
+              )}
+              {mostrarDropdownCarrinho && carrinho && carrinho.itens.length > 0 && (
+                <div className="dropdown-carrinho">
+                  {carrinho.itens.map((item) => (
+                    <div key={item.idItemCarrinho} className="item-dropdown">
+                      <span>{item.nomeProduto}</span>
+                      <span>Qtd: {item.quantidade}</span>
+                    </div>
+                  ))}
                 </div>
-                {user?.tipoUsuario?.idTipoUsuario === 2 && (
-  <div className="item-dropdown">
-    <Link to="/paginaAdmin">Gerenciar</Link>
-  </div>
-)}
-              </div>
-            )}
-          </div>
-        ) : (
-          <Link to="/login">
-            <div className="user">
-              <img src={iconPerfil} alt="icon perfil" id="icon-perfil" />
+              )}
             </div>
-          </Link>
-        )}
-      </div>
-    </header>
+          )}
+
+          {user ? (
+            <div className="user" onClick={toggleDropdownPerfil}>
+              <img src={iconPerfil} alt="icon perfil" id="icon-perfil" />
+              {mostrarDropdownPerfil && (
+                <div className="dropdown-carrinho">
+                  <div className="item-dropdown">
+                    <Link to="/perfil">Perfil</Link>
+                  </div>
+                  {user?.tipoUsuario?.idTipoUsuario === 2 && (
+                    <div className="item-dropdown">
+                      <Link to="/paginaAdmin">Gerenciar</Link>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          ) : (
+            <Link to="/login">
+              <div className="user">
+                <img src={iconPerfil} alt="icon perfil" id="icon-perfil" />
+              </div>
+            </Link>
+          )}
+        </div>
+      </header>
+
+      {/* SIDEBAR (apenas no mobile) */}
+      {isMobile && (
+        <Sidebar
+          isOpen={sidebarAberta}
+          onClose={() => setSidebarAberta(false)}
+        />
+      )}
+    </>
   );
 }
 
