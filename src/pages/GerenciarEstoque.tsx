@@ -1,430 +1,625 @@
 import React, { useEffect, useState } from "react";
+import axios from "axios";
+import Modal from "../components/EstoqueModal";
 import "./GerenciarEstoque.css";
-import EstoqueModal from "../components/EstoqueModal"; // <-- novo modal bonito
 
 interface EstoqueDTO {
   idEstoque: number;
+  idProduto: number;
   nomeProduto: string;
   quantidade: number;
   quantidadeMinima: number;
   estoqueAbaixoDoMinimo: boolean;
 }
 
-interface MovimentacaoDTO {
+interface MovimentacaoEstoqueDTO {
   idMovimentacao: number;
+  idProduto: number;
   nomeProduto: string;
-  quantidade: number;
   tipoMovimentacao: "ENTRADA" | "SAIDA";
+  quantidade: number;
   dataMovimentacao: string;
+  observacao?: string;
 }
 
-// Tipos de sort separados
-type SortKeyEstoque = keyof EstoqueDTO;
-type SortKeyMov = keyof MovimentacaoDTO;
+interface AlertaMov {
+  tipo: "ENTRADA" | "SAIDA";
+  mensagem: string;
+}
 
-export const GerenciarEstoque: React.FC = () => {
+export default function GerenciarEstoque() {
+  const baseUrl = "http://localhost:8080";
+
+  // ==== Estados Estoque e Movimentação ====
   const [estoques, setEstoques] = useState<EstoqueDTO[]>([]);
-  const [movimentacoes, setMovimentacoes] = useState<MovimentacaoDTO[]>([]);
+  const [movimentacoes, setMovimentacoes] = useState<MovimentacaoEstoqueDTO[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
 
-  const [filtroProdutoEstoque, setFiltroProdutoEstoque] = useState("");
-  const [filtroZerado, setFiltroZerado] = useState(false);
-  const [filtroMinimo, setFiltroMinimo] = useState(false);
+  // ==== Modal de movimentação ====
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedProduto, setSelectedProduto] = useState<EstoqueDTO | null>(null);
+  const [tipoMovimentacao, setTipoMovimentacao] = useState<"ENTRADA" | "SAIDA">("ENTRADA");
+  const [quantidade, setQuantidade] = useState<number>(0);
+  const [observacao, setObservacao] = useState("");
 
-  const [filtroProdutoMov, setFiltroProdutoMov] = useState("");
-  const [filtroTipoMov, setFiltroTipoMov] = useState<"ENTRADA" | "SAIDA" | "">("");
-  const [filtroIDMov, setFiltroIDMov] = useState("");
-  const [filtroDataMov, setFiltroDataMov] = useState("");
+  // ==== Modal de novo estoque ====
+  const [isModalNovoEstoqueOpen, setIsModalNovoEstoqueOpen] = useState(false);
+  const [novoProdutoId, setNovoProdutoId] = useState("");
+  const [novoProdutoNome, setNovoProdutoNome] = useState("");
+  const [novoProdutoQtd, setNovoProdutoQtd] = useState<number>(0);
+  const [novoProdutoMin, setNovoProdutoMin] = useState<number>(0);
+  const [buscandoProduto, setBuscandoProduto] = useState(false);
 
-  const [sortEstoque, setSortEstoque] = useState<{ key: SortKeyEstoque; ascending: boolean }>({
-    key: "idEstoque",
-    ascending: true,
-  });
+  // ==== Filtros ====
+  const [filtroEstoque, setFiltroEstoque] = useState(localStorage.getItem("filtroEstoque") || "");
+  const [filtroStatus, setFiltroStatus] = useState(localStorage.getItem("filtroStatus") || "TODOS");
+  const [filtroMov, setFiltroMov] = useState(localStorage.getItem("filtroMov") || "");
+  const [tipoFiltroMov, setTipoFiltroMov] = useState(localStorage.getItem("tipoFiltroMov") || "TODOS");
+  const [filtroData, setFiltroData] = useState(localStorage.getItem("filtroData") || "");
 
-  const [sortMov, setSortMov] = useState<{ key: SortKeyMov; ascending: boolean }>({
-    key: "idMovimentacao",
-    ascending: true,
-  });
+  // ==== Paginação ====
+  const [paginaEstoque, setPaginaEstoque] = useState(Number(localStorage.getItem("paginaEstoque")) || 1);
+  const [paginaMov, setPaginaMov] = useState(Number(localStorage.getItem("paginaMov")) || 1);
+  const [itensPorPaginaEstoque, setItensPorPaginaEstoque] = useState(Number(localStorage.getItem("itensPorPaginaEstoque")) || 10);
+  const [itensPorPaginaMov, setItensPorPaginaMov] = useState(Number(localStorage.getItem("itensPorPaginaMov")) || 10);
 
-  const [tooltip, setTooltip] = useState<{ text: string; x: number; y: number } | null>(null);
-  const [modalEstoque, setModalEstoque] = useState<Partial<EstoqueDTO> | null>(null);
-  const [modalMovimentacao, setModalMovimentacao] = useState<Partial<MovimentacaoDTO> | null>(null);
+  // ==== Alerta ====
+  const [alertaMov, setAlertaMov] = useState<AlertaMov | null>(null);
+  const [alertaAnimacao, setAlertaAnimacao] = useState(false);
 
-  // ==== FETCH ALL ====
-  const fetchAll = async () => {
-    setLoading(true);
-    setError(null);
+  // ==== Fetch Estoques e Movimentações ====
+  const fetchEstoque = async () => {
     try {
-      const [estoqueRes, movRes] = await Promise.all([
-        fetch("http://localhost:8080/estoque"),
-        fetch("http://localhost:8080/movimentacoes/ultimas"),
-      ]);
+      const res = await axios.get(`${baseUrl}/estoques`);
+      setEstoques(res.data);
+    } catch (err) {
+      console.error("Erro buscar estoques:", err);
+    }
+  };
 
-      if (!estoqueRes.ok) throw new Error(`Erro ao buscar estoques: ${estoqueRes.status}`);
-      if (!movRes.ok) throw new Error(`Erro ao buscar movimentações: ${movRes.status}`);
-
-      const estoquesData: EstoqueDTO[] = await estoqueRes.json();
-      const movData: MovimentacaoDTO[] = await movRes.json();
-
-      setEstoques(estoquesData);
-      setMovimentacoes(movData);
-    } catch (err: any) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
+  const fetchMovimentacoes = async () => {
+    try {
+      const res = await axios.get(`${baseUrl}/movimentacoes`);
+      setMovimentacoes(res.data);
+    } catch (err) {
+      console.error("Erro buscar movimentações:", err);
     }
   };
 
   useEffect(() => {
-    fetchAll();
+    const load = async () => {
+      await Promise.all([fetchEstoque(), fetchMovimentacoes()]);
+      setLoading(false);
+    };
+    load();
   }, []);
 
-  // ==== SORT HELPER ====
-  const sortValues = (a: any, b: any) => {
-    if (typeof a === "string" && typeof b === "string") return a.localeCompare(b);
-    if (a instanceof Date && b instanceof Date) return a.getTime() - b.getTime();
-    return a - b;
+  // ==== Persistir filtros e paginação ====
+  useEffect(() => {
+    localStorage.setItem("filtroEstoque", filtroEstoque);
+    localStorage.setItem("filtroStatus", filtroStatus);
+    localStorage.setItem("filtroMov", filtroMov);
+    localStorage.setItem("tipoFiltroMov", tipoFiltroMov);
+    localStorage.setItem("filtroData", filtroData);
+    localStorage.setItem("paginaEstoque", String(paginaEstoque));
+    localStorage.setItem("paginaMov", String(paginaMov));
+    localStorage.setItem("itensPorPaginaEstoque", String(itensPorPaginaEstoque));
+    localStorage.setItem("itensPorPaginaMov", String(itensPorPaginaMov));
+  }, [
+    filtroEstoque,
+    filtroStatus,
+    filtroMov,
+    tipoFiltroMov,
+    filtroData,
+    paginaEstoque,
+    paginaMov,
+    itensPorPaginaEstoque,
+    itensPorPaginaMov,
+  ]);
+
+  // ==== Modal Movimentação ====
+  const abrirModal = (produto: EstoqueDTO, tipo: "ENTRADA" | "SAIDA") => {
+    setSelectedProduto(produto);
+    setTipoMovimentacao(tipo);
+    setQuantidade(0);
+    setObservacao("");
+    setIsModalOpen(true);
   };
 
-  // ==== FILTROS E ORDENAÇÃO ====
-  const estoquesFiltrados = estoques
-    .filter((e) => e.nomeProduto.toLowerCase().includes(filtroProdutoEstoque.toLowerCase()))
-    .filter((e) => !filtroZerado || e.quantidade === 0)
-    .filter((e) => !filtroMinimo || e.estoqueAbaixoDoMinimo)
-    .sort((a, b) =>
-      sortEstoque.ascending
-        ? sortValues(a[sortEstoque.key], b[sortEstoque.key])
-        : -sortValues(a[sortEstoque.key], b[sortEstoque.key])
-    );
+  const registrarMovimentacao = async () => {
+    if (!selectedProduto || quantidade <= 0) {
+      alert("Informe uma quantidade válida.");
+      return;
+    }
 
-  const movimentacoesFiltradas = movimentacoes
-    .filter((m) => m.nomeProduto.toLowerCase().includes(filtroProdutoMov.toLowerCase()))
-    .filter((m) => filtroTipoMov === "" || m.tipoMovimentacao === filtroTipoMov)
-    .filter((m) => filtroIDMov === "" || m.idMovimentacao.toString().includes(filtroIDMov))
-    .filter(
-      (m) =>
-        filtroDataMov === "" ||
-        new Date(m.dataMovimentacao).toLocaleDateString().includes(filtroDataMov)
-    )
-    .sort((a, b) =>
-      sortMov.ascending
-        ? sortValues(a[sortMov.key], b[sortMov.key])
-        : -sortValues(a[sortMov.key], b[sortMov.key])
-    );
+    // Validação de saída: não pode retirar mais do que tem em estoque
+    if (tipoMovimentacao === "SAIDA" && quantidade > selectedProduto.quantidade) {
+      alert(
+        `❌ Quantidade insuficiente em estoque!\n\n` +
+        `Produto: ${selectedProduto.nomeProduto}\n` +
+        `Quantidade disponível: ${selectedProduto.quantidade}\n` +
+        `Quantidade solicitada: ${quantidade}\n\n` +
+        `Por favor, insira uma quantidade menor ou igual a ${selectedProduto.quantidade}.`
+      );
+      return;
+    }
 
-  // ==== BADGE ====
-  const getBadge = (estoque: EstoqueDTO) => {
-    if (estoque.quantidade === 0) return <span className="badge zerado">Zerado</span>;
-    if (estoque.estoqueAbaixoDoMinimo)
-      return <span className="badge emergencial">Emergencial</span>;
-    return <span className="badge normal">Normal</span>;
-  };
+    const payload = {
+      idProduto: selectedProduto.idProduto,
+      quantidade,
+      tipoMovimentacao,
+      observacao,
+    };
 
-  // ==== TOOLTIP ====
-  const showTooltip = (e: React.MouseEvent, text: string) => {
-    const tooltipWidth = 200;
-    const tooltipHeight = 60;
-    let x = e.clientX + 10;
-    let y = e.clientY + 10;
-    if (x + tooltipWidth > window.innerWidth) x = e.clientX - tooltipWidth - 10;
-    if (y + tooltipHeight > window.innerHeight) y = e.clientY - tooltipHeight - 10;
-    setTooltip({ text, x, y });
-  };
-  const hideTooltip = () => setTooltip(null);
-
-  // ==== SORT HANDLERS ====
-  const handleSortEstoque = (key: SortKeyEstoque) =>
-    setSortEstoque({ key, ascending: sortEstoque.key === key ? !sortEstoque.ascending : true });
-
-  const handleSortMov = (key: SortKeyMov) =>
-    setSortMov({ key, ascending: sortMov.key === key ? !sortMov.ascending : true });
-
-  // ==== CRUD ESTOQUE ====
-  const salvarEstoque = async (estoque: Partial<EstoqueDTO>) => {
     try {
-      if (estoque.idEstoque) {
-        const res = await fetch(`http://localhost:8080/estoque/${estoque.idEstoque}`, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(estoque),
-        });
-        if (!res.ok) throw new Error("Erro ao atualizar estoque");
-      } else {
-        const res = await fetch("http://localhost:8080/estoque", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(estoque),
-        });
-        if (!res.ok) throw new Error("Erro ao adicionar estoque");
+      await axios.post(`${baseUrl}/movimentacoes/manual`, payload, {
+        headers: { "Content-Type": "application/json" },
+      });
+      setIsModalOpen(false);
+      await Promise.all([fetchEstoque(), fetchMovimentacoes()]);
+      mostrarAlerta(tipoMovimentacao, `${tipoMovimentacao} registrada com sucesso!`);
+    } catch (err) {
+      console.error("Erro ao registrar movimentação:", err);
+      alert("Erro ao registrar movimentação. Verifique o console.");
+    }
+  };
+
+  // ==== Modal Novo Estoque ====
+  const buscarProdutoPorId = async (idProduto: string) => {
+    if (!idProduto.trim()) {
+      setNovoProdutoNome("");
+      return;
+    }
+
+    setBuscandoProduto(true);
+    try {
+      const res = await axios.get(`${baseUrl}/produto/${idProduto}`);
+      if (res.data && res.data.nomeProduto) {
+        setNovoProdutoNome(res.data.nomeProduto);
       }
-      setModalEstoque(null);
-      fetchAll();
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err) {
+      console.error("Erro ao buscar produto:", err);
+      setNovoProdutoNome("");
+      alert("Produto não encontrado com esse ID.");
+    } finally {
+      setBuscandoProduto(false);
     }
   };
 
-  const deletarEstoque = async (id: number) => {
-    if (!window.confirm("Deseja realmente deletar este estoque?")) return;
+  const cadastrarNovoEstoque = async () => {
+    if (!novoProdutoId.trim() || !novoProdutoNome || novoProdutoQtd < 0 || novoProdutoMin < 0) {
+      alert("Preencha os dados corretamente.");
+      return;
+    }
+
+    const payload = {
+      idProduto: Number(novoProdutoId),
+      nomeProduto: novoProdutoNome,
+      quantidade: novoProdutoQtd,
+      quantidadeMinima: novoProdutoMin,
+    };
+
     try {
-      const res = await fetch(`http://localhost:8080/estoque/${id}`, { method: "DELETE" });
-      if (!res.ok) throw new Error("Erro ao deletar estoque");
-      fetchAll();
-    } catch (err: any) {
-      setError(err.message);
+      await axios.post(`${baseUrl}/estoques`, payload);
+      setIsModalNovoEstoqueOpen(false);
+      setNovoProdutoId("");
+      setNovoProdutoNome("");
+      setNovoProdutoQtd(0);
+      setNovoProdutoMin(0);
+      await fetchEstoque();
+      mostrarAlerta("ENTRADA", "Estoque cadastrado com sucesso!");
+    } catch (err) {
+      console.error("Erro ao cadastrar estoque:", err);
+      alert("Erro ao cadastrar estoque. Verifique se o produto já não possui estoque cadastrado.");
     }
   };
 
-  // ==== CRUD MOVIMENTAÇÃO ====
-  const salvarMovimentacao = async (mov: Partial<MovimentacaoDTO>) => {
-    try {
-      if (mov.idMovimentacao) {
-        const res = await fetch(`http://localhost:8080/movimentacoes/${mov.idMovimentacao}`, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(mov),
-        });
-        if (!res.ok) throw new Error("Erro ao atualizar movimentação");
-      } else {
-        const res = await fetch("http://localhost:8080/movimentacoes", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(mov),
-        });
-        if (!res.ok) throw new Error("Erro ao adicionar movimentação");
-      }
-      setModalMovimentacao(null);
-      fetchAll();
-    } catch (err: any) {
-      setError(err.message);
-    }
+  // ==== Alerta ====
+  const mostrarAlerta = (tipo: "ENTRADA" | "SAIDA", mensagem: string) => {
+    setAlertaMov({ tipo, mensagem });
+    setAlertaAnimacao(false);
+
+    setTimeout(() => setAlertaAnimacao(true), 50);
+    setTimeout(() => {
+      setAlertaAnimacao(false);
+      setTimeout(() => setAlertaMov(null), 300);
+    }, 3000);
   };
 
-  const deletarMovimentacao = async (id: number) => {
-    if (!window.confirm("Deseja realmente deletar esta movimentação?")) return;
-    try {
-      const res = await fetch(`http://localhost:8080/movimentacoes/${id}`, { method: "DELETE" });
-      if (!res.ok) throw new Error("Erro ao deletar movimentação");
-      fetchAll();
-    } catch (err: any) {
-      setError(err.message);
-    }
+  const normalizar = (texto: string) =>
+    texto.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
+  // ==== Filtragem Estoques ====
+  const estoquesFiltrados = estoques.filter((e) => {
+    const nomeMatch = normalizar(e.nomeProduto).includes(normalizar(filtroEstoque));
+    const idMatch = e.idProduto.toString().includes(filtroEstoque.trim());
+    const statusMatch =
+      filtroStatus === "TODOS" ||
+      (filtroStatus === "ABAIXO" && e.estoqueAbaixoDoMinimo) ||
+      (filtroStatus === "ZERADO" && e.quantidade === 0) ||
+      (filtroStatus === "NORMAL" && !e.estoqueAbaixoDoMinimo && e.quantidade > 0);
+    return (nomeMatch || idMatch) && statusMatch;
+  });
+
+  // ==== Filtragem Movimentações ====
+  const movimentacoesFiltradas = movimentacoes.filter((m) => {
+    const nomeMatch = normalizar(m.nomeProduto).includes(normalizar(filtroMov));
+    const idMatch =
+      filtroMov.trim() === ""
+        ? false
+        : m.idMovimentacao.toString().includes(filtroMov.trim()) ||
+          m.idProduto.toString().includes(filtroMov.trim());
+    const tipoMatch = tipoFiltroMov === "TODOS" ? true : m.tipoMovimentacao === tipoFiltroMov;
+    const dataMatch = !filtroData || new Date(m.dataMovimentacao).toLocaleDateString("sv-SE") === filtroData;
+    const nomeOuIdMatch = filtroMov.trim() ? (nomeMatch || idMatch) : nomeMatch;
+    return nomeOuIdMatch && tipoMatch && dataMatch;
+  });
+
+  // ==== Paginação ====
+  const totalPaginasEstoque = Math.max(1, Math.ceil(estoquesFiltrados.length / itensPorPaginaEstoque));
+  const totalPaginasMov = Math.max(1, Math.ceil(movimentacoesFiltradas.length / itensPorPaginaMov));
+
+  const estoquesPaginados = estoquesFiltrados.slice(
+    (paginaEstoque - 1) * itensPorPaginaEstoque,
+    paginaEstoque * itensPorPaginaEstoque
+  );
+
+  const movimentacoesPaginadas = movimentacoesFiltradas.slice(
+    (paginaMov - 1) * itensPorPaginaMov,
+    paginaMov * itensPorPaginaMov
+  );
+
+  // ==== Navegação Paginação ====
+  const prevEstoque = () => setPaginaEstoque((p) => Math.max(1, p - 1));
+  const nextEstoque = () => setPaginaEstoque((p) => Math.min(totalPaginasEstoque, p + 1));
+  const prevMov = () => setPaginaMov((p) => Math.max(1, p - 1));
+  const nextMov = () => setPaginaMov((p) => Math.min(totalPaginasMov, p + 1));
+
+  const limparFiltrosEstoque = async () => {
+    setFiltroEstoque("");
+    setFiltroStatus("TODOS");
+    setItensPorPaginaEstoque(10);
+    setPaginaEstoque(1);
+    localStorage.removeItem("filtroEstoque");
+    localStorage.removeItem("filtroStatus");
+    await fetchEstoque();
   };
 
-  if (loading) return <div className="loading">Carregando dados do estoque...</div>;
-  if (error) return <div className="error">Erro: {error}</div>;
+  const limparFiltrosMov = async () => {
+    setFiltroMov("");
+    setTipoFiltroMov("TODOS");
+    setFiltroData("");
+    setItensPorPaginaMov(10);
+    setPaginaMov(1);
+    localStorage.removeItem("filtroMov");
+    localStorage.removeItem("tipoFiltroMov");
+    localStorage.removeItem("filtroData");
+    await fetchMovimentacoes();
+  };
+
+  const handleChangeItensPorPaginaEstoque = (n: number) => {
+    setItensPorPaginaEstoque(n);
+    setPaginaEstoque(1);
+  };
+
+  const handleChangeItensPorPaginaMov = (n: number) => {
+    setItensPorPaginaMov(n);
+    setPaginaMov(1);
+  };
+
+  if (loading) return <p>Carregando dados...</p>;
 
   return (
-    <div className="gerenciar-estoque-container">
+    <div className="estoque-container">
       <h1>Gerenciamento de Estoque</h1>
 
-      {/* ========== ESTOQUES ========== */}
-      <section className="estoques-section">
-        <h2>Estoques</h2>
-        <button className="btn-add" onClick={() => setModalEstoque({})}>
-          Adicionar Estoque
+      {/* ALERTA */}
+      {alertaMov && (
+        <div
+          className={`alerta-mov ${alertaMov.tipo.toLowerCase()} ${alertaAnimacao ? "entra" : "sai"}`}
+        >
+          {alertaMov.mensagem}
+        </div>
+      )}
+
+      {/* BOTÃO NOVO ESTOQUE */}
+      <div style={{ textAlign: "right", marginBottom: "10px" }}>
+        <button className="btn entrada" onClick={() => setIsModalNovoEstoqueOpen(true)}>
+          ➕ Novo Estoque
         </button>
+      </div>
+
+      {/* ESTOQUES */}
+      <section className="bloco-estoque">
+        <h2>📦 Estoques</h2>
         <div className="filtros">
           <input
-            placeholder="Filtrar por Produto"
-            value={filtroProdutoEstoque}
-            onChange={(e) => setFiltroProdutoEstoque(e.target.value)}
+            type="text"
+            placeholder="Buscar por nome ou ID..."
+            value={filtroEstoque}
+            onChange={(e) => setFiltroEstoque(e.target.value)}
           />
-          <label>
-            <input type="checkbox" checked={filtroZerado} onChange={() => setFiltroZerado(!filtroZerado)} /> Zerado
-          </label>
-          <label>
-            <input type="checkbox" checked={filtroMinimo} onChange={() => setFiltroMinimo(!filtroMinimo)} /> Emergencial
-          </label>
+          <select value={filtroStatus} onChange={(e) => setFiltroStatus(e.target.value)}>
+            <option value="TODOS">Todos</option>
+            <option value="ABAIXO">Abaixo do mínimo</option>
+            <option value="ZERADO">Zerados</option>
+            <option value="NORMAL">Normal</option>
+          </select>
+          <button className="btn limpar" onClick={limparFiltrosEstoque}>
+            Limpar filtros
+          </button>
         </div>
 
-        <div className="table-wrapper">
-          <table className="tabela">
+        <div className="tabela-container">
+          <table className="estoque-tabela">
             <thead>
               <tr>
-                <th onClick={() => handleSortEstoque("idEstoque")}>ID</th>
-                <th onClick={() => handleSortEstoque("nomeProduto")}>Produto</th>
-                <th onClick={() => handleSortEstoque("quantidade")}>Quantidade</th>
-                <th onClick={() => handleSortEstoque("quantidadeMinima")}>Qtd Mínima</th>
+                <th>ID</th>
+                <th>Produto</th>
+                <th>Qtd</th>
+                <th>Mínimo</th>
                 <th>Status</th>
                 <th>Ações</th>
               </tr>
             </thead>
             <tbody>
-              {estoquesFiltrados.length === 0 ? (
+              {estoquesPaginados.map((item) => (
+                <tr key={item.idEstoque}>
+                  <td>{item.idProduto}</td>
+                  <td>{item.nomeProduto}</td>
+                  <td>{item.quantidade}</td>
+                  <td>{item.quantidadeMinima}</td>
+                  <td>
+                    {item.estoqueAbaixoDoMinimo ? (
+                      <span className="status alerta">Abaixo</span>
+                    ) : item.quantidade === 0 ? (
+                      <span className="status zerado">Zerado</span>
+                    ) : (
+                      <span className="status ok">OK</span>
+                    )}
+                  </td>
+                  <td>
+                    <button className="btn entrada" onClick={() => abrirModal(item, "ENTRADA")}>
+                      ➕
+                    </button>
+                    <button className="btn saida" onClick={() => abrirModal(item, "SAIDA")}>
+                      ➖
+                    </button>
+                  </td>
+                </tr>
+              ))}
+              {estoquesPaginados.length === 0 && (
                 <tr>
-                  <td colSpan={6} className="empty">
+                  <td colSpan={6} style={{ textAlign: "center" }}>
                     Nenhum estoque encontrado.
                   </td>
                 </tr>
-              ) : (
-                estoquesFiltrados.map((e) => (
-                  <tr key={e.idEstoque}>
-                    <td>{e.idEstoque}</td>
-                    <td>{e.nomeProduto}</td>
-                    <td>{e.quantidade}</td>
-                    <td>{e.quantidadeMinima}</td>
-                    <td>{getBadge(e)}</td>
-                    <td>
-                      <button className="btn-edit" onClick={() => setModalEstoque(e)}>
-                        Editar
-                      </button>
-                      <button className="btn-delete" onClick={() => deletarEstoque(e.idEstoque)}>
-                        Deletar
-                      </button>
-                    </td>
-                  </tr>
-                ))
               )}
             </tbody>
           </table>
         </div>
+
+        {/* Paginação Estoques */}
+        <div className="paginacao">
+          <div className="paginacao-controls">
+            <button onClick={prevEstoque} disabled={paginaEstoque <= 1}>
+              ◀
+            </button>
+            {Array.from({ length: totalPaginasEstoque }).map((_, i) => (
+              <button
+                key={i}
+                className={paginaEstoque === i + 1 ? "ativa" : ""}
+                onClick={() => setPaginaEstoque(i + 1)}
+              >
+                {i + 1}
+              </button>
+            ))}
+            <button onClick={nextEstoque} disabled={paginaEstoque >= totalPaginasEstoque}>
+              ▶
+            </button>
+          </div>
+          <div>
+            <label>Itens por página</label>
+            <select
+              value={itensPorPaginaEstoque}
+              onChange={(e) => handleChangeItensPorPaginaEstoque(Number(e.target.value))}
+            >
+              <option value={6}>6</option>
+              <option value={10}>10</option>
+              <option value={20}>20</option>
+              <option value={50}>50</option>
+            </select>
+          </div>
+        </div>
       </section>
 
-      {/* ========== MOVIMENTAÇÕES ========== */}
-      <section className="movimentacoes-section">
-        <h2>Últimas Movimentações</h2>
-        <button className="btn-add" onClick={() => setModalMovimentacao({})}>
-          Adicionar Movimentação
-        </button>
+      {/* MOVIMENTAÇÕES */}
+      <section className="bloco-movimentacoes">
+        <h2>📊 Movimentações</h2>
         <div className="filtros">
-          <input placeholder="Filtrar por Produto" value={filtroProdutoMov} onChange={(e) => setFiltroProdutoMov(e.target.value)} />
-          <input placeholder="Filtrar por ID" value={filtroIDMov} onChange={(e) => setFiltroIDMov(e.target.value)} />
-          <input type="date" value={filtroDataMov} onChange={(e) => setFiltroDataMov(e.target.value)} />
-          <select value={filtroTipoMov} onChange={(e) => setFiltroTipoMov(e.target.value as any)}>
-            <option value="">Todos os tipos</option>
+          <input
+            type="text"
+            placeholder="Buscar por nome, ID produto ou ID mov..."
+            value={filtroMov}
+            onChange={(e) => setFiltroMov(e.target.value)}
+          />
+          <select value={tipoFiltroMov} onChange={(e) => setTipoFiltroMov(e.target.value)}>
+            <option value="TODOS">Todos</option>
             <option value="ENTRADA">Entrada</option>
             <option value="SAIDA">Saída</option>
           </select>
+          <input type="date" value={filtroData} onChange={(e) => setFiltroData(e.target.value)} />
+          <button className="btn limpar" onClick={limparFiltrosMov}>
+            Limpar filtros
+          </button>
         </div>
 
-        <div className="table-wrapper">
-          <table className="tabela">
+        <div className="tabela-container">
+          <table className="estoque-tabela">
             <thead>
               <tr>
-                <th onClick={() => handleSortMov("idMovimentacao")}>ID</th>
-                <th onClick={() => handleSortMov("nomeProduto")}>Produto</th>
-                <th onClick={() => handleSortMov("quantidade")}>Quantidade</th>
-                <th onClick={() => handleSortMov("tipoMovimentacao")}>Tipo</th>
-                <th onClick={() => handleSortMov("dataMovimentacao")}>Data</th>
-                <th>Ações</th>
+                <th>ID Mov.</th>
+                <th>Produto</th>
+                <th>Tipo</th>
+                <th>Qtd</th>
+                <th>Data</th>
+                <th>Observação</th>
               </tr>
             </thead>
             <tbody>
-              {movimentacoesFiltradas.length === 0 ? (
+              {movimentacoesPaginadas.length > 0 ? (
+                movimentacoesPaginadas.map((m) => (
+                  <tr key={m.idMovimentacao}>
+                    <td>{m.idMovimentacao}</td>
+                    <td>{m.nomeProduto}</td>
+                    <td className={m.tipoMovimentacao === "ENTRADA" ? "entrada" : "saida"}>
+                      {m.tipoMovimentacao}
+                    </td>
+                    <td>{m.quantidade}</td>
+                    <td>{new Date(m.dataMovimentacao).toLocaleString("pt-BR")}</td>
+                    <td>{m.observacao || "-"}</td>
+                  </tr>
+                ))
+              ) : (
                 <tr>
-                  <td colSpan={6} className="empty">
+                  <td colSpan={6} style={{ textAlign: "center" }}>
                     Nenhuma movimentação encontrada.
                   </td>
                 </tr>
-              ) : (
-                movimentacoesFiltradas.map((m) => (
-                  <tr
-                    key={m.idMovimentacao}
-                    className={m.tipoMovimentacao === "ENTRADA" ? "entrada" : "saida"}
-                    onMouseEnter={(e) =>
-                      showTooltip(e, `Produto: ${m.nomeProduto}\nTipo: ${m.tipoMovimentacao}\nQtd: ${m.quantidade}`)
-                    }
-                    onMouseLeave={hideTooltip}
-                  >
-                    <td>{m.idMovimentacao}</td>
-                    <td>{m.nomeProduto}</td>
-                    <td>{m.quantidade}</td>
-                    <td>{m.tipoMovimentacao}</td>
-                    <td>{m.dataMovimentacao ? new Date(m.dataMovimentacao).toLocaleString() : "N/D"}</td>
-                    <td>
-                      <button className="btn-edit" onClick={() => setModalMovimentacao(m)}>
-                        Editar
-                      </button>
-                      <button className="btn-delete" onClick={() => deletarMovimentacao(m.idMovimentacao)}>
-                        Deletar
-                      </button>
-                    </td>
-                  </tr>
-                ))
               )}
             </tbody>
           </table>
         </div>
+
+        {/* Paginação Movimentações */}
+        <div className="paginacao">
+          <div className="paginacao-controls">
+            <button onClick={prevMov} disabled={paginaMov <= 1}>
+              ◀
+            </button>
+            {Array.from({ length: totalPaginasMov }).map((_, i) => (
+              <button
+                key={i}
+                className={paginaMov === i + 1 ? "ativa" : ""}
+                onClick={() => setPaginaMov(i + 1)}
+              >
+                {i + 1}
+              </button>
+            ))}
+            <button onClick={nextMov} disabled={paginaMov >= totalPaginasMov}>
+              ▶
+            </button>
+          </div>
+          <div>
+            <label>Itens por página</label>
+            <select
+              value={itensPorPaginaMov}
+              onChange={(e) => handleChangeItensPorPaginaMov(Number(e.target.value))}
+            >
+              <option value={6}>6</option>
+              <option value={10}>10</option>
+              <option value={20}>20</option>
+              <option value={50}>50</option>
+            </select>
+          </div>
+        </div>
       </section>
 
-      {/* ==== TOOLTIP ==== */}
-      {tooltip && (
-        <div className="tooltip show" style={{ top: tooltip.y, left: tooltip.x, position: "fixed" }}>
-          {tooltip.text.split("\n").map((line, idx) => (
-            <div key={idx}>{line}</div>
-          ))}
+      {/* MODAL MOVIMENTAÇÃO */}
+      <Modal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onConfirm={registrarMovimentacao}
+        title={tipoMovimentacao === "ENTRADA" ? "Registrar Entrada" : "Registrar Saída"}
+      >
+        {selectedProduto && (
+          <div className="modal-form">
+            <p>
+              <strong>Produto:</strong> {selectedProduto.nomeProduto}
+            </p>
+            <label>
+              Quantidade:
+              <input
+                type="number"
+                min={1}
+                value={quantidade}
+                onChange={(e) => setQuantidade(Number(e.target.value))}
+              />
+            </label>
+            <label>
+              Observação:
+              <textarea value={observacao} onChange={(e) => setObservacao(e.target.value)} />
+            </label>
+          </div>
+        )}
+      </Modal>
+
+      {/* MODAL NOVO ESTOQUE */}
+      <Modal
+        isOpen={isModalNovoEstoqueOpen}
+        onClose={() => {
+          setIsModalNovoEstoqueOpen(false);
+          setNovoProdutoId("");
+          setNovoProdutoNome("");
+          setNovoProdutoQtd(0);
+          setNovoProdutoMin(0);
+        }}
+        onConfirm={cadastrarNovoEstoque}
+        title="Cadastrar Novo Estoque"
+      >
+        <div className="modal-form">
+          <label>
+            ID do Produto: *
+            <input
+              type="number"
+              placeholder="Digite o ID do produto"
+              value={novoProdutoId}
+              onChange={(e) => {
+                setNovoProdutoId(e.target.value);
+                buscarProdutoPorId(e.target.value);
+              }}
+              min={1}
+            />
+          </label>
+          
+          <label>
+            Nome do Produto:
+            <input
+              type="text"
+              value={buscandoProduto ? "Buscando..." : novoProdutoNome}
+              disabled
+              placeholder="O nome será preenchido automaticamente"
+              style={{ 
+                background: '#f3f4f6', 
+                cursor: 'not-allowed',
+                color: buscandoProduto ? '#9ca3af' : '#374151'
+              }}
+            />
+          </label>
+          
+          <label>
+            Quantidade Inicial: *
+            <input
+              type="number"
+              min={0}
+              value={novoProdutoQtd}
+              onChange={(e) => setNovoProdutoQtd(Number(e.target.value))}
+              placeholder="Ex: 100"
+            />
+          </label>
+          
+          <label>
+            Quantidade Mínima: *
+            <input
+              type="number"
+              min={0}
+              value={novoProdutoMin}
+              onChange={(e) => setNovoProdutoMin(Number(e.target.value))}
+              placeholder="Ex: 10"
+            />
+          </label>
         </div>
-      )}
-
-      {/* ==== MODAIS ==== */}
-      {modalEstoque && (
-        <EstoqueModal
-          title={modalEstoque.idEstoque ? "Editar Estoque" : "Adicionar Estoque"}
-          onClose={() => setModalEstoque(null)}
-        >
-          <input
-            placeholder="Nome do Produto"
-            value={modalEstoque.nomeProduto || ""}
-            onChange={(e) => setModalEstoque({ ...modalEstoque, nomeProduto: e.target.value })}
-          />
-          <input
-            type="number"
-            placeholder="Quantidade"
-            value={modalEstoque.quantidade ?? ""}
-            onChange={(e) => setModalEstoque({ ...modalEstoque, quantidade: Number(e.target.value) })}
-          />
-          <input
-            type="number"
-            placeholder="Quantidade Mínima"
-            value={modalEstoque.quantidadeMinima ?? ""}
-            onChange={(e) => setModalEstoque({ ...modalEstoque, quantidadeMinima: Number(e.target.value) })}
-          />
-          <div className="estoque-modal-buttons">
-            <button className="btn-save" onClick={() => salvarEstoque(modalEstoque)}>Salvar</button>
-            <button className="btn-cancel" onClick={() => setModalEstoque(null)}>Cancelar</button>
-          </div>
-        </EstoqueModal>
-      )}
-
-      {modalMovimentacao && (
-        <EstoqueModal
-          title={modalMovimentacao.idMovimentacao ? "Editar Movimentação" : "Adicionar Movimentação"}
-          onClose={() => setModalMovimentacao(null)}
-        >
-          <input
-            placeholder="Nome do Produto"
-            value={modalMovimentacao.nomeProduto || ""}
-            onChange={(e) => setModalMovimentacao({ ...modalMovimentacao, nomeProduto: e.target.value })}
-          />
-          <input
-            type="number"
-            placeholder="Quantidade"
-            value={modalMovimentacao.quantidade ?? ""}
-            onChange={(e) => setModalMovimentacao({ ...modalMovimentacao, quantidade: Number(e.target.value) })}
-          />
-          <select
-            value={modalMovimentacao.tipoMovimentacao || ""}
-            onChange={(e) => setModalMovimentacao({ ...modalMovimentacao, tipoMovimentacao: e.target.value as any })}
-          >
-            <option value="">Selecione o tipo</option>
-            <option value="ENTRADA">Entrada</option>
-            <option value="SAIDA">Saída</option>
-          </select>
-          <input
-            type="datetime-local"
-            value={modalMovimentacao.dataMovimentacao ? modalMovimentacao.dataMovimentacao.slice(0, 16) : ""}
-            onChange={(e) => setModalMovimentacao({ ...modalMovimentacao, dataMovimentacao: e.target.value })}
-          />
-          <div className="estoque-modal-buttons">
-            <button className="btn-save" onClick={() => salvarMovimentacao(modalMovimentacao)}>Salvar</button>
-            <button className="btn-cancel" onClick={() => setModalMovimentacao(null)}>Cancelar</button>
-          </div>
-        </EstoqueModal>
-      )}
+      </Modal>
     </div>
   );
-};
-
-export default GerenciarEstoque;
+}

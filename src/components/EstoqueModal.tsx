@@ -1,40 +1,48 @@
 import React, { useEffect } from "react";
 import "./EstoqueModal.css";
 
-interface EstoqueModalProps {
-  title: string;
+interface ModalProps {
+  isOpen: boolean;
   onClose: () => void;
+  onConfirm?: () => void;
+  title?: string;
   children: React.ReactNode;
 }
 
-export const EstoqueModal: React.FC<EstoqueModalProps> = ({ title, onClose, children }) => {
-  // Fecha com ESC
+export default function Modal({ isOpen, onClose, onConfirm, title, children }: ModalProps) {
   useEffect(() => {
-    const handleEsc = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
+    const handleEsc = (event: KeyboardEvent) => {
+      if (event.key === "Escape") onClose();
     };
     document.addEventListener("keydown", handleEsc);
     return () => document.removeEventListener("keydown", handleEsc);
   }, [onClose]);
 
-  // Fecha ao clicar fora
-  const handleBackdropClick = (e: React.MouseEvent) => {
-    if ((e.target as HTMLElement).classList.contains("estoque-modal-backdrop")) {
-      onClose();
-    }
-  };
+  if (!isOpen) return null;
 
   return (
-    <div className="estoque-modal-backdrop" onClick={handleBackdropClick}>
-      <div className="estoque-modal-content">
-        <div className="estoque-modal-header">
-          <h3>{title}</h3>
-          <button className="estoque-modal-close" onClick={onClose}>×</button>
+    <div className="modal-overlay" onClick={onClose}>
+      <div
+        className="modal-content"
+        onClick={(e) => e.stopPropagation()} // impede fechar ao clicar dentro
+      >
+        <button className="modal-close" onClick={onClose}>
+          &times;
+        </button>
+
+        {title && <h2 className="modal-title">{title}</h2>}
+
+        <div className="modal-body">{children}</div>
+
+        <div className="modal-actions">
+          <button className="btn cancel" onClick={onClose}>
+            Cancelar
+          </button>
+          <button className="btn confirm" onClick={onConfirm}>
+            Salvar
+          </button>
         </div>
-        <div className="estoque-modal-body">{children}</div>
       </div>
     </div>
   );
-};
-
-export default EstoqueModal;
+}
