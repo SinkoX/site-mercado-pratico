@@ -51,8 +51,8 @@
 }
 
 .oferta-item {
-  opacity: 1;               
-  transform: scale(1);     
+  opacity: 1;
+  transform: scale(1);
   transition: opacity 0.4s ease, transform 0.4s ease;
 }
 
@@ -95,7 +95,7 @@
 }
 
 .home-page .titulo-destaque h1 {
-  text-align: left;
+  text-align: center;
   margin-left: 30px;
   font-family: "KonkhmerSleokchher";
   font-size: 40px;
@@ -159,7 +159,7 @@
 
 @media (min-width: 1024px) {
   .super-ofertas-carrossel {
-    display: none; /* some o carrossel */
+    display: none;
   }
 
   .desktop-ofertas {
@@ -171,13 +171,7 @@
     opacity: 1;
   }
 
-  .home-page .produtos{
+  .home-page .produtos {
     grid-template-columns: repeat(5, 1fr);
-  }
-
-  @media(min-width: 501px) and (max-width: 1023px){
-    .home-page .produtos{
-      grid-template-columns: repeat(3, 1fr);
-    }    
   }
 }

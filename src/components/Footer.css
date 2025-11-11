@@ -28,6 +28,7 @@
   font-size: 24px;
   font-weight: 700;
   margin-bottom: 8px;
+  text-align: left;
 }
 
 .info p {
@@ -48,8 +49,7 @@
 
 /* MAPA */
 .info4 iframe {
-  width: 100%;
-  max-width: 350px;
+  width: 300px;
   height: 250px;
   border-radius: 12px;
   border: none;
@@ -188,8 +188,12 @@
   }
 
   .infos {
-    grid-template-columns: 2fr 1fr 1fr 1fr;
-    gap: 60px;
+    grid-template-columns: 1.5fr 1fr 1fr 1fr;
+    gap: 40px;
+  }
+
+  .info3 {
+    width: 200px;
   }
 
   .info h1 {
@@ -203,7 +207,6 @@
 
   .info4 iframe {
     width: 100%;
-    max-width: 380px;
     height: 260px;
     border-radius: 14px;
     box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);

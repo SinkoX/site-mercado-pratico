@@ -16,3 +16,14 @@
   object-fit: cover;
   border-radius: 15px;
 }
+
+
+@media (min-width: 501px) and (max-width: 1023px){
+  .card-superoferta{
+   grid-template-rows: repeat(2,1fr);
+  }
+
+  .img-superoferta{
+   grid-template-rows: repeat(2,1fr);
+  }
+}
