@@ -1,7 +1,6 @@
 import { useNavigate } from "react-router-dom";
-import Header from "../components/Header";
-import Footer from "../components/Footer";
 import { User, Package, Boxes, ClipboardList, Truck } from "lucide-react";
+import { FaHome } from "react-icons/fa";
 import "./PaginaAdmin.css";
 
 export default function PaginaAdmin() {
@@ -9,7 +8,9 @@ export default function PaginaAdmin() {
 
   return (
     <div className="admin-container">
-      <Header />
+            <div className="home-icon" onClick={() => navigate("/")}>
+              <FaHome />
+            </div>
 
       <main className="admin-main">
         <div className="admin-cards">
@@ -97,8 +98,6 @@ export default function PaginaAdmin() {
 
         </div>
       </main>
-
-      <Footer />
     </div>
   );
 }

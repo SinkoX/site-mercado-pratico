@@ -15,6 +15,7 @@ html {
   background: linear-gradient(135deg, #fef7f7 0%, #fff 100%);
   font-family: "Inter", sans-serif;
   position: relative;
+  overflow-y: hidden;
 }
 
 /* Ícone de home */
@@ -127,26 +128,27 @@ html {
 }
 
 /* Senha com ícone */
-.senha-wrapper {
+.campo-pag-cadastro-usuario .senha-wrapper {
   display: flex;
   align-items: center;
   position: relative;
 }
 
-.senha-wrapper input {
+.campo-pag-cadastro-usuario .senha-wrapper input {
   flex: 1;
   padding-right: 40px;
 }
 
-.icon-btn {
+.campo-pag-cadastro-usuario .icon-btn {
   position: absolute;
   right: 10px;
   cursor: pointer;
   color: #666;
+  top: 11px;
 }
 
 /* Botão específico da página */
-.btn-cadastro-usuario {
+.cadastro-usuario-page .btn-cadastro-usuario {
   display: block;
   margin: 25px auto 0;
   border-radius: 8px;
@@ -162,7 +164,7 @@ html {
   box-shadow: 0 4px 10px rgba(39, 174, 96, 0.3);
 }
 
-.btn-cadastro-usuario:hover {
+.cadastro-usuario-page .btn-cadastro-usuario:hover {
   background: linear-gradient(135deg, #ff7b00, #ff4d4d);
   box-shadow: 0 4px 14px rgba(255, 123, 0, 0.4);
   transform: scale(1.03);

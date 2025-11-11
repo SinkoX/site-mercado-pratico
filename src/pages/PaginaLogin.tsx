@@ -103,7 +103,7 @@ const handleSubmit = async (e: React.FormEvent) => {
               placeholder="Digite sua senha"
               required
             />
-            <span className="toggle-icon" onClick={toggleSenha}>
+            <span className="icon-btn" onClick={toggleSenha}>
               {showSenha ? <FaEye /> : <FaEyeSlash />}
             </span>
           </div>

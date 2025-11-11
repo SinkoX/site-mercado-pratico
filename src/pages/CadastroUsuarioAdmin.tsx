@@ -46,9 +46,36 @@ export default function CadastroUsuarioAdmPage() {
     }));
   };
 
+    const handleCpfChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      let value = e.target.value.replace(/\D/g, "");
+      if (value.length > 11) value = value.slice(0, 11);
+      value = value
+        .replace(/(\d{3})(\d)/, "$1.$2")
+        .replace(/(\d{3})(\d)/, "$1.$2")
+        .replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+      setFormData({ ...formData, cpfUsuario: value });
+    };
+  
+    const handleTelChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      let value = e.target.value.replace(/\D/g, "");
+      if (value.length > 11) value = value.slice(0, 11);
+      value = value
+        .replace(/^(\d{2})(\d)/, "($1) $2")
+        .replace(/(\d{5})(\d)/, "$1-$2");
+      setFormData({ ...formData, telefoneUsuario: value });
+    };
+  
+
   const toggleSenha = () => setShowSenha(prev => !prev);
-  const limparCpf = (cpf: string) => cpf.replace(/\D/g, "");
-  const limparTelefone = (tel: string) => tel.replace(/\D/g, "");
+
+
+  function limparCpf(cpf: string) {
+    return cpf.replace(/\D/g, "");
+  }
+
+  function limparTelefone(telefone: string) {
+    return telefone.replace(/\D/g, "");
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -140,9 +167,7 @@ export default function CadastroUsuarioAdmPage() {
               type="tel"
               name="telefoneUsuario"
               value={formData.telefoneUsuario}
-              onChange={e =>
-                setFormData(prev => ({ ...prev, telefoneUsuario: limparTelefone(e.target.value) }))
-              }
+              onChange={handleTelChange}
               required
               placeholder="(00) 00000-0000"
             />
@@ -154,9 +179,7 @@ export default function CadastroUsuarioAdmPage() {
               type="text"
               name="cpfUsuario"
               value={formData.cpfUsuario}
-              onChange={e =>
-                setFormData(prev => ({ ...prev, cpfUsuario: limparCpf(e.target.value) }))
-              }
+              onChange={handleCpfChange}
               required
               placeholder="000.000.000-00"
             />

@@ -8,8 +8,8 @@ html {
   justify-content: center;
   align-items: flex-start;
   flex-direction: column;
-  padding-top: 60px;
-  padding-bottom: 60px;
+  padding-top: 30px;
+  padding-bottom: 30px;
   min-height: calc(100vh - 40px);
   margin: 0;
   background: linear-gradient(135deg, #fef7f7 0%, #fff 100%);
@@ -46,11 +46,6 @@ html {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   position: relative;
   margin: 0 auto;
-}
-
-.formulario-pag-cadastro-usuario-adm:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
 }
 
 /* Título e subtítulo */
@@ -127,26 +122,27 @@ html {
 }
 
 /* Senha com ícone */
-.senha-wrapper {
+.campo-pag-cadastro-usuario-adm .senha-wrapper {
   display: flex;
   align-items: center;
   position: relative;
 }
 
-.senha-wrapper input {
+.campo-pag-cadastro-usuario-adm .senha-wrapper input {
   flex: 1;
   padding-right: 40px;
 }
 
-.icon-btn {
+.campo-pag-cadastro-usuario-adm .icon-btn {
   position: absolute;
   right: 10px;
   cursor: pointer;
   color: #666;
+  top: 11px;
 }
 
 /* Botão específico da página */
-.btn-cadastro-usuario-adm {
+.cadastro-usuario-adm-page .btn-cadastro-usuario-adm {
   display: block;
   margin: 25px auto 0;
   border-radius: 8px;
@@ -162,7 +158,7 @@ html {
   box-shadow: 0 4px 10px rgba(39, 174, 96, 0.3);
 }
 
-.btn-cadastro-usuario-adm:hover {
+.cadastro-usuario-adm-page .btn-cadastro-usuario-adm:hover {
   background: linear-gradient(135deg, #ff7b00, #ff4d4d);
   box-shadow: 0 4px 14px rgba(255, 123, 0, 0.4);
   transform: scale(1.03);

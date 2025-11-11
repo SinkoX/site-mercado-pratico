@@ -81,7 +81,7 @@ function CadastroEnderecoUsuario() {
       alert("Endereço cadastrado com sucesso!");
 
       setFormData({ cep: "", numero: "", rua: "", bairro: "", cidade: "" });
-      navigate("/");
+      navigate("/gerenciar/usuarios");
     } catch (error) {
       console.error("Erro ao cadastrar endereço:", error);
       alert("Erro ao cadastrar o endereço. Tente novamente.");
@@ -93,17 +93,15 @@ function CadastroEnderecoUsuario() {
       <div className="home-icon" onClick={() => navigate("/")}>
         <FaHome />
       </div>
-      <form className="form" onSubmit={handleSubmit}>
+
+      <form className="formulario-pag-cadastro-endereco" onSubmit={handleSubmit}>
         <div className="titulo">
           <h1>Cadastro de Endereço</h1>
-          <div className="subtitulo">
-            <h5>Digite seu CEP para preencher automaticamente</h5>
-          </div>
         </div>
 
-        <div className="campos">
-          <div className="campo">
-            <label htmlFor="cep"><h2>CEP</h2></label>
+        <div className="campos-pag-cadastro-endereco">
+          <div className="campo-pag-cadastro-endereco">
+            <label>CEP</label>
             <input
               type="text"
               id="cep"
@@ -116,8 +114,8 @@ function CadastroEnderecoUsuario() {
             />
           </div>
 
-          <div className="campo">
-            <label htmlFor="rua"><h2>Rua</h2></label>
+          <div className="campo-pag-cadastro-endereco">
+            <label>Rua</label>
             <input
               type="text"
               id="rua"
@@ -128,8 +126,8 @@ function CadastroEnderecoUsuario() {
             />
           </div>
 
-          <div className="campo">
-            <label htmlFor="bairro"><h2>Bairro</h2></label>
+          <div className="campo-pag-cadastro-endereco">
+            <label>Bairro</label>
             <input
               type="text"
               id="bairro"
@@ -140,8 +138,8 @@ function CadastroEnderecoUsuario() {
             />
           </div>
 
-          <div className="campo">
-            <label htmlFor="cidade"><h2>Cidade</h2></label>
+          <div className="campo-pag-cadastro-endereco">
+            <label>Cidade</label>
             <input
               type="text"
               id="cidade"
@@ -152,8 +150,8 @@ function CadastroEnderecoUsuario() {
             />
           </div>
 
-          <div className="campo">
-            <label htmlFor="numero"><h2>Número</h2></label>
+          <div className="campo-pag-cadastro-endereco">
+            <label>Número</label>
             <input
               type="text"
               id="numero"
@@ -161,13 +159,12 @@ function CadastroEnderecoUsuario() {
               value={formData.numero}
               onChange={handleChange}
               required
-              placeholder="Digite o número da casa"
             />
           </div>
         </div>
 
-        <button className="button" type="submit">
-          <h1>Cadastrar</h1>
+        <button type="submit" className="btn-cadastro-endereco">
+          Cadastrar
         </button>
       </form>
     </div>

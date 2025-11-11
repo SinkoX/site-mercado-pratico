@@ -341,7 +341,7 @@ const handleSubmit = async (e: React.FormEvent) => {
                         required
                       />
                     </div>
-                    <button className="button-popup" type="submit" onClick={refreshPage}>Enviar</button>cdddd
+                    <button className="button-popup" type="submit" onClick={refreshPage}>Enviar</button>
                   </form>
                 </div>
               </div>

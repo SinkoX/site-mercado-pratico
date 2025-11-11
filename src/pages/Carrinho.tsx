@@ -167,7 +167,7 @@ function Carrinho() {
       </div>
     );
 
-    console.log(carrinho)
+  console.log(carrinho);
 
   return (
     <div className="carrinho-page">
@@ -237,17 +237,16 @@ function Carrinho() {
         </p>
         <h2>Total: R$ {carrinho.valorTotal.toFixed(2)}</h2>
         <div className="botoes-carrinho">
-  <button className="btn-limpar" onClick={handleLimparCarrinho}>
-    Limpar
-  </button>
-  <button
-    className="btn-finalizar"
-    onClick={() => navigate("/checkout", { state: { carrinho } })}
-  >
-    Finalizar Pedido
-  </button>
-</div>
-
+          <button className="btn-limpar" onClick={handleLimparCarrinho}>
+            Limpar
+          </button>
+          <button
+            className="btn-finalizar"
+            onClick={() => navigate("/checkout", { state: { carrinho } })}
+          >
+            Finalizar Pedido
+          </button>
+        </div>
       </div>
 
       <Footer />

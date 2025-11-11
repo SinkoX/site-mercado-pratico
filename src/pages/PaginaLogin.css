@@ -5,7 +5,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  padding: 80px 20px;
+  padding: 40px 20px;
   background: linear-gradient(135deg, #fef7f7 0%, #fff 100%);
   font-family: 'Arial', sans-serif;
   position: relative;
@@ -170,6 +170,25 @@
   font-size: 14px;
   margin-top: 15px;
   color: #666;
+}
+
+.pagina-login-container .senha-wrapper {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.pagina-login-container .senha-wrapper input {
+  flex: 1;
+  padding-right: 40px;
+}
+
+.pagina-login-container .icon-btn {
+  position: absolute;
+  right: 10px;
+  cursor: pointer;
+  color: #666;
+  top: 13.5px;
 }
 
 .pagina-login-container .link-cadastro {
