@@ -17,6 +17,7 @@ import GerenciarFornecedores from "./pages/GerenciarFornecedores";
 import CadastroUsuarioAdm from "./pages/CadastroUsuarioAdmin";
 import GerenciarCategorias from "./pages/GerenciarCategorias"; 
 import SucessoPedido from "./pages/SucessoPedido";
+import GerenciarEstoque from "./pages/GerenciarEstoque";
 
 import "./App.css";
 
@@ -42,7 +43,8 @@ function App() {
       <Route path="/paginaAdmin" element={<PaginaAdmin />} />
       <Route path="/gerenciar/pedidos" element={<GerenciarPedidos />} />
       <Route path="/gerenciar/fornecedores" element={<GerenciarFornecedores />} />
-      <Route path="/gerenciar/categorias" element={<GerenciarCategorias />} /> {/* 👈 nova rota */}
+      <Route path="/gerenciar/categorias" element={<GerenciarCategorias />} /> 
+      <Route path="/gerenciar/estoque" element={<GerenciarEstoque />} />
 
       {/* 📝 Cadastros */}
       <Route path="/cadastro/usuario" element={<CadastroUsuario />} />

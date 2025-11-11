@@ -1,0 +1,85 @@
+/* Fundo escurecido */
+.estoque-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  animation: estoqueModalFadeIn 0.3s ease forwards;
+}
+
+/* Corpo do modal */
+.estoque-modal-content {
+  background: #ffffff;
+  padding: 20px 24px;
+  border-radius: 10px;
+  width: 380px;
+  max-width: 90%;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  animation: estoqueModalSlideUp 0.3s ease forwards;
+}
+
+/* Cabeçalho */
+.estoque-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #eee;
+  margin-bottom: 10px;
+  padding-bottom: 5px;
+}
+
+.estoque-modal-header h3 {
+  margin: 0;
+  font-size: 1.2rem;
+  color: #333;
+}
+
+/* Botão de fechar */
+.estoque-modal-close {
+  background: none;
+  border: none;
+  font-size: 1.4rem;
+  cursor: pointer;
+  color: #666;
+  transition: color 0.2s ease;
+}
+
+.estoque-modal-close:hover {
+  color: #000;
+}
+
+/* Corpo (inputs, selects, botões) */
+.estoque-modal-body input,
+.estoque-modal-body select {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  transition: border-color 0.2s;
+}
+
+.estoque-modal-body input:focus,
+.estoque-modal-body select:focus {
+  border-color: #2196f3;
+  outline: none;
+}
+
+.estoque-modal-body .estoque-modal-buttons {
+  text-align: right;
+  margin-top: 10px;
+}
+
+/* Animações */
+@keyframes estoqueModalFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes estoqueModalSlideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}

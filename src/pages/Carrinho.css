@@ -268,19 +268,21 @@ body {
   .item-card {
     flex-direction: row;
     align-items: center;
-    padding: 10px 12px;
+    padding: 10px 1px;
+    
   }
 
   .item-img {
-    width: 70px;
-    height: 70px;
+    width: 120px;
+    height: 120px;
     border-radius: 8px;
     margin-right: 12px;
   }
 
   .item-info {
-    margin-left: 0;
+    margin-left: 128px;
     flex: 1;
+    margin-top: -70px;
   }
 
   .item-info h3 {
@@ -305,8 +307,9 @@ body {
   }
 
   .btn-remover {
-    padding: 6px 10px;
+    padding: 9px 12px;
     font-size: 0.85rem;
+    justify-content: flex-end;
   }
 
   /* Resumo do carrinho */
