@@ -114,28 +114,40 @@ const PaginaProduto: React.FC = () => {
       </div>
 
       {/* Toast animado */}
-      {showToast && <div className="toast-carrinho">🛒 Item adicionado ao carrinho!</div>}
+      {showToast && (
+        <div className="toast-carrinho">🛒 Item adicionado ao carrinho!</div>
+      )}
 
       {/* Popup de Login */}
-        {showLoginPopup && (
-          <div className="login-popup-overlay">
-            <div className="login-popup">
-              <span className="close-popup" onClick={fecharPopup}>✖</span>
-              <div className="popup-content">
-                <h2>Você precisa estar logado</h2>
-                <p>Para adicionar produtos ao carrinho, faça login ou cadastre-se.</p>
-                <div className="popup-buttons">
-                  <button className="button-popup" onClick={() => navigate("/login")}>
-                    Fazer Login
-                  </button>
-                  <button className="button-popup secondary" onClick={() => navigate("/cadastro")}>
-                    Cadastrar-se
-                  </button>
-                </div>
+      {showLoginPopup && (
+        <div className="login-popup-overlay">
+          <div className="login-popup">
+            <span className="close-popup" onClick={fecharPopup}>
+              ✖
+            </span>
+            <div className="popup-content">
+              <h2>Você precisa estar logado</h2>
+              <p>
+                Para adicionar produtos ao carrinho, faça login ou cadastre-se.
+              </p>
+              <div className="popup-buttons">
+                <button
+                  className="button-popup"
+                  onClick={() => navigate("/login")}
+                >
+                  Fazer Login
+                </button>
+                <button
+                  className="button-popup secondary"
+                  onClick={() => navigate("/cadastro")}
+                >
+                  Cadastrar-se
+                </button>
               </div>
             </div>
           </div>
-        )}
+        </div>
+      )}
 
       <Footer />
     </div>

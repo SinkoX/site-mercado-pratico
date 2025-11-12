@@ -12,7 +12,7 @@ const categorias = [
   "Hortifruti",
   "Bebidas",
   "Mercearia",
-  "Limpeza",    
+  "Limpeza",
   "Açougue",
   "Higiene",
   "Padaria",
@@ -29,16 +29,16 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
 
   return (
     <>
-      <nav 
-        className={`sidebar ${isOpen ? "sidebar--open" : ""}`} 
+      <nav
+        className={`sidebar ${isOpen ? "sidebar--open" : ""}`}
         aria-label="Menu lateral"
       >
-        <div className="sidebar_inner"> 
+        <div className="sidebar_inner">
           <div className="sidebar_header">
             <span className="sidebar_title">Categorias</span>
-            <button 
-              className="sidebar_close" 
-              onClick={onClose} 
+            <button
+              className="sidebar_close"
+              onClick={onClose}
               aria-label="Fechar menu"
             >
               ✕
@@ -58,8 +58,10 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
           </ul>
         </div>
       </nav>
-      <div 
-        className={`sidebar_backdrop ${isOpen ? "sidebar_backdrop--visible" : ""}`} 
+      <div
+        className={`sidebar_backdrop ${
+          isOpen ? "sidebar_backdrop--visible" : ""
+        }`}
         onClick={onClose}
       />
     </>

@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { api } from "../api";
-import { FaEye, FaEyeSlash, FaHome } from "react-icons/fa";
-import "./CadastroUsuario.css"; // CSS atualizado
+import { FaEye, FaEyeSlash, FaArrowLeft } from "react-icons/fa";
+import "./CadastroUsuario.css";
 
 interface FormDataUsuario {
   nomeUsuario: string;
@@ -86,8 +86,8 @@ export default function CadastroUsuarioAdmPage() {
 
   return (
     <div className="cadastro-usuario-page">
-      <div className="home-icon" onClick={() => navigate("/")}>
-        <FaHome />
+      <div className="back-icon" onClick={() => navigate(-1)}>
+        <FaArrowLeft />
       </div>
 
       <form className="formulario-pag-cadastro-usuario" onSubmit={handleSubmit}>

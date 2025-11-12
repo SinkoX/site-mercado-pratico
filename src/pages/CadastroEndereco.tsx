@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { api } from "../api";
 import { useNavigate } from "react-router-dom";
 import "./CadastroEndereco.css";
-import { FaHome } from "react-icons/fa";
+import { FaArrowLeft } from "react-icons/fa";
 
 interface FormDataEnderecoUsuario {
   cep: string;
@@ -90,11 +90,14 @@ function CadastroEnderecoUsuario() {
 
   return (
     <div className="cadastro-endereco-page">
-      <div className="home-icon" onClick={() => navigate("/")}>
-        <FaHome />
+      <div className="back-icon" onClick={() => navigate(-1)}>
+        <FaArrowLeft />
       </div>
 
-      <form className="formulario-pag-cadastro-endereco" onSubmit={handleSubmit}>
+      <form
+        className="formulario-pag-cadastro-endereco"
+        onSubmit={handleSubmit}
+      >
         <div className="titulo">
           <h1>Cadastro de Endereço</h1>
         </div>

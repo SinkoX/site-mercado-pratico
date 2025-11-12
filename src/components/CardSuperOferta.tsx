@@ -9,11 +9,7 @@ interface CardSuperOfertaProps {
 const CardSuperOferta: React.FC<CardSuperOfertaProps> = ({ src, alt }) => {
   return (
     <div className="card-superoferta">
-      <img
-        src={src}
-        alt={alt || "Imagem"}
-        className="img-superoferta"
-      />
+      <img src={src} alt={alt || "Imagem"} className="img-superoferta" />
     </div>
   );
 };

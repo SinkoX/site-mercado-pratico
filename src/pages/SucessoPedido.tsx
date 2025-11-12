@@ -39,7 +39,9 @@ export default function SucessoPedido() {
 
     async function buscarPedido() {
       try {
-        const resposta = await axios.get(`http://localhost:8080/pedidos-usuarios/${pedidoId}`);
+        const resposta = await axios.get(
+          `http://localhost:8080/pedidos-usuarios/${pedidoId}`
+        );
         setPedido(resposta.data);
       } catch {
         setErro("Erro ao carregar pedido.");
@@ -66,9 +68,15 @@ export default function SucessoPedido() {
 
       {/* Informações do pedido */}
       <div className="pedido-info">
-        <div className="info-item"><span>ID:</span> #{pedido.idPedidoUsuario}</div>
-        <div className="info-item"><span>Nome:</span> {pedido.nomeUsuario}</div>
-        <div className="info-item"><span>Data:</span> {pedido.dataPedido}</div>
+        <div className="info-item">
+          <span>ID:</span> #{pedido.idPedidoUsuario}
+        </div>
+        <div className="info-item">
+          <span>Nome:</span> {pedido.nomeUsuario}
+        </div>
+        <div className="info-item">
+          <span>Data:</span> {pedido.dataPedido}
+        </div>
         <div className="info-item">
           <span>Status:</span>
           <span className={`status-badge ${pedido.statusPedido.toLowerCase()}`}>
@@ -91,13 +99,24 @@ export default function SucessoPedido() {
 
       {/* Valores do pedido */}
       <div className="valores-pedido">
-        <div><span>Total:</span> R$ {pedido.valorTotal.toFixed(2)}</div>
-        <div><span>Frete:</span> R$ {(pedido.frete ?? 0).toFixed(2)}</div>
-        <div><span>Desconto:</span> R$ {(pedido.desconto ?? 0).toFixed(2)}</div>
-        <div className="valor-final"><span>Valor Final:</span> R$ {(pedido.valorFinal ?? pedido.valorTotal).toFixed(2)}</div>
+        <div>
+          <span>Total:</span> R$ {pedido.valorTotal.toFixed(2)}
+        </div>
+        <div>
+          <span>Frete:</span> R$ {(pedido.frete ?? 0).toFixed(2)}
+        </div>
+        <div>
+          <span>Desconto:</span> R$ {(pedido.desconto ?? 0).toFixed(2)}
+        </div>
+        <div className="valor-final">
+          <span>Valor Final:</span> R${" "}
+          {(pedido.valorFinal ?? pedido.valorTotal).toFixed(2)}
+        </div>
       </div>
 
-      <button className="btn-home" onClick={() => navigate("/")}>Voltar à Home</button>
+      <button className="btn-home" onClick={() => navigate("/")}>
+        Voltar à Home
+      </button>
     </div>
   );
 }

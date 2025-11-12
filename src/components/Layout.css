@@ -33,7 +33,6 @@
   grid-area: footer;
 }
 
-/* Sobreposição da barra lateral quando aberta no celular */
 .layout--sidebar-open .sidebar.sidebar--overlay {
   transform: translateX(0);
 }
@@ -47,13 +46,13 @@
 @media (max-width: 500px) {
   .layout {
     grid-template-areas:
-    "header"
-    "content"
-    "footer";
+      "header"
+      "content"
+      "footer";
     grid-template-columns: 1fr;
     grid-template-rows: var(--header-heigth) 1fr auto;
   }
-  .layout_content{
+  .layout_content {
     padding: 12px;
   }
 }

@@ -1,4 +1,4 @@
-import  { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import {
   FaPlus,
@@ -6,10 +6,12 @@ import {
   FaTrash,
   FaChevronDown,
   FaChevronUp,
+  FaArrowLeft,
 } from "react-icons/fa";
 import ModalCategoria from "../components/ModalCategoria";
 import ModalSubcategoria from "../components/ModalSubcategoria";
 import "./GerenciarCategorias.css";
+import { useNavigate } from "react-router-dom";
 
 interface Subcategoria {
   idSubcategoria: number;
@@ -32,6 +34,7 @@ export default function GerenciarCategorias() {
     null
   );
   const [expandido, setExpandido] = useState<number[]>([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     carregarCategorias();
@@ -72,6 +75,10 @@ export default function GerenciarCategorias() {
 
   return (
     <div className="container-categorias">
+      <div className="back-icon" onClick={() => navigate(-1)}>
+        <FaArrowLeft />
+      </div>
+
       <header className="filtro-header">
         <input
           type="text"
@@ -81,10 +88,7 @@ export default function GerenciarCategorias() {
         />
 
         <div className="botoes-add">
-          <button
-            className="btn-add"
-            onClick={() => setModalCategoria(true)}
-          >
+          <button className="btn-add" onClick={() => setModalCategoria(true)}>
             <FaPlus /> Nova Categoria
           </button>
           <button
@@ -148,7 +152,9 @@ export default function GerenciarCategorias() {
                         </button>
                         <button
                           className="btn-icon excluir"
-                          onClick={() => excluirSubcategoria(sub.idSubcategoria)}
+                          onClick={() =>
+                            excluirSubcategoria(sub.idSubcategoria)
+                          }
                         >
                           <FaTrash />
                         </button>

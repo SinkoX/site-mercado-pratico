@@ -22,46 +22,46 @@ const PaginaLogin: React.FC<LoginProps> = ({ loginFn }) => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
     setError("");
   };
 
-  const toggleSenha = () => setShowSenha(prev => !prev);
+  const toggleSenha = () => setShowSenha((prev) => !prev);
 
-const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
-  setLoading(true);
-  setError("");
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setError("");
 
-  try {
-    const res = await api.post("/usuario/login", formData);
+    try {
+      const res = await api.post("/usuario/login", formData);
 
-    // Verifica se veio algo válido do backend
-    if (!res.data || !res.data.idUsuario) {
-      setError("Email ou senha inválidos!");
+      // Verifica se veio algo válido do backend
+      if (!res.data || !res.data.idUsuario) {
+        setError("Email ou senha inválidos!");
+        setLoading(false);
+        return;
+      }
+
+      const user: User = {
+        ...res.data,
+        enderecoUsuario: res.data.endereco || [],
+      };
+
+      loginFn(user);
+      navigate("/perfil");
+    } catch (err: any) {
+      console.error(err);
+
+      if (err.response && err.response.status === 401) {
+        setError("Email ou senha incorretos.");
+      } else {
+        setError("Erro ao conectar com o servidor. Tente novamente.");
+      }
+    } finally {
       setLoading(false);
-      return;
     }
-
-    const user: User = {
-      ...res.data,
-      enderecoUsuario: res.data.endereco || [],
-    };
-
-    loginFn(user);
-    navigate("/perfil");
-  } catch (err: any) {
-    console.error(err);
-
-    if (err.response && err.response.status === 401) {
-      setError("Email ou senha incorretos.");
-    } else {
-      setError("Erro ao conectar com o servidor. Tente novamente.");
-    }
-  } finally {
-    setLoading(false);
-  }
-};
+  };
 
   return (
     <div className="pagina-login-container">
@@ -74,9 +74,14 @@ const handleSubmit = async (e: React.FormEvent) => {
         <p className="market-slogan">Seu mercado de confiança desde 1975</p>
       </div>
 
-      <form className={`login-form ${error ? "shake" : ""}`} onSubmit={handleSubmit}>
+      <form
+        className={`login-form ${error ? "shake" : ""}`}
+        onSubmit={handleSubmit}
+      >
         <h2 className="login-title">Bem-vindo de volta!</h2>
-        <p className="login-subtitle">Entre em sua conta para continuar comprando</p>
+        <p className="login-subtitle">
+          Entre em sua conta para continuar comprando
+        </p>
 
         <div className="input-group">
           <label htmlFor="emailUsuario">Email</label>
@@ -117,7 +122,10 @@ const handleSubmit = async (e: React.FormEvent) => {
 
         <p className="cadastro-text">
           Não tem uma conta?{" "}
-          <span className="link-cadastro" onClick={() => navigate("/cadastro/usuario")}>
+          <span
+            className="link-cadastro"
+            onClick={() => navigate("/cadastro/usuario")}
+          >
             Cadastre-se
           </span>
         </p>

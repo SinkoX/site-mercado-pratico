@@ -9,7 +9,6 @@ export default function MainImage() {
       <div className="blob verde-claro" aria-hidden="true" />
       <div className="blob laranja" aria-hidden="true" />
 
-
       {/* círculo branco com logo */}
       <div className="bola">
         <img src={logoCarrinho} alt="Logo Mercado Prático" />
@@ -18,7 +17,8 @@ export default function MainImage() {
       {/* texto à esquerda */}
       <div className="texto">
         <h1>
-          <span className="verde-texto">Mercado</span><br />
+          <span className="verde-texto">Mercado</span>
+          <br />
           <span className="laranja-texto">Prático</span>
         </h1>
         <p className="tagline">Tudo o que você precisa, se encontra aqui</p>

@@ -9,13 +9,13 @@ import Perfil from "./pages/PerfilUsuario";
 import PaginaCategoria from "./pages/PaginaCategoria";
 import { useAuth } from "./hooks/useAuth";
 import Carrinho from "./pages/Carrinho";
-import Produtos from "./pages/Produtos"; 
+import Produtos from "./pages/Produtos";
 import Checkout from "./pages/Checkout";
 import PaginaAdmin from "./pages/PaginaAdmin";
 import GerenciarPedidos from "./pages/GerenciarPedidos";
 import GerenciarFornecedores from "./pages/GerenciarFornecedores";
 import CadastroUsuarioAdm from "./pages/CadastroUsuarioAdmin";
-import GerenciarCategorias from "./pages/GerenciarCategorias"; 
+import GerenciarCategorias from "./pages/GerenciarCategorias";
 import SucessoPedido from "./pages/SucessoPedido";
 import GerenciarEstoque from "./pages/GerenciarEstoque";
 import GerenciarUsuarios from "./pages/GerenciarUsuarios";
@@ -43,10 +43,16 @@ function App() {
       {/* ⚙️ Administração */}
       <Route path="/paginaAdmin" element={<PaginaAdmin />} />
       <Route path="/gerenciar/pedidos" element={<GerenciarPedidos />} />
-      <Route path="/gerenciar/fornecedores" element={<GerenciarFornecedores />} />
-      <Route path="/gerenciar/categorias" element={<GerenciarCategorias />} /> 
+      <Route
+        path="/gerenciar/fornecedores"
+        element={<GerenciarFornecedores />}
+      />
+      <Route path="/gerenciar/categorias" element={<GerenciarCategorias />} />
       <Route path="/gerenciar/estoque" element={<GerenciarEstoque />} />
-      <Route path="/gerenciar/cadastro-usuario" element={<CadastroUsuarioAdm />} />
+      <Route
+        path="/gerenciar/cadastro-usuario"
+        element={<CadastroUsuarioAdm />}
+      />
       <Route path="/gerenciar/usuarios" element={<GerenciarUsuarios />} />
 
       {/* 📝 Cadastros */}
@@ -55,7 +61,6 @@ function App() {
       <Route path="/cadastro/produto" element={<CadastroProduto />} />
 
       <Route path="/sucesso" element={<SucessoPedido />} />
-
     </Routes>
   );
 }

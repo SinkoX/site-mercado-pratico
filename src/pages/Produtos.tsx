@@ -24,7 +24,9 @@ interface Categoria {
 export default function PaginaProdutos() {
   const [produtos, setProdutos] = useState<Produto[]>([]);
   const [categorias, setCategorias] = useState<Categoria[]>([]);
-  const [categoriaFiltrada, setCategoriaFiltrada] = useState<number | null>(null);
+  const [categoriaFiltrada, setCategoriaFiltrada] = useState<number | null>(
+    null
+  );
   const [loading, setLoading] = useState(true);
 
   // Buscar produtos e categorias ao carregar
@@ -33,19 +35,24 @@ export default function PaginaProdutos() {
 
     axios
       .get("http://localhost:8080/produto")
-      .then(res => setProdutos(Array.isArray(res.data) ? res.data : []))
-      .catch(err => console.error("Erro ao buscar produtos:", err));
+      .then((res) => setProdutos(Array.isArray(res.data) ? res.data : []))
+      .catch((err) => console.error("Erro ao buscar produtos:", err));
 
     axios
       .get("http://localhost:8080/categorias")
-      .then(res => setCategorias(Array.isArray(res.data) ? res.data : []))
-      .catch(err => console.error("Erro ao buscar categorias:", err))
+      .then((res) => setCategorias(Array.isArray(res.data) ? res.data : []))
+      .catch((err) => console.error("Erro ao buscar categorias:", err))
       .finally(() => setLoading(false));
   }, []);
 
   // Produtos filtrados pela categoria selecionada
   const produtosFiltrados = categoriaFiltrada
-    ? produtos.filter(p => p.nomeCategoria && categorias.find(c => c.idCategoria === categoriaFiltrada)?.nomeCategoria === p.nomeCategoria)
+    ? produtos.filter(
+        (p) =>
+          p.nomeCategoria &&
+          categorias.find((c) => c.idCategoria === categoriaFiltrada)
+            ?.nomeCategoria === p.nomeCategoria
+      )
     : produtos;
 
   return (
@@ -63,7 +70,7 @@ export default function PaginaProdutos() {
           >
             Todas
           </button>
-          {categorias.map(cat => (
+          {categorias.map((cat) => (
             <button
               key={cat.idCategoria}
               className={categoriaFiltrada === cat.idCategoria ? "ativo" : ""}
@@ -80,12 +87,15 @@ export default function PaginaProdutos() {
           <p>Nenhum produto encontrado.</p>
         ) : (
           <div className="produtos-lista">
-            {produtosFiltrados.map(prod => (
+            {produtosFiltrados.map((prod) => (
               <CardProduto
                 key={prod.idProduto}
                 produto={{
                   ...prod,
-                  imgUrl: prod.imgUrl && prod.imgUrl.trim() !== "" ? prod.imgUrl : "/placeholder.png",
+                  imgUrl:
+                    prod.imgUrl && prod.imgUrl.trim() !== ""
+                      ? prod.imgUrl
+                      : "/placeholder.png",
                 }}
               />
             ))}

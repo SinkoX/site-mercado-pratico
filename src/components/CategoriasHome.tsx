@@ -33,7 +33,7 @@ const CategoriasHome = () => {
     setTimeout(() => {
       setIndice((prev) => (prev === categorias.length - 1 ? 0 : prev + 1));
       setAnimacao("");
-    }, 400); // tempo igual à duração da animação
+    }, 400);
   };
 
   const anterior = () => {
@@ -62,7 +62,6 @@ const CategoriasHome = () => {
           </button>
         </div>
 
-        {/* 🔹 Adicionamos a classe dinâmica aqui */}
         <div className={`categorias-container ${animacao}`}>
           {categoriasVisiveis.map((categoria) => (
             <div

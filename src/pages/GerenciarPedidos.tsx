@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { FaHome } from "react-icons/fa";
-import Footer from "../components/Footer";
+import { FaArrowLeft } from "react-icons/fa";
 import "./GerenciarPedidos.css";
 
 interface PedidoUsuario {
@@ -20,7 +19,9 @@ export default function GerenciarPedidos() {
   const [pedidos, setPedidos] = useState<PedidoUsuario[]>([]);
   const [pedidosFiltrados, setPedidosFiltrados] = useState<PedidoUsuario[]>([]);
   const [carregando, setCarregando] = useState(true);
-  const [pedidoSelecionado, setPedidoSelecionado] = useState<number | null>(null);
+  const [pedidoSelecionado, setPedidoSelecionado] = useState<number | null>(
+    null
+  );
   const [mostrarModal, setMostrarModal] = useState(false);
 
   // FILTROS
@@ -71,9 +72,9 @@ export default function GerenciarPedidos() {
   function filtrarPedidos() {
     const normalizar = (texto: string) =>
       texto
-        .normalize("NFD") // separa letras e acentos
-        .replace(/[\u0300-\u036f]/g, "") // remove acentos
-        .toLowerCase(); // ignora maiúsculas/minúsculas
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase();
 
     let filtrados = pedidos;
 
@@ -138,9 +139,8 @@ export default function GerenciarPedidos() {
   return (
     <div className="gerenciar-pedidos-container">
       <main className="gerenciar-pedidos-main">
-        {/* 🏠 ÍCONE DE VOLTAR PARA A HOME */}
-        <div className="home-icon" onClick={() => navigate("/paginaAdmin")}>
-          <FaHome />
+        <div className="home-icon" onClick={() => navigate(-1)}>
+          <FaArrowLeft />
         </div>
 
         <h1>Gerenciar Pedidos</h1>

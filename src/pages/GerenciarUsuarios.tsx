@@ -76,7 +76,7 @@ export default function GerenciarUsuarios() {
 
   return (
     <div className="gerenciar-usuarios-page">
-      <div className="back-icon" onClick={() => navigate("/")}>
+      <div className="back-icon" onClick={() => navigate(-1)}>
         <FaArrowLeft />
       </div>
       <h1>Gerenciamento de Usuários</h1>

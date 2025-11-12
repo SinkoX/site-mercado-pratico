@@ -181,34 +181,36 @@ function Checkout() {
     }
   };
 
-const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
 
-  try {
-    const idUsuario = localStorage.getItem("usuarioId");
-    if (!idUsuario) {
-      alert("Usuário não identificado! Faça login novamente.");
-      return;
+    try {
+      const idUsuario = localStorage.getItem("usuarioId");
+      if (!idUsuario) {
+        alert("Usuário não identificado! Faça login novamente.");
+        return;
+      }
+
+      const response = await api.post(
+        `/enderecos/usuario/${idUsuario}`,
+        formData
+      );
+      console.log("Endereço cadastrado:", response.data);
+      alert("Endereço cadastrado com sucesso!");
+
+      // 🔄 Atualiza o usuário no contexto e no localStorage
+      const resUser = await api.get(`/usuario/${idUsuario}`);
+      setUser(resUser.data);
+      localStorage.setItem("user", JSON.stringify(resUser.data));
+    } catch (error) {
+      console.error("Erro ao cadastrar endereço:", error);
+      alert("Erro ao cadastrar o endereço. Tente novamente.");
     }
-
-    const response = await api.post(`/enderecos/usuario/${idUsuario}`, formData);
-    console.log("Endereço cadastrado:", response.data);
-    alert("Endereço cadastrado com sucesso!");
-
-    // 🔄 Atualiza o usuário no contexto e no localStorage
-    const resUser = await api.get(`/usuario/${idUsuario}`);
-    setUser(resUser.data);
-    localStorage.setItem("user", JSON.stringify(resUser.data));
-
-  } catch (error) {
-    console.error("Erro ao cadastrar endereço:", error);
-    alert("Erro ao cadastrar o endereço. Tente novamente.");
-  }
-};
+  };
 
   const refreshPage = () => {
     location.reload();
-  }
+  };
 
   const handleFinalizarCompra = async () => {
     if (!pedido || !enderecoSelecionado) {
@@ -292,46 +294,38 @@ const handleSubmit = async (e: React.FormEvent) => {
                 </span>
                 <div className="popup-content">
                   <h2>Insira seu CEP</h2>
-                  <p>
-                    Insira seu CEP para receber os produtos.
-                  </p>
+                  <p>Insira seu CEP para receber os produtos.</p>
                   <form className="popup-buttons" onSubmit={handleSubmit}>
                     <div className="campos-principal">
-                    <div className="campo-principal campo">
-                      <label htmlFor="cep">
-                        CEP:
-                      </label>
-                      <input
-                        type="text"
-                        id="cep"
-                        name="cep"
-                        value={formData.cep}
-                        onChange={handleCepChange}
-                        required
-                        placeholder="00000-000"
-                        maxLength={9}
-                      />
-                    </div>
+                      <div className="campo-principal campo">
+                        <label htmlFor="cep">CEP:</label>
+                        <input
+                          type="text"
+                          id="cep"
+                          name="cep"
+                          value={formData.cep}
+                          onChange={handleCepChange}
+                          required
+                          placeholder="00000-000"
+                          maxLength={9}
+                        />
+                      </div>
 
-                    <div className="campo-principal campo">
-                      <label htmlFor="numero">
-                        Numero:
-                      </label>
-                      <input
-                        type="number"
-                        id="numero"
-                        name="numero"
-                        value={formData.numero}
-                        onChange={handleChange}
-                        required
-                      />
-                    </div>
+                      <div className="campo-principal campo">
+                        <label htmlFor="numero">Numero:</label>
+                        <input
+                          type="number"
+                          id="numero"
+                          name="numero"
+                          value={formData.numero}
+                          onChange={handleChange}
+                          required
+                        />
+                      </div>
                     </div>
 
                     <div className="campo">
-                      <label htmlFor="complemento">
-                        Complemento
-                      </label>
+                      <label htmlFor="complemento">Complemento</label>
                       <input
                         type="text"
                         id="complemento"
@@ -341,7 +335,13 @@ const handleSubmit = async (e: React.FormEvent) => {
                         required
                       />
                     </div>
-                    <button className="button-popup" type="submit" onClick={refreshPage}>Enviar</button>
+                    <button
+                      className="button-popup"
+                      type="submit"
+                      onClick={refreshPage}
+                    >
+                      Enviar
+                    </button>
                   </form>
                 </div>
               </div>

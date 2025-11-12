@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { api } from "../api";
-import { FaEye, FaEyeSlash, FaHome } from "react-icons/fa";
-import "./CadastroUsuarioAdmin.css"; // CSS atualizado
+import { FaEye, FaEyeSlash, FaArrowLeft } from "react-icons/fa";
+import "./CadastroUsuarioAdmin.css";
 
 interface TipoUsuario {
   idTipoUsuario: number;
@@ -33,41 +33,42 @@ export default function CadastroUsuarioAdmPage() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    api.get("/tipos-usuario")
-      .then(res => setTipos(res.data))
-      .catch(err => console.error(err));
+    api
+      .get("/tipos-usuario")
+      .then((res) => setTipos(res.data))
+      .catch((err) => console.error(err));
   }, []);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: name === "tipoUsuarioId" ? Number(value) : value
+      [name]: name === "tipoUsuarioId" ? Number(value) : value,
     }));
   };
 
-    const handleCpfChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      let value = e.target.value.replace(/\D/g, "");
-      if (value.length > 11) value = value.slice(0, 11);
-      value = value
-        .replace(/(\d{3})(\d)/, "$1.$2")
-        .replace(/(\d{3})(\d)/, "$1.$2")
-        .replace(/(\d{3})(\d{1,2})$/, "$1-$2");
-      setFormData({ ...formData, cpfUsuario: value });
-    };
-  
-    const handleTelChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      let value = e.target.value.replace(/\D/g, "");
-      if (value.length > 11) value = value.slice(0, 11);
-      value = value
-        .replace(/^(\d{2})(\d)/, "($1) $2")
-        .replace(/(\d{5})(\d)/, "$1-$2");
-      setFormData({ ...formData, telefoneUsuario: value });
-    };
-  
+  const handleCpfChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let value = e.target.value.replace(/\D/g, "");
+    if (value.length > 11) value = value.slice(0, 11);
+    value = value
+      .replace(/(\d{3})(\d)/, "$1.$2")
+      .replace(/(\d{3})(\d)/, "$1.$2")
+      .replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+    setFormData({ ...formData, cpfUsuario: value });
+  };
 
-  const toggleSenha = () => setShowSenha(prev => !prev);
+  const handleTelChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let value = e.target.value.replace(/\D/g, "");
+    if (value.length > 11) value = value.slice(0, 11);
+    value = value
+      .replace(/^(\d{2})(\d)/, "($1) $2")
+      .replace(/(\d{5})(\d)/, "$1-$2");
+    setFormData({ ...formData, telefoneUsuario: value });
+  };
 
+  const toggleSenha = () => setShowSenha((prev) => !prev);
 
   function limparCpf(cpf: string) {
     return cpf.replace(/\D/g, "");
@@ -89,7 +90,7 @@ export default function CadastroUsuarioAdmPage() {
       ...formData,
       cpfUsuario: limparCpf(formData.cpfUsuario),
       telefoneUsuario: limparTelefone(formData.telefoneUsuario),
-      tipoUsuario: { idTipoUsuario: formData.tipoUsuarioId }
+      tipoUsuario: { idTipoUsuario: formData.tipoUsuarioId },
     };
 
     try {
@@ -107,11 +108,14 @@ export default function CadastroUsuarioAdmPage() {
 
   return (
     <div className="cadastro-usuario-adm-page">
-      <div className="home-icon" onClick={() => navigate("/")}>
-        <FaHome />
+      <div className="back-icon" onClick={() => navigate(-1)}>
+        <FaArrowLeft />
       </div>
 
-      <form className="formulario-pag-cadastro-usuario-adm" onSubmit={handleSubmit}>
+      <form
+        className="formulario-pag-cadastro-usuario-adm"
+        onSubmit={handleSubmit}
+      >
         <div className="titulo">
           <h1>Cadastro de Usuário</h1>
           <div className="subtitulo">
@@ -193,8 +197,10 @@ export default function CadastroUsuarioAdmPage() {
               onChange={handleChange}
               required
             >
-              <option value="" disabled>Selecione</option>
-              {tipos.map(tipo => (
+              <option value="" disabled>
+                Selecione
+              </option>
+              {tipos.map((tipo) => (
                 <option key={tipo.idTipoUsuario} value={tipo.idTipoUsuario}>
                   {tipo.nomeTipoUsuario}
                 </option>
@@ -203,7 +209,9 @@ export default function CadastroUsuarioAdmPage() {
           </div>
         </div>
 
-        <button type="submit" className="btn-cadastro-usuario-adm">Cadastrar</button>
+        <button type="submit" className="btn-cadastro-usuario-adm">
+          Cadastrar
+        </button>
       </form>
     </div>
   );

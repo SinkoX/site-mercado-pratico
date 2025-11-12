@@ -17,7 +17,7 @@ export interface Endereco {
 }
 
 export interface User {
-  idUsuario: number; // campo igual ao backend
+  idUsuario: number;
   nomeUsuario: string;
   emailUsuario: string;
   senhaUsuario: string;

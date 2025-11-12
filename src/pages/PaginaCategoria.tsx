@@ -45,7 +45,7 @@ export default function PaginaCategoria() {
   const [precoMin, setPrecoMin] = useState(0);
   const [precoMax, setPrecoMax] = useState(1000);
 
-  const STEP = 1; // passo do slider
+  const STEP = 1;
 
   // Busca produtos e subcategorias
   useEffect(() => {

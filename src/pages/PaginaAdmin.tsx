@@ -14,19 +14,19 @@ export default function PaginaAdmin() {
 
       <main className="admin-main">
         <div className="admin-cards">
-          {/* Card 1 - Cadastro Produto */}
+          {/* Card 1 - Gerenciar Produto */}
           <div className="admin-card">
             <div className="admin-icon">
               <Package size={32} />
             </div>
             <h2>Cadastro Produto</h2>
             <p>Adicione novos produtos ao catálogo do mercado</p>
-            <button onClick={() => navigate("/cadastro/produto")}>
+            <button onClick={() => navigate("/gerenciar/produtos")}>
               Acessar
             </button>
           </div>
 
-          {/* Card 2 - Cadastro Usuário */}
+          {/* Card 2 - Gerenciar Usuário */}
           <div className="admin-card">
             <div className="admin-icon">
               <User size={32} />

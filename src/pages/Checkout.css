@@ -10,7 +10,6 @@
   font-family: "Inter", sans-serif;
 }
 
-/* Container centralizado */
 .checkout-container {
   width: 100%;
   max-width: 1200px;
@@ -22,7 +21,6 @@
   flex-wrap: wrap;
 }
 
-/* Título do checkout */
 .titulo-checkout {
   width: 100%;
   text-align: center;
@@ -31,7 +29,6 @@
   color: #333;
 }
 
-/* Itens do pedido */
 .checkout-itens {
   flex: 2;
   display: flex;
@@ -39,7 +36,6 @@
   gap: 15px;
 }
 
-/* Resumo e endereço */
 .checkout-resumo {
   flex: 1;
   background-color: #fff;
@@ -49,7 +45,6 @@
   height: fit-content;
 }
 
-/* Resumo financeiro */
 .resumo-financeiro p {
   margin: 8px 0;
   font-size: 1rem;
@@ -61,7 +56,6 @@
   color: #111;
 }
 
-/* Botões */
 .btn-finalizar-checkout {
   width: 100%;
   padding: 12px 0;
@@ -79,7 +73,6 @@
   background-color: #219150;
 }
 
-/* CheckoutCard */
 .checkout-card {
   display: flex;
   gap: 15px;
@@ -88,7 +81,7 @@
   padding: 15px;
   align-items: center;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-  flex-wrap: wrap; /* permite responsividade interna */
+  flex-wrap: wrap;
 }
 
 .checkout-img {
@@ -117,7 +110,6 @@
   color: #555;
 }
 
-/* Select de endereço */
 .checkout-resumo select {
   width: 100%;
   padding: 10px 12px;
@@ -143,14 +135,12 @@
   outline: none;
 }
 
-/* Popup buttons */
 .checkout-page .popup-buttons {
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
 
-/* Campos principais */
 .checkout-page .campos-principal {
   display: flex;
   flex-wrap: wrap;
@@ -175,23 +165,20 @@
 }
 
 @media (max-width: 768px) {
-  /* Container vertical para melhor leitura */
   .checkout-container {
     flex-direction: column;
     padding: 0 20px;
     gap: 25px;
   }
 
-  /* Itens e resumo ficam full width para fácil leitura */
   .checkout-itens,
   .checkout-resumo {
     width: 100%;
   }
 
-  /* Cards horizontais com imagem à esquerda e infos à direita */
   .checkout-card {
-    flex-direction: row; /* horizontal */
-    align-items: center; /* centraliza verticalmente */
+    flex-direction: row;
+    align-items: center;
     padding: 15px 20px;
     gap: 15px;
     border-radius: 16px;
@@ -199,15 +186,13 @@
     background-color: #fff;
   }
 
-  /* Imagem menor, mas visível */
   .checkout-img {
     width: 90px;
     height: 90px;
     border-radius: 12px;
-    flex-shrink: 0; /* garante que não encolha */
+    flex-shrink: 0;
   }
 
-  /* Info do produto ocupa o restante do espaço */
   .checkout-info {
     flex: 1;
     display: flex;
@@ -215,7 +200,6 @@
     gap: 4px;
   }
 
-  /* Títulos e textos menores e legíveis */
   .checkout-info h3 {
     font-size: 1.1rem;
     color: #222;
@@ -227,7 +211,6 @@
     color: #555;
   }
 
-  /* Botão maior, confortável para toque */
   .btn-finalizar-checkout {
     font-size: 1.25rem;
     padding: 16px 0;
@@ -244,7 +227,6 @@
     outline: none;
   }
 
-  /* Select com área maior e foco evidente */
   .checkout-resumo select {
     padding: 14px 16px;
     font-size: 1.1rem;
@@ -261,20 +243,17 @@
 }
 
 @media (max-width: 480px) {
-  /* Cards ainda mais compactos */
   .checkout-card {
-    flex-direction: row; /* continua horizontal */
+    flex-direction: row;
     padding: 12px 15px;
     gap: 10px;
   }
 
-  /* Imagem menor para ocupar menos espaço */
   .checkout-img {
     width: 70px;
     height: 70px;
   }
 
-  /* Textos ajustados para tela muito pequena */
   .checkout-info h3 {
     font-size: 1rem;
   }
@@ -283,7 +262,6 @@
     font-size: 0.9rem;
   }
 
-  /* Botão confortável para toque com boa área */
   .btn-finalizar-checkout {
     font-size: 1.2rem;
     padding: 14px 0;

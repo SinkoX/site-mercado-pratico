@@ -2,8 +2,21 @@ body {
     overflow-x: hidden;
 }
 
-
-/* Firefox */
 * {
   scrollbar-color: #4caf50 #f1f1f1;
+}
+
+.back-icon {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  font-size: 28px;
+  cursor: pointer;
+  color: #666;
+  transition: 0.2s;
+}
+
+.back-icon:hover {
+  color: #2f2f2f;
+  transform: scale(1.1);
 }

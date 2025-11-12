@@ -141,7 +141,6 @@
     justify-content: center;
   }
 
-  /* Apenas o ativo aparece */
   .oferta-item {
     display: none;
     opacity: 0;

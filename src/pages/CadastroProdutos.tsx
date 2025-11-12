@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { FaHome } from "react-icons/fa";
+import { FaArrowLeft } from "react-icons/fa";
 import { api } from "../api";
 import "./CadastroProduto.css";
 
@@ -41,14 +41,14 @@ function CadastroProduto() {
   }, []);
 
   useEffect(() => {
-    if (!formData.categoriaProduto) return; // só busca se houver categoria selecionada
+    if (!formData.categoriaProduto) return;
     if (formData.categoriaProduto == "-1") return setSubCategoria([]);
 
     api
       .get(`/categorias/id/${encodeURIComponent(formData.categoriaProduto)}`)
       .then((res) => {
         console.log("Subcategorias carregadas:", res.data);
-        setSubCategoria(res.data); // ✅ aqui sim
+        setSubCategoria(res.data);
       })
       .catch((err) => console.error("Erro ao buscar subcategorias:", err));
   }, [formData.categoriaProduto]);
@@ -132,9 +132,8 @@ function CadastroProduto() {
 
   return (
     <div className="cadastro-produto-page">
-      {/* Ícone de voltar */}
-      <div className="home-icon" onClick={() => navigate("/")}>
-        <FaHome />
+      <div className="back-icon" onClick={() => navigate(-1)}>
+        <FaArrowLeft />
       </div>
 
       <form className="formulario-pag-cadastro-produto" onSubmit={handleSubmit}>

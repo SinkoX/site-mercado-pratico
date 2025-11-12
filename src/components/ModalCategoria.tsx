@@ -7,7 +7,11 @@ interface ModalCategoriaProps {
   atualizar: () => void;
 }
 
-export default function ModalCategoria({ categoriaEdit, fechar, atualizar }: ModalCategoriaProps) {
+export default function ModalCategoria({
+  categoriaEdit,
+  fechar,
+  atualizar,
+}: ModalCategoriaProps) {
   const [nome, setNome] = useState("");
 
   useEffect(() => {
@@ -16,11 +20,16 @@ export default function ModalCategoria({ categoriaEdit, fechar, atualizar }: Mod
 
   const salvar = async () => {
     if (categoriaEdit) {
-      await axios.put(`http://localhost:8080/categorias/${categoriaEdit.idCategoria}`, {
+      await axios.put(
+        `http://localhost:8080/categorias/${categoriaEdit.idCategoria}`,
+        {
+          nomeCategoria: nome,
+        }
+      );
+    } else {
+      await axios.post("http://localhost:8080/categorias", {
         nomeCategoria: nome,
       });
-    } else {
-      await axios.post("http://localhost:8080/categorias", { nomeCategoria: nome });
     }
     atualizar();
     fechar();

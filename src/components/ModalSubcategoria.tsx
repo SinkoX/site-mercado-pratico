@@ -8,7 +8,12 @@ interface ModalSubcategoriaProps {
   atualizar: () => void;
 }
 
-export default function ModalSubcategoria({ subcategoriaEdit, categorias, fechar, atualizar }: ModalSubcategoriaProps) {
+export default function ModalSubcategoria({
+  subcategoriaEdit,
+  categorias,
+  fechar,
+  atualizar,
+}: ModalSubcategoriaProps) {
   const [nome, setNome] = useState("");
   const [categoriaId, setCategoriaId] = useState("");
 
@@ -21,10 +26,13 @@ export default function ModalSubcategoria({ subcategoriaEdit, categorias, fechar
 
   const salvar = async () => {
     if (subcategoriaEdit) {
-      await axios.put(`http://localhost:8080/subcategorias/${subcategoriaEdit.idSubcategoria}`, {
-        nomeSubcategoria: nome,
-        categoria: { idCategoria: categoriaId },
-      });
+      await axios.put(
+        `http://localhost:8080/subcategorias/${subcategoriaEdit.idSubcategoria}`,
+        {
+          nomeSubcategoria: nome,
+          categoria: { idCategoria: categoriaId },
+        }
+      );
     } else {
       await axios.post("http://localhost:8080/subcategorias", {
         nomeSubcategoria: nome,
@@ -38,7 +46,9 @@ export default function ModalSubcategoria({ subcategoriaEdit, categorias, fechar
   return (
     <div className="modal">
       <div className="modal-conteudo">
-        <h2>{subcategoriaEdit ? "Editar Subcategoria" : "Nova Subcategoria"}</h2>
+        <h2>
+          {subcategoriaEdit ? "Editar Subcategoria" : "Nova Subcategoria"}
+        </h2>
         <input
           type="text"
           placeholder="Nome da subcategoria"

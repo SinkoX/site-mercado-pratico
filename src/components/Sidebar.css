@@ -2,7 +2,6 @@
   --sidebar-width: 280px;
 }
 
-/* --- CONTAINER PRINCIPAL --- */
 .sidebar {
   position: fixed;
   top: 0;
@@ -14,23 +13,18 @@
   overflow-y: auto;
   z-index: 1000;
 
-  /* Animação base */
   transform: translateX(-100%);
   opacity: 0;
-  transition:
-    transform 0.35s cubic-bezier(0.25, 1, 0.5, 1),
-    opacity 0.3s ease,
+  transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.3s ease,
     box-shadow 0.3s ease;
 }
 
-/* --- ESTADO ABERTO --- */
 .sidebar--open {
   transform: translateX(0);
   opacity: 1;
   box-shadow: 4px 0 25px rgba(0, 0, 0, 0.15);
 }
 
-/* --- CONTEÚDO INTERNO --- */
 .sidebar_inner {
   display: flex;
   flex-direction: column;
@@ -68,7 +62,6 @@
   transform: rotate(90deg);
 }
 
-/* --- ITENS DE LISTA --- */
 .sidebar_list {
   list-style: none;
   padding: 0;
@@ -107,7 +100,6 @@
   transform: translateX(6px) scale(0.98);
 }
 
-/* --- BACKDROP (FUNDO ESCURO) --- */
 .sidebar_backdrop {
   position: fixed;
   inset: 0;

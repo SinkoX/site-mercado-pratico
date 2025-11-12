@@ -24,7 +24,9 @@ function Busca() {
     const fetchProdutos = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8080/produto/busca?nome=${encodeURIComponent(termo)}`
+          `http://localhost:8080/produto/busca?nome=${encodeURIComponent(
+            termo
+          )}`
         );
         setProdutos(Array.isArray(response.data) ? response.data : []);
       } catch (error) {

@@ -5,7 +5,7 @@
   min-height: 100vh;
   background-color: #f7f7f7;
   padding: 40px 20px;
-  font-family: 'Arial', sans-serif;
+  font-family: "Arial", sans-serif;
 }
 
 .home-icon {
@@ -19,7 +19,7 @@
 }
 
 .home-icon:hover {
-  color: #ff8000; /* Laranja */
+  color: #ff8000;
 }
 
 .profile-header {
@@ -29,10 +29,9 @@
 
 .avatar img {
   border-radius: 50%;
-  width: 110px; /* Ajuste o tamanho conforme necessário */
-  height: 110px; /* Ajuste o tamanho conforme necessário */
-  object-fit: cover; /* Garantir que a imagem cubra o círculo */
-  
+  width: 110px;
+  height: 110px;
+  object-fit: cover;
 }
 
 .profile-header h2 {
@@ -79,7 +78,7 @@
 }
 
 .perfil-page .info-box:hover {
-  border-color: #ff8000; /* Laranja */
+  border-color: #ff8000;
   background-color: #fffae6;
 }
 
@@ -88,7 +87,7 @@
   margin: 20px auto 0;
   padding: 15px;
   width: 70%;
-  background-color: #ff4d4d; /* Vermelho */
+  background-color: #ff4d4d;
   color: white;
   border: none;
   border-radius: 10px;
@@ -99,8 +98,8 @@
 }
 
 .perfil-page .logout-btn:hover {
-  background-color: #fc5b3b; /* Laranja */
-  transform: translateY(-2px); /* Efeito de elevação */
+  background-color: #fc5b3b;
+  transform: translateY(-2px);
 }
 
 @keyframes fadeIn {

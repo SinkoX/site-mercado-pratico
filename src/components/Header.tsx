@@ -43,7 +43,6 @@ function Header() {
   const [sidebarAberta, setSidebarAberta] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
-  // Atualiza quando redimensiona a tela
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth <= 768);
     window.addEventListener("resize", handleResize);
@@ -94,7 +93,6 @@ function Header() {
 
   const toggleSidebar = () => setSidebarAberta((prev) => !prev);
 
-  // Fecha o dropdown do perfil se clicar fora
   useEffect(() => {
     const handleClickFora = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
@@ -144,16 +142,18 @@ function Header() {
               {carrinho && carrinho.quantidadeTotal > 0 && (
                 <span className="contador">{carrinho.quantidadeTotal}</span>
               )}
-              {mostrarDropdownCarrinho && carrinho && carrinho.itens.length > 0 && (
-                <div className="dropdown-carrinho">
-                  {carrinho.itens.map((item) => (
-                    <div key={item.idItemCarrinho} className="item-dropdown">
-                      <span>{item.nomeProduto}</span>
-                      <span>Qtd: {item.quantidade}</span>
-                    </div>
-                  ))}
-                </div>
-              )}
+              {mostrarDropdownCarrinho &&
+                carrinho &&
+                carrinho.itens.length > 0 && (
+                  <div className="dropdown-carrinho">
+                    {carrinho.itens.map((item) => (
+                      <div key={item.idItemCarrinho} className="item-dropdown">
+                        <span>{item.nomeProduto}</span>
+                        <span>Qtd: {item.quantidade}</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
             </div>
           )}
 

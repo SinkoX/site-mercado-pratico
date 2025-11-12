@@ -66,12 +66,10 @@ html {
   margin-bottom: 18px;
 }
 
-/* Container dos campos */
 .cadastro-produto-page .campos-pag-cadastro-produto {
   width: 100%;
 }
 
-/* Cada campo individual */
 .cadastro-produto-page .campo-pag-cadastro-produto {
   margin-bottom: 12px;
   width: 100%;
@@ -85,7 +83,6 @@ html {
   color: #333;
 }
 
-/* INPUTS E SELECTS */
 .cadastro-produto-page .campo-pag-cadastro-produto input,
 .cadastro-produto-page .campo-pag-cadastro-produto select,
 .cadastro-produto-page .campo-pag-cadastro-produto textarea {
@@ -103,7 +100,6 @@ html {
   -moz-appearance: none;
 }
 
-/* Select com seta custom */
 .cadastro-produto-page .campo-pag-cadastro-produto select {
   background-image: url('data:image/svg+xml;utf8,<svg fill="%23666" height="12" viewBox="0 0 24 24" width="12" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
   background-repeat: no-repeat;
@@ -113,7 +109,6 @@ html {
   box-sizing: border-box;
 }
 
-/* Foco */
 .cadastro-produto-page .campo-pag-cadastro-produto input:focus,
 .cadastro-produto-page .campo-pag-cadastro-produto select:focus {
   outline: none;
@@ -121,7 +116,6 @@ html {
   box-shadow: 0 0 6px rgba(46, 204, 113, 0.4);
 }
 
-/* Botão específico da página */
 .cadastro-produto-page .btn-cadastro-produto {
   display: block;
   margin: 25px auto 0;
@@ -144,7 +138,6 @@ html {
   transform: scale(1.03);
 }
 
-/* Placeholder */
 .cadastro-produto-page .campo-pag-cadastro-produto input::placeholder {
   color: #aaa;
   font-size: 13px;

@@ -2,7 +2,6 @@ html {
   scroll-behavior: smooth;
 }
 
-/* Container principal da página */
 .cadastro-usuario-page {
   display: flex;
   justify-content: center;
@@ -18,7 +17,6 @@ html {
   overflow-y: hidden;
 }
 
-/* Ícone de home */
 .cadastro-usuario-adm .home-icon {
   position: absolute;
   top: 20px;
@@ -33,7 +31,6 @@ html {
   color: #27ae60;
 }
 
-/* Formulário principal */
 .formulario-pag-cadastro-usuario {
   background-color: #fff;
   border-radius: 16px;
@@ -54,7 +51,6 @@ html {
   align-items: center;
 }
 
-/* Título e subtítulo */
 .formulario-pag-cadastro-usuario .titulo h1 {
   text-align: center;
   font-size: 1.9rem;
@@ -73,12 +69,10 @@ html {
   margin-bottom: 18px;
 }
 
-/* Container dos campos */
 .campos-pag-cadastro-usuario {
   width: 100%;
 }
 
-/* Cada campo individual */
 .campo-pag-cadastro-usuario {
   margin-bottom: 12px;
   width: 100%;
@@ -92,7 +86,6 @@ html {
   color: #333;
 }
 
-/* INPUTS E SELECTS */
 .campo-pag-cadastro-usuario input,
 .campo-pag-cadastro-usuario select {
   width: 100%;
@@ -109,7 +102,6 @@ html {
   -moz-appearance: none;
 }
 
-/* Select com seta custom */
 .campo-pag-cadastro-usuario select {
   background-image: url('data:image/svg+xml;utf8,<svg fill="%23666" height="12" viewBox="0 0 24 24" width="12" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
   background-repeat: no-repeat;
@@ -119,7 +111,6 @@ html {
   box-sizing: border-box;
 }
 
-/* Foco */
 .campo-pag-cadastro-usuario input:focus,
 .campo-pag-cadastro-usuario select:focus {
   outline: none;
@@ -127,7 +118,6 @@ html {
   box-shadow: 0 0 6px rgba(46, 204, 113, 0.4);
 }
 
-/* Senha com ícone */
 .campo-pag-cadastro-usuario .senha-wrapper {
   display: flex;
   align-items: center;
@@ -147,7 +137,6 @@ html {
   top: 11px;
 }
 
-/* Botão específico da página */
 .cadastro-usuario-page .btn-cadastro-usuario {
   display: block;
   margin: 25px auto 0;
@@ -170,14 +159,13 @@ html {
   transform: scale(1.03);
 }
 
-/* Placeholder */
 .campo-pag-cadastro-usuario input::placeholder {
   color: #aaa;
   font-size: 13px;
 }
 
 .cadastro-usuario-page .logar {
-  color: #0080FF;
+  color: #0080ff;
   font-weight: bold;
   cursor: pointer;
   text-decoration: none;

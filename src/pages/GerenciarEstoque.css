@@ -111,30 +111,30 @@
   text-transform: uppercase;
 }
 
-.status.ok { 
+.status.ok {
   background: #d1f4dd;
   color: #1b7a2f;
 }
 
-.status.alerta { 
+.status.alerta {
   background: #fed7aa;
   color: #d97706;
 }
 
-.status.zerado { 
+.status.zerado {
   background: #fecaca;
   color: #b42318;
 }
 
-td.entrada { 
-  color: #1b7a2f; 
+td.entrada {
+  color: #1b7a2f;
   font-weight: 600;
   text-transform: uppercase;
   font-size: 13px;
 }
 
-td.saida { 
-  color: #b42318; 
+td.saida {
+  color: #b42318;
   font-weight: 600;
   text-transform: uppercase;
   font-size: 13px;
@@ -156,8 +156,8 @@ td.saida {
   margin-right: 0;
 }
 
-.btn.entrada { 
-  background: #28a745; 
+.btn.entrada {
+  background: #28a745;
   color: white;
   box-shadow: 0 2px 4px rgba(40, 167, 69, 0.2);
 }
@@ -168,8 +168,8 @@ td.saida {
   box-shadow: 0 4px 8px rgba(40, 167, 69, 0.3);
 }
 
-.btn.saida { 
-  background: #dc3545; 
+.btn.saida {
+  background: #dc3545;
   color: white;
   box-shadow: 0 2px 4px rgba(220, 53, 69, 0.2);
 }
@@ -180,8 +180,8 @@ td.saida {
   box-shadow: 0 4px 8px rgba(220, 53, 69, 0.3);
 }
 
-.btn.limpar { 
-  background: #6c757d; 
+.btn.limpar {
+  background: #6c757d;
   color: white;
   box-shadow: 0 2px 4px rgba(108, 117, 125, 0.2);
 }
@@ -197,20 +197,20 @@ td.saida {
   padding: 4px 0;
 }
 
-.modal-form label { 
-  display: block; 
-  margin-top: 14px; 
+.modal-form label {
+  display: block;
+  margin-top: 14px;
   margin-bottom: 6px;
   font-weight: 600;
   color: #374151;
   font-size: 14px;
 }
 
-.modal-form input, 
-.modal-form textarea { 
-  width: 100%; 
-  padding: 10px 12px; 
-  border-radius: 8px; 
+.modal-form input,
+.modal-form textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
   border: 1px solid #ddd;
   font-size: 14px;
   font-family: inherit;
@@ -381,33 +381,33 @@ td.saida {
 
 /* Responsivo */
 @media (max-width: 880px) {
-  .filtros { 
-    gap: 8px; 
+  .filtros {
+    gap: 8px;
   }
-  
-  .estoque-container { 
-    padding: 16px; 
+
+  .estoque-container {
+    padding: 16px;
   }
-  
-  .tabela-container { 
-    max-height: 320px; 
+
+  .tabela-container {
+    max-height: 320px;
   }
-  
+
   .bloco-estoque,
   .bloco-movimentacoes {
     padding: 16px;
     margin-bottom: 32px;
   }
-  
+
   .estoque-container h1 {
     font-size: 1.5rem;
   }
-  
+
   .paginacao {
     flex-direction: column;
     align-items: stretch;
   }
-  
+
   .paginacao-controls {
     justify-content: center;
     flex-wrap: wrap;
@@ -485,9 +485,8 @@ td.saida {
   animation: slideInRight 0.3s ease-out;
 }
 
-/* Linha de separação entre seções */
 .bloco-estoque::after {
-  content: '';
+  content: "";
   display: block;
   margin-top: 24px;
   border-bottom: 2px solid #e5e7eb;

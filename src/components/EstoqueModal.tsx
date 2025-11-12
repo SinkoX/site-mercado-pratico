@@ -9,7 +9,13 @@ interface ModalProps {
   children: React.ReactNode;
 }
 
-export default function Modal({ isOpen, onClose, onConfirm, title, children }: ModalProps) {
+export default function Modal({
+  isOpen,
+  onClose,
+  onConfirm,
+  title,
+  children,
+}: ModalProps) {
   useEffect(() => {
     const handleEsc = (event: KeyboardEvent) => {
       if (event.key === "Escape") onClose();
@@ -22,10 +28,7 @@ export default function Modal({ isOpen, onClose, onConfirm, title, children }: M
 
   return (
     <div className="modal-overlay" onClick={onClose}>
-      <div
-        className="modal-content"
-        onClick={(e) => e.stopPropagation()} // impede fechar ao clicar dentro
-      >
+      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <button className="modal-close" onClick={onClose}>
           &times;
         </button>

@@ -1,7 +1,7 @@
 import React from "react";
 import { useAuth } from "../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
-import { FaHome } from "react-icons/fa";
+import { FaArrowLeft } from "react-icons/fa";
 import "./PerfilUsuario.css";
 
 function PerfilUsuario() {
@@ -35,8 +35,8 @@ function PerfilUsuario() {
 
   return (
     <div className="perfil-page">
-      <div className="home-icon" onClick={() => navigate("/")}>
-        <FaHome />
+      <div className="home-icon" onClick={() => navigate(-1)}>
+        <FaArrowLeft />
       </div>
 
       <div className="profile-header">
@@ -54,7 +54,9 @@ function PerfilUsuario() {
 
         <div className="info-item">
           <label className="info-label">Telefone</label>
-          <span className="info-box">{formatTelefone(user.telefoneUsuario)}</span>
+          <span className="info-box">
+            {formatTelefone(user.telefoneUsuario)}
+          </span>
         </div>
 
         <div className="info-item">
@@ -64,7 +66,9 @@ function PerfilUsuario() {
 
         <div className="info-item">
           <label className="info-label">CEP</label>
-          <span className="info-box">{formatCEP(user.enderecoUsuario?.[0]?.cep)}</span>
+          <span className="info-box">
+            {formatCEP(user.enderecoUsuario?.[0]?.cep)}
+          </span>
         </div>
 
         <button className="logout-btn" onClick={handleLogout}>

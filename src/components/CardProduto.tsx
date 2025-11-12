@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import "./CardProduto.css";
 import PlaceHolder from "../assets/images/categorias/placeholder.png";
-import { FaShoppingCart } from "react-icons/fa"; 
+import { FaShoppingCart } from "react-icons/fa";
 import { FaPlus } from "react-icons/fa6";
 
 interface CardProdutoProps {
@@ -17,7 +17,6 @@ interface CardProdutoProps {
 }
 
 const CardProduto: React.FC<CardProdutoProps> = ({ produto }) => {
-  // Escolhe a imagem correta
   const imagemFinal =
     produto.imgUrl && produto.imgUrl.trim() !== ""
       ? produto.imgUrl
@@ -35,7 +34,10 @@ const CardProduto: React.FC<CardProdutoProps> = ({ produto }) => {
           <h3>{produto.nomeProduto}</h3>
           <p>R${Number(produto.precoProduto).toFixed(2)}</p>
         </div>
-        <button><FaShoppingCart /><FaPlus /></button>
+        <button>
+          <FaShoppingCart />
+          <FaPlus />
+        </button>
       </div>
     </Link>
   );
