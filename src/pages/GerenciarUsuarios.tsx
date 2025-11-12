@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { api } from "../api";
+import { FaArrowLeft } from "react-icons/fa6";
 import "./GerenciarUsuarios.css";
 
 interface Endereco {
@@ -63,7 +64,7 @@ export default function GerenciarUsuarios() {
     u.nomeUsuario.toLowerCase().includes(filtro.toLowerCase())
   );
 
-    const formatTelefone = (telefone: string) => {
+  const formatTelefone = (telefone: string) => {
     if (!telefone) return "";
     return telefone.replace(/^(\d{2})(\d{5})(\d{4})$/, "($1)$2-$3");
   };
@@ -73,9 +74,11 @@ export default function GerenciarUsuarios() {
     return cpf.replace(/^(\d{3})(\d{3})(\d{3})(\d{2})$/, "$1.$2.$3-$4");
   };
 
-
   return (
     <div className="gerenciar-usuarios-page">
+      <div className="back-icon" onClick={() => navigate("/")}>
+        <FaArrowLeft />
+      </div>
       <h1>Gerenciamento de Usuários</h1>
 
       <div className="bloco">

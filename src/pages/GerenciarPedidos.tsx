@@ -233,7 +233,6 @@ export default function GerenciarPedidos() {
           </div>
         )}
       </main>
-      <Footer />
     </div>
   );
 }

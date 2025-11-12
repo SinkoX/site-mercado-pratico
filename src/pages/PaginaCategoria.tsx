@@ -14,8 +14,15 @@ interface Produto {
   precoProduto: number;
   quantidade: number;
   dataValidade: string;
-  idSubcategoria?: number;
+  categoria?: Categoria;
+  subCategoria: Subcategoria;
   imgUrl?: string;
+}
+
+interface Categoria {
+  idCategoria: number;
+  nomeCategoria: string;
+  subCategoria: Subcategoria;
 }
 
 interface Subcategoria {
@@ -51,19 +58,22 @@ export default function PaginaCategoria() {
       ? `http://localhost:8080/produto/busca?nome=${encodeURIComponent(
           parametro
         )}`
-      : `http://localhost:8080/categorias/${encodeURIComponent(
+      : `http://localhost:8080/categorias/nome/${encodeURIComponent(
           parametro
         )}/produtos`;
 
     axios
       .get(url)
-      .then((res) => setProdutos(Array.isArray(res.data) ? res.data : []))
+      .then((res) => {
+        console.log("Produtos recebidos:", res.data); // <-- coloca aqui
+        setProdutos(Array.isArray(res.data) ? res.data : []);
+      })
       .catch((err) => console.error("Erro ao buscar produtos:", err))
       .finally(() => setLoading(false));
 
     if (nomeCategoria) {
       api
-        .get(`/categorias/${encodeURIComponent(nomeCategoria)}`)
+        .get(`/categorias/nome/${encodeURIComponent(nomeCategoria)}`)
         .then((res) => {
           const data = res.data;
           const subcats = Array.isArray(data)
@@ -71,7 +81,7 @@ export default function PaginaCategoria() {
             : Array.isArray(data.subcategorias)
             ? data.subcategorias
             : [];
-            console.log("Subcategorias carregadas:", subcats);
+          console.log("Subcategorias carregadas:", subcats);
           setSubcategorias(subcats);
         })
         .catch((err) =>
@@ -83,8 +93,9 @@ export default function PaginaCategoria() {
   // Filtra produtos automaticamente com base em subcategoria e faixa de preço
   const produtosFiltrados = produtos.filter((prod) => {
     const atendeSub = filtroSubcategoria
-      ? prod.idSubcategoria === filtroSubcategoria
+      ? prod.subCategoria?.idSubcategoria === filtroSubcategoria
       : true;
+
     const atendePreco =
       prod.precoProduto >= precoMin && prod.precoProduto <= precoMax;
     return atendeSub && atendePreco;

@@ -89,3 +89,19 @@
 .gerenciar-usuarios-page .btn-excluir:hover {
   background-color: #b52a37;
 }
+
+/* Home icon */
+.back-icon {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  font-size: 28px;
+  cursor: pointer;
+  color: #666;
+  transition: 0.2s;
+}
+
+.back-icon:hover {
+  color: #2f2f2f;
+  transform: scale(1.1);
+}

@@ -8,9 +8,9 @@ export default function PaginaAdmin() {
 
   return (
     <div className="admin-container">
-            <div className="home-icon" onClick={() => navigate("/")}>
-              <FaHome />
-            </div>
+      <div className="home-icon" onClick={() => navigate("/")}>
+        <FaHome />
+      </div>
 
       <main className="admin-main">
         <div className="admin-cards">
@@ -33,7 +33,7 @@ export default function PaginaAdmin() {
             </div>
             <h2>Cadastro Usuário</h2>
             <p>Gerencie usuários e permissões do sistema</p>
-            <button onClick={() => navigate("/gerenciar/cadastro-usuario")}>
+            <button onClick={() => navigate("/gerenciar/usuarios")}>
               Acessar
             </button>
           </div>
@@ -89,13 +89,14 @@ export default function PaginaAdmin() {
           {/* Card 7 - Gerenciar Categorias */}
           <div className="admin-card">
             <div className="admin-icon">
-                  <Boxes size={32} />
+              <Boxes size={32} />
             </div>
             <h2>Gerenciar Categorias</h2>
-              <p>Crie, edite e remova categorias e subcategorias</p>
-              <button onClick={() => navigate("/gerenciar/categorias")}>Acessar</button>
-                </div>
-
+            <p>Crie, edite e remova categorias e subcategorias</p>
+            <button onClick={() => navigate("/gerenciar/categorias")}>
+              Acessar
+            </button>
+          </div>
         </div>
       </main>
     </div>
