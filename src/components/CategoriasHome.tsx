@@ -1,32 +1,30 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./CategoriasHome.css";
-import categoriaHortiFruti from "../assets/images/categorias/categoriaHortiFruti.png";
-import categoriaBebidas from "../assets/images/categorias/categoriaBebidas.png";
-import categoriaMercearia from "../assets/images/categorias/categoriaMercearia.png";
-import categoriaLimpeza from "../assets/images/categorias/categoriaLimpeza.png";
-import categoriaAcougue from "../assets/images/categorias/categoriaAcougue.png";
-import categoriaHigiene from "../assets/images/categorias/categoriaHigiene.png";
-import categoriaPadaria from "../assets/images/categorias/categoriaPadaria.png";
-import categoriaPetShop from "../assets/images/categorias/categoriaPetShop.png";
+import { api } from "../api";
+
+interface Categoria {
+  id: number;
+  nomeCategoria: string;
+  imgUrl: string;
+}
 
 const CategoriasHome = () => {
+  const [categorias, setCategorias] = useState<Categoria[]>([]);
   const navigate = useNavigate();
-
-  const categorias = [
-    { id: 1, nome: "Hortifruti", imagem: categoriaHortiFruti },
-    { id: 2, nome: "Bebidas", imagem: categoriaBebidas },
-    { id: 3, nome: "Mercearia", imagem: categoriaMercearia },
-    { id: 4, nome: "Limpeza", imagem: categoriaLimpeza },
-    { id: 5, nome: "Açougue", imagem: categoriaAcougue },
-    { id: 6, nome: "Higiene", imagem: categoriaHigiene },
-    { id: 7, nome: "Padaria", imagem: categoriaPadaria },
-    { id: 8, nome: "PetShop", imagem: categoriaPetShop },
-  ];
 
   const [indice, setIndice] = useState(0);
   const itensPorPagina = 6;
   const [animacao, setAnimacao] = useState("");
+
+  useEffect(() => {
+    api
+      .get("/categorias")
+      .then((res) => {
+        setCategorias(Array.isArray(res.data) ? res.data : []);
+      })
+      .catch((err) => console.error("Erro ao buscar categorias:", err));
+  }, []);
 
   const proximo = () => {
     setAnimacao("animar-proximo");
@@ -68,12 +66,12 @@ const CategoriasHome = () => {
               key={categoria.id}
               className="categoria-card"
               style={{ cursor: "pointer" }}
-              onClick={() => navigate(`/categoria/${categoria.nome}`)}
+              onClick={() => navigate(`/categoria/${categoria.nomeCategoria}`)}
             >
               <div className="img-card">
-                <img src={categoria.imagem} alt={categoria.nome} />
+                <img src={categoria.imgUrl} alt={categoria.nomeCategoria} />
               </div>
-              <h3>{categoria.nome}</h3>
+              <h3>{categoria.nomeCategoria}</h3>
             </div>
           ))}
         </div>

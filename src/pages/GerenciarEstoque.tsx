@@ -49,6 +49,7 @@ export default function GerenciarEstoque() {
   );
   const [quantidade, setQuantidade] = useState<number>(0);
   const [observacao, setObservacao] = useState("");
+  const [buscandoProduto, setBuscandoProduto] = useState(false);
 
   // ==== Modal de novo estoque ====
   const [isModalNovoEstoqueOpen, setIsModalNovoEstoqueOpen] = useState(false);

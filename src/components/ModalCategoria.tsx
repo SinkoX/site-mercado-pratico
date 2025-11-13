@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import { api } from "../api";
 
 interface ModalCategoriaProps {
   categoriaEdit?: any;
@@ -12,23 +12,29 @@ export default function ModalCategoria({
   fechar,
   atualizar,
 }: ModalCategoriaProps) {
-  const [nome, setNome] = useState("");
+  const [nomeCategoria, setNomeCategoria] = useState("");
+  const [imgUrl, setImgUrl] = useState("");
 
   useEffect(() => {
-    if (categoriaEdit) setNome(categoriaEdit.nomeCategoria);
+    if (categoriaEdit) {
+      setNomeCategoria(categoriaEdit.nomeCategoria);
+      setImgUrl(categoriaEdit.imgUrl)
+    }
   }, [categoriaEdit]);
 
   const salvar = async () => {
     if (categoriaEdit) {
-      await axios.put(
-        `http://localhost:8080/categorias/${categoriaEdit.idCategoria}`,
+      await api.put(
+        `/categorias/${categoriaEdit.idCategoria}`,
         {
-          nomeCategoria: nome,
+          nomeCategoria: nomeCategoria,
+          imgUrl: imgUrl,
         }
       );
     } else {
-      await axios.post("http://localhost:8080/categorias", {
-        nomeCategoria: nome,
+      await api.post("/categorias", {
+        nomeCategoria: nomeCategoria,
+        imgUrl: imgUrl,
       });
     }
     atualizar();
@@ -42,8 +48,14 @@ export default function ModalCategoria({
         <input
           type="text"
           placeholder="Nome da categoria"
-          value={nome}
-          onChange={(e) => setNome(e.target.value)}
+          value={nomeCategoria}
+          onChange={(e) => setNomeCategoria(e.target.value)}
+        />
+        <input
+          type="text"
+          placeholder="Img URL"
+          value={imgUrl}
+          onChange={(e) => setImgUrl(e.target.value)}
         />
         <div className="botoes">
           <button onClick={salvar}>Salvar</button>
