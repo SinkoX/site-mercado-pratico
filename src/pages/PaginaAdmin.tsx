@@ -38,17 +38,7 @@ export default function PaginaAdmin() {
             </button>
           </div>
 
-          {/* Card 3 - Cadastro Fornecedor */}
-          <div className="admin-card">
-            <div className="admin-icon">
-              <Truck size={32} />
-            </div>
-            <h2>Cadastro Fornecedor</h2>
-            <p>Cadastre novos fornecedores do mercado</p>
-            <button onClick={() => navigate("/cadastro/fornecedor")}>
-              Acessar
-            </button>
-          </div>
+          
 
           {/* Card 4 - Gerenciar Estoque */}
           <div className="admin-card">
