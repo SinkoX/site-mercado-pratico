@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaArrowLeft } from "react-icons/fa";
 import { api } from "../api";
-import "./CadastroProduto.css";
+import "./CadastroProdutos.css";
 
 interface Categoria {
   idCategoria: number;
@@ -20,11 +20,9 @@ function CadastroProduto() {
 
   const [formData, setFormData] = useState({
     nomeProduto: "",
-    quantidadeProduto: "",
     categoriaProduto: "",
     subCategoriaProduto: "",
     precoProduto: "",
-    dataValidade: "",
     descricao: "",
     imagemProduto: "",
     imgUrl: "",
@@ -88,8 +86,6 @@ function CadastroProduto() {
 
     if (!formData.nomeProduto.trim())
       return alert("Informe o nome do produto.");
-    if (!formData.quantidadeProduto || Number(formData.quantidadeProduto) <= 0)
-      return alert("Informe uma quantidade válida.");
     if (!formData.precoProduto || Number(formData.precoProduto) <= 0)
       return alert("Informe um preço válido.");
     if (!formData.categoriaProduto) return alert("Selecione uma categoria.");
@@ -98,9 +94,7 @@ function CadastroProduto() {
 
     const produto = {
       nomeProduto: formData.nomeProduto.trim(),
-      quantidade: Number(formData.quantidadeProduto),
       precoProduto: Number(formData.precoProduto),
-      dataValidade: formData.dataValidade || null,
       categoria: { idCategoria: parseInt(formData.categoriaProduto) },
       subCategoria: { idSubcategoria: parseInt(formData.subCategoriaProduto) },
       descricaoProduto: formData.descricao.trim(),
@@ -113,11 +107,9 @@ function CadastroProduto() {
       alert("Produto cadastrado com sucesso!");
       setFormData({
         nomeProduto: "",
-        quantidadeProduto: "",
         categoriaProduto: "",
         subCategoriaProduto: "",
         precoProduto: "",
-        dataValidade: "",
         descricao: "",
         imagemProduto: "",
         imgUrl: "",
@@ -153,18 +145,6 @@ function CadastroProduto() {
               value={formData.nomeProduto}
               onChange={handleChange}
               placeholder="Nome do produto"
-              required
-            />
-          </div>
-
-          <div className="campo-pag-cadastro-produto">
-            <label>Quantidade</label>
-            <input
-              type="number"
-              name="quantidadeProduto"
-              value={formData.quantidadeProduto}
-              onChange={handleChange}
-              placeholder="Quantidade disponível"
               required
             />
           </div>
@@ -213,16 +193,6 @@ function CadastroProduto() {
               onChange={handleChange}
               placeholder="Ex: 12.50"
               required
-            />
-          </div>
-
-          <div className="campo-pag-cadastro-produto">
-            <label>Data de Validade</label>
-            <input
-              type="date"
-              name="dataValidade"
-              value={formData.dataValidade}
-              onChange={handleChange}
             />
           </div>
 
