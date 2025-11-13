@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import { api } from "../api";
 import Modal from "../components/EstoqueModal";
 import "./GerenciarEstoque.css";
 import { useNavigate } from "react-router-dom";
@@ -30,8 +30,6 @@ interface AlertaMov {
 }
 
 export default function GerenciarEstoque() {
-  const baseUrl = "http://localhost:8080";
-
   // ==== Estados Estoque e Movimentação ====
   const [estoques, setEstoques] = useState<EstoqueDTO[]>([]);
   const [movimentacoes, setMovimentacoes] = useState<MovimentacaoEstoqueDTO[]>(
@@ -97,7 +95,7 @@ export default function GerenciarEstoque() {
   // ==== Fetch Estoques e Movimentações ====
   const fetchEstoque = async () => {
     try {
-      const res = await axios.get(`${baseUrl}/estoques`);
+      const res = await api.get(`/estoques`);
       setEstoques(res.data);
     } catch (err) {
       console.error("Erro buscar estoques:", err);
@@ -106,7 +104,7 @@ export default function GerenciarEstoque() {
 
   const fetchMovimentacoes = async () => {
     try {
-      const res = await axios.get(`${baseUrl}/movimentacoes`);
+      const res = await api.get(`/movimentacoes`);
       setMovimentacoes(res.data);
     } catch (err) {
       console.error("Erro buscar movimentações:", err);
@@ -185,7 +183,7 @@ export default function GerenciarEstoque() {
     };
 
     try {
-      await axios.post(`${baseUrl}/movimentacoes/manual`, payload, {
+      await api.post(`/movimentacoes/manual`, payload, {
         headers: { "Content-Type": "application/json" },
       });
       setIsModalOpen(false);
@@ -209,7 +207,7 @@ export default function GerenciarEstoque() {
 
     setBuscandoProduto(true);
     try {
-      const res = await axios.get(`${baseUrl}/produto/${idProduto}`);
+      const res = await api.get(`/produto/${idProduto}`);
       if (res.data && res.data.nomeProduto) {
         setNovoProdutoNome(res.data.nomeProduto);
       }
@@ -241,7 +239,7 @@ export default function GerenciarEstoque() {
     };
 
     try {
-      await axios.post(`${baseUrl}/estoques`, payload);
+      await api.post(`/estoques`, payload);
       setIsModalNovoEstoqueOpen(false);
       setNovoProdutoId("");
       setNovoProdutoNome("");

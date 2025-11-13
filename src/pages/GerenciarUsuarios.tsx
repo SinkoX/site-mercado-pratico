@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { api } from "../api";
 import { FaArrowLeft } from "react-icons/fa6";
 import "./GerenciarUsuarios.css";
+import ModalUsuario from "../components/ModalUsuario";
 
 interface Endereco {
   idEndereco: number;
@@ -11,7 +12,7 @@ interface Endereco {
   bairro: string;
   numero: string;
   cidade: string;
-  complemento: string;
+  complemento?: string;
 }
 
 interface TipoUsuario {
@@ -32,10 +33,16 @@ interface Usuario {
 export default function GerenciarUsuarios() {
   const [usuarios, setUsuarios] = useState<Usuario[]>([]);
   const [filtro, setFiltro] = useState("");
+  const [modalUsuario, setModalUsuario] = useState(false);
+  const [usuarioEdit, setUsuarioEdit] = useState<Usuario | null>(null);
+  const [tiposUsuario, setTiposUsuario] = useState<TipoUsuario[]>([]);
+  const [enderecos, setEnderecos] = useState<Endereco[]>([]);
   const navigate = useNavigate();
 
   useEffect(() => {
     carregarUsuarios();
+    carregarTipos();
+    carregarEnderecos();
   }, []);
 
   const carregarUsuarios = async () => {
@@ -47,7 +54,23 @@ export default function GerenciarUsuarios() {
     }
   };
 
-  console.log(usuarios);
+  const carregarTipos = async () => {
+    try {
+      const res = await api.get("/tipos-usuario");
+      setTiposUsuario(res.data);
+    } catch (err) {
+      console.error("Erro ao buscar tipos de usuário:", err);
+    }
+  };
+
+  const carregarEnderecos = async () => {
+    try {
+      const res = await api.get("/enderecos");
+      setEnderecos(res.data);
+    } catch (err) {
+      console.error("Erro ao buscar endereços:", err);
+    }
+  };
 
   const deletarUsuario = async (id: number) => {
     if (!window.confirm("Tem certeza que deseja excluir este usuário?")) return;
@@ -84,7 +107,10 @@ export default function GerenciarUsuarios() {
       <div className="bloco">
         <button
           className="btn-adicionar"
-          onClick={() => navigate("/gerenciar/cadastro-usuario")}
+          onClick={() => {
+            setUsuarioEdit(null);
+            setModalUsuario(true);
+          }}
         >
           Adicionar Usuário
         </button>
@@ -121,7 +147,15 @@ export default function GerenciarUsuarios() {
                   <td>{u.endereco?.[0]?.cep || "—"}</td>
                   <td>{u.tipoUsuario?.nomeTipoUsuario || "—"}</td>
                   <td>
-                    <button className="btn-editar">Editar</button>
+                    <button
+                      className="btn-editar"
+                      onClick={() => {
+                        setUsuarioEdit(u);
+                        setModalUsuario(true);
+                      }}
+                    >
+                      Editar
+                    </button>
                     <button
                       className="btn-excluir"
                       onClick={() => deletarUsuario(u.idUsuario)}
@@ -141,6 +175,16 @@ export default function GerenciarUsuarios() {
           </tbody>
         </table>
       </div>
+
+      {modalUsuario && (
+        <ModalUsuario
+          usuarioEdit={usuarioEdit || undefined}
+          tiposUsuario={tiposUsuario}
+          enderecos={enderecos}
+          fechar={() => setModalUsuario(false)}
+          atualizar={carregarUsuarios}
+        />
+      )}
     </div>
   );
 }

@@ -37,6 +37,10 @@ export default function GerenciarProdutos() {
   const [subCategorias, setSubCategorias] = useState<Subcategoria[]>([]);
   const navigate = useNavigate();
 
+  // 🔹 Estados de paginação
+  const [paginaEstoque, setPaginaEstoque] = useState(1);
+  const [itensPorPaginaEstoque, setItensPorPaginaEstoque] = useState(10);
+
   useEffect(() => {
     carregarProdutos();
     carregarCategorias();
@@ -72,7 +76,6 @@ export default function GerenciarProdutos() {
     }
   };
 
-  // 🔹 Limpar filtros
   const limparFiltros = () => {
     setFiltro("");
     setFiltroCategoria("");
@@ -81,9 +84,7 @@ export default function GerenciarProdutos() {
 
   // 🔹 Filtro composto
   const produtosFiltrados = produtos.filter((p) => {
-    const nomeMatch = p.nomeProduto
-      .toLowerCase()
-      .includes(filtro.toLowerCase());
+    const nomeMatch = p.nomeProduto.toLowerCase().includes(filtro.toLowerCase());
     const categoriaMatch = p.categoria?.nomeCategoria
       ?.toLowerCase()
       .includes(filtroCategoria.toLowerCase());
@@ -93,6 +94,25 @@ export default function GerenciarProdutos() {
 
     return nomeMatch && categoriaMatch && subcategoriaMatch;
   });
+
+  // 🔹 Paginação
+  const totalPaginasEstoque = Math.ceil(produtosFiltrados.length / itensPorPaginaEstoque);
+  const indexInicio = (paginaEstoque - 1) * itensPorPaginaEstoque;
+  const indexFim = indexInicio + itensPorPaginaEstoque;
+  const produtosPaginados = produtosFiltrados.slice(indexInicio, indexFim);
+
+  const nextEstoque = () => {
+    if (paginaEstoque < totalPaginasEstoque) setPaginaEstoque(paginaEstoque + 1);
+  };
+
+  const prevEstoque = () => {
+    if (paginaEstoque > 1) setPaginaEstoque(paginaEstoque - 1);
+  };
+
+  const handleChangeItensPorPaginaEstoque = (value: number) => {
+    setItensPorPaginaEstoque(value);
+    setPaginaEstoque(1); // volta para página 1 ao mudar a quantidade
+  };
 
   return (
     <div className="gerenciar-produtos-page">
@@ -109,7 +129,6 @@ export default function GerenciarProdutos() {
           Adicionar Produto
         </button>
 
-        {/* Filtros */}
         <div className="filtros">
           <input
             type="text"
@@ -158,13 +177,11 @@ export default function GerenciarProdutos() {
               ))}
           </select>
 
-          {/* 🔹 Botão de limpar filtros */}
           <button className="btn-limpar" onClick={limparFiltros}>
             Limpar filtros
           </button>
         </div>
 
-        {/* Tabela */}
         <table className="tabela">
           <thead>
             <tr>
@@ -179,17 +196,13 @@ export default function GerenciarProdutos() {
             </tr>
           </thead>
           <tbody>
-            {produtosFiltrados.length > 0 ? (
-              produtosFiltrados.map((p) => (
+            {produtosPaginados.length > 0 ? (
+              produtosPaginados.map((p) => (
                 <tr key={p.idProduto}>
                   <td>{p.idProduto}</td>
                   <td>
                     {p.imgUrl ? (
-                      <img
-                        src={p.imgUrl}
-                        alt={p.nomeProduto}
-                        id="imagem-produto"
-                      />
+                      <img src={p.imgUrl} alt={p.nomeProduto} id="imagem-produto" />
                     ) : (
                       "—"
                     )}
@@ -227,6 +240,42 @@ export default function GerenciarProdutos() {
             )}
           </tbody>
         </table>
+      </div>
+
+      {/* 🔹 Paginação */}
+      <div className="paginacao">
+        <div className="paginacao-controls">
+          <button onClick={prevEstoque} disabled={paginaEstoque <= 1}>
+            ◀
+          </button>
+          {Array.from({ length: totalPaginasEstoque }).map((_, i) => (
+            <button
+              key={i}
+              className={paginaEstoque === i + 1 ? "ativa" : ""}
+              onClick={() => setPaginaEstoque(i + 1)}
+            >
+              {i + 1}
+            </button>
+          ))}
+          <button
+            onClick={nextEstoque}
+            disabled={paginaEstoque >= totalPaginasEstoque}
+          >
+            ▶
+          </button>
+        </div>
+        <div>
+          <label>Itens por página</label>
+          <select
+            value={itensPorPaginaEstoque}
+            onChange={(e) => handleChangeItensPorPaginaEstoque(Number(e.target.value))}
+          >
+            <option value={6}>6</option>
+            <option value={10}>10</option>
+            <option value={20}>20</option>
+            <option value={50}>50</option>
+          </select>
+        </div>
       </div>
 
       {modalProduto && (

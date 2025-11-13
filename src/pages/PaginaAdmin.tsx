@@ -19,8 +19,8 @@ export default function PaginaAdmin() {
             <div className="admin-icon">
               <Package size={32} />
             </div>
-            <h2>Cadastro Produto</h2>
-            <p>Adicione novos produtos ao catálogo do mercado</p>
+            <h2>Gerenciar Produtos</h2>
+            <p>Gerencie produtos e adicione novos ao catálogo do mercado</p>
             <button onClick={() => navigate("/gerenciar/produtos")}>
               Acessar
             </button>
@@ -31,7 +31,7 @@ export default function PaginaAdmin() {
             <div className="admin-icon">
               <User size={32} />
             </div>
-            <h2>Cadastro Usuário</h2>
+            <h2>Gerenciar Usuários</h2>
             <p>Gerencie usuários e permissões do sistema</p>
             <button onClick={() => navigate("/gerenciar/usuarios")}>
               Acessar

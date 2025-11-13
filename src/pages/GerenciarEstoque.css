@@ -257,8 +257,6 @@ td.saida {
 /* Paginação geral */
 .paginacao {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
   margin-top: 16px;
   gap: 16px;
   flex-wrap: wrap;
