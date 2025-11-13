@@ -1,9 +1,11 @@
-import { useState, useEffect } from "react";
-import { api } from "../api";
+import React, { useState, useEffect } from "react";
+import { Box, Grid, TextField, Button, Card, CardContent, CardActions, Typography, Dialog, DialogTitle, DialogContent, DialogActions, IconButton } from "@mui/material";
+import { Add, Edit, Delete, ArrowBack } from "@mui/icons-material";
+import { toast, ToastContainer } from "react-toastify";
+import { api } from "../api"; // seu axios instance
 import { useNavigate } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import "./GerenciarFornecedores.css";
+import './GerenciarFornecedores.css';
 
 interface Fornecedor {
   idFornecedor: number;
@@ -14,7 +16,7 @@ interface Fornecedor {
   telefoneFornecedor: string;
 }
 
-function GerenciarFornecedores() {
+export default function GerenciarFornecedores() {
   const [fornecedores, setFornecedores] = useState<Fornecedor[]>([]);
   const [busca, setBusca] = useState("");
   const [modalAberto, setModalAberto] = useState(false);
@@ -22,12 +24,12 @@ function GerenciarFornecedores() {
   const [editando, setEditando] = useState(false);
   const navigate = useNavigate();
 
-  // Buscar todos os fornecedores
   const fetchFornecedores = async () => {
     try {
       const res = await api.get("/fornecedores");
       setFornecedores(res.data);
-    } catch {
+    } catch (err) {
+      console.error(err);
       toast.error("❌ Erro ao carregar fornecedores");
     }
   };
@@ -36,30 +38,9 @@ function GerenciarFornecedores() {
     fetchFornecedores();
   }, []);
 
-  // Filtro automático em múltiplos campos
-  useEffect(() => {
-    const delay = setTimeout(async () => {
-      try {
-        const res = await api.get("/fornecedores");
-        const todos = res.data;
-        const filtrados = todos.filter((f: Fornecedor) =>
-          Object.values(f)
-            .join(" ")
-            .toLowerCase()
-            .includes(busca.toLowerCase())
-        );
-        setFornecedores(filtrados);
-      } catch {
-        toast.error("⚠️ Erro ao filtrar fornecedores");
-      }
-    }, 400);
-
-    return () => clearTimeout(delay);
-  }, [busca]);
-
-  const abrirModal = (fornecedor?: Fornecedor) => {
-    setForm(fornecedor || {});
-    setEditando(!!fornecedor);
+  const abrirModal = (f?: Fornecedor) => {
+    setForm(f ?? {});
+    setEditando(Boolean(f));
     setModalAberto(true);
   };
 
@@ -75,16 +56,24 @@ function GerenciarFornecedores() {
 
   const handleSalvar = async () => {
     try {
+      const fornecedorLimpo = {
+        ...form,
+        cpfFornecedor: limparCpf(form.cpfFornecedor || ""),
+        telefoneFornecedor: limparTelefone(form.telefoneFornecedor || ""),
+        cnpj: limparCnpj(form.cnpj || ""),
+      };
+
       if (editando && form.idFornecedor) {
-        await api.put(`/fornecedores/${form.idFornecedor}`, form);
-        toast.success("✅ Fornecedor atualizado com sucesso!");
+        await api.put(`/fornecedores/${form.idFornecedor}`, fornecedorLimpo);
+        toast.success("Fornecedor atualizado com sucesso!");
       } else {
-        await api.post("/fornecedores", form);
+        await api.post("/fornecedores", fornecedorLimpo);
         toast.success("🎉 Fornecedor cadastrado com sucesso!");
       }
       fecharModal();
       fetchFornecedores();
-    } catch {
+    } catch (err) {
+      console.error(err);
       toast.error("❌ Erro ao salvar fornecedor");
     }
   };
@@ -93,111 +82,176 @@ function GerenciarFornecedores() {
     if (!window.confirm("Tem certeza que deseja excluir este fornecedor?")) return;
     try {
       await api.delete(`/fornecedores/${id}`);
-      toast.info("🗑️ Fornecedor excluído com sucesso");
+      toast.info("Fornecedor excluído com sucesso");
       fetchFornecedores();
-    } catch {
+    } catch (err) {
+      console.error(err);
       toast.error("❌ Erro ao deletar fornecedor");
     }
   };
 
+  // Funções de formatação ao digitar
+  const handleCpfChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let value = e.target.value.replace(/\D/g, "");
+    if (value.length > 11) value = value.slice(0, 11);
+    value = value
+      .replace(/(\d{3})(\d)/, "$1.$2")
+      .replace(/(\d{3})(\d)/, "$1.$2")
+      .replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+    setForm({ ...form, cpfFornecedor: value });
+  };
+
+  const handleCnpjChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let value = e.target.value.replace(/\D/g, "");
+    if (value.length > 14) value = value.slice(0, 14);
+    value = value
+      .replace(/^(\d{2})(\d)/, "$1.$2")
+      .replace(/^(\d{2})\.(\d{3})(\d)/, "$1.$2.$3")
+      .replace(/(\d{4})(\d{2})$/, "$1/$2")
+      .replace(/(\d{4})\/(\d{2})(\d{2})$/, "$1/$2-$3");
+    setForm({ ...form, cnpj: value });
+  };
+
+  const handleTelefoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let value = e.target.value.replace(/\D/g, "");
+    if (value.length > 11) value = value.slice(0, 11);
+    value = value
+      .replace(/^(\d{2})(\d)/, "($1) $2")
+      .replace(/(\d{5})(\d)/, "$1-$2");
+    setForm({ ...form, telefoneFornecedor: value });
+  };
+
+  // Funções de limpeza antes de enviar
+  function limparCpf(cpf: string) {
+    return cpf.replace(/\D/g, ""); // remove tudo que não for número
+  }
+
+  function limparTelefone(telefone: string) {
+    return telefone.replace(/\D/g, ""); // remove tudo que não for número
+  }
+
+  function limparCnpj(cnpj: string) {
+    return cnpj.replace(/\D/g, ""); // remove tudo que não for número
+  }
+
+  // Funções de formatação para visualização no card
+  const formatarCpf = (cpf: string) => {
+    return cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4");
+  };
+
+  const formatarTelefone = (telefone: string) => {
+    return telefone.replace(/^(\d{2})(\d{5})(\d{4})$/, "($1) $2-$3");
+  };
+
+  const formatarCnpj = (cnpj: string) => {
+    return cnpj.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})$/, "$1.$2.$3/$4-$5");
+  };
+
   return (
-    <div className="fornecedor-page">
+    <Box sx={{ bgcolor: "#f8f9fa", minHeight: "100vh", py: 6 }}>
       <ToastContainer position="top-right" autoClose={3000} />
+      <Box sx={{ maxWidth: 1200, mx: "auto", px: 3 }}>
+        <Box sx={{ display: "flex", alignItems: "center", gap: 2, mb: 3 }}>
+          <IconButton color="primary" onClick={() => navigate("/paginaAdmin")}>
+            <ArrowBack />
+          </IconButton>
+          <Typography variant="h4" fontWeight="bold">
+            Gerenciamento de Fornecedores
+          </Typography>
+        </Box>
 
-      <div className="fornecedor-container">
-        <div className="fornecedor-header">
-          <h1>📦 Gerenciamento de Fornecedores</h1>
-          <div className="fornecedor-actions">
-            <input
-              type="text"
-              placeholder="🔍 Pesquisar por nome, e-mail, CPF, CNPJ ou telefone..."
-              value={busca}
-              onChange={(e) => setBusca(e.target.value)}
-            />
-            <button className="btn-novo" onClick={() => abrirModal()}>
-              + Novo Fornecedor
-            </button>
-          </div>
-        </div>
+        <Box sx={{ display: "flex", gap: 2, mb: 3 }}>
+          <TextField
+            label="Pesquisar por nome, e-mail, CPF, CNPJ ou telefone..."
+            variant="outlined"
+            fullWidth
+            value={busca}
+            onChange={(e) => setBusca(e.target.value)}
+          />
+          <Button variant="contained" startIcon={<Add />} onClick={() => abrirModal()}>
+            Novo
+          </Button>
+        </Box>
 
-        <div className="fornecedor-lista">
+        <Grid container spacing={2}>
           {fornecedores.length === 0 ? (
-            <p className="sem-fornecedores">Nenhum fornecedor encontrado.</p>
+            <Typography align="center" color="text.secondary">
+              Nenhum fornecedor encontrado.
+            </Typography>
           ) : (
             fornecedores.map((f) => (
-              <div key={f.idFornecedor} className="fornecedor-card">
-                <div className="fornecedor-info">
-                  <h3>{f.nomeFornecedor}</h3>
-                  <p><strong>Email:</strong> {f.emailFornecedor}</p>
-                  <p><strong>CPF:</strong> {f.cpfFornecedor}</p>
-                  <p><strong>CNPJ:</strong> {f.cnpj}</p>
-                  <p><strong>Telefone:</strong> {f.telefoneFornecedor}</p>
-                </div>
-                <div className="fornecedor-acoes">
-                  <button onClick={() => abrirModal(f)} className="btn-editar">✏️ Editar</button>
-                  <button onClick={() => handleDeletar(f.idFornecedor)} className="btn-excluir">🗑️ Excluir</button>
-                </div>
-              </div>
+              <Grid item component="div" xs={12} md={6} lg={4} key={f.idFornecedor}>
+                <Card sx={{ boxShadow: 3, borderRadius: 2 }}>
+                  <CardContent>
+                    <Typography variant="h6" fontWeight="bold">
+                      {f.nomeFornecedor}
+                    </Typography>
+                    <Typography>Email: {f.emailFornecedor}</Typography>
+                    <Typography>CPF: {formatarCpf(f.cpfFornecedor)}</Typography>
+                    <Typography>CNPJ: {formatarCnpj(f.cnpj)}</Typography>
+                    <Typography>Telefone: {formatarTelefone(f.telefoneFornecedor)}</Typography>
+                  </CardContent>
+                  <CardActions sx={{ justifyContent: "flex-end", gap: 1, pb: 2, pr: 2 }}>
+                    <Button size="small" variant="outlined" startIcon={<Edit />} onClick={() => abrirModal(f)}>
+                      Editar
+                    </Button>
+                    <Button size="small" variant="outlined" color="error" startIcon={<Delete />} onClick={() => handleDeletar(f.idFornecedor)}>
+                      Excluir
+                    </Button>
+                  </CardActions>
+                </Card>
+              </Grid>
             ))
           )}
-        </div>
+        </Grid>
+      </Box>
 
-        <button className="btn-voltar" onClick={() => navigate("/paginaAdmin")}>
-          ⬅ Voltar ao Gerenciamento
-        </button>
-      </div>
-
-      {modalAberto && (
-        <div className="modal-overlay">
-          <div className="modal">
-            <h2>{editando ? "✏️ Editar Fornecedor" : "➕ Novo Fornecedor"}</h2>
-
-            <div className="form-grid">
-              <input
-                type="text"
-                placeholder="Nome do Fornecedor"
-                value={form.nomeFornecedor || ""}
-                onChange={(e) => handleChange("nomeFornecedor", e.target.value)}
-              />
-              <input
-                type="email"
-                placeholder="E-mail"
-                value={form.emailFornecedor || ""}
-                onChange={(e) => handleChange("emailFornecedor", e.target.value)}
-              />
-              <input
-                type="text"
-                placeholder="CPF"
-                value={form.cpfFornecedor || ""}
-                onChange={(e) => handleChange("cpfFornecedor", e.target.value)}
-              />
-              <input
-                type="text"
-                placeholder="CNPJ"
-                value={form.cnpj || ""}
-                onChange={(e) => handleChange("cnpj", e.target.value)}
-              />
-              <input
-                type="text"
-                placeholder="Telefone"
-                value={form.telefoneFornecedor || ""}
-                onChange={(e) => handleChange("telefoneFornecedor", e.target.value)}
-              />
-            </div>
-
-            <div className="botoes-form">
-              <button className="btn-salvar" onClick={handleSalvar}>
-                {editando ? "Salvar Alterações" : "Cadastrar"}
-              </button>
-              <button className="btn-cancelar" onClick={fecharModal}>
-                Cancelar
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-    </div>
+      {/* DIALOG / MODAL */}
+      <Dialog open={modalAberto} onClose={fecharModal}>
+        <DialogTitle>{editando ? "Editar Fornecedor" : "Cadastrar Fornecedor"}</DialogTitle>
+        <DialogContent>
+          <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+            <TextField
+              label="Nome do Fornecedor"
+              value={form.nomeFornecedor ?? ""}
+              onChange={(e) => handleChange("nomeFornecedor", e.target.value)}
+              fullWidth
+            />
+            <TextField
+              label="E-mail"
+              value={form.emailFornecedor ?? ""}
+              onChange={(e) => handleChange("emailFornecedor", e.target.value)}
+              fullWidth
+            />
+            <TextField
+              label="CPF"
+              value={form.cpfFornecedor ?? ""}
+              onChange={handleCpfChange} // Formata enquanto digita
+              fullWidth
+            />
+            <TextField
+              label="CNPJ"
+              value={form.cnpj ?? ""}
+              onChange={handleCnpjChange} // Formata enquanto digita
+              fullWidth
+            />
+            <TextField
+              label="Telefone"
+              value={form.telefoneFornecedor ?? ""}
+              onChange={handleTelefoneChange} // Formata enquanto digita
+              fullWidth
+            />
+          </Box>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={fecharModal} color="inherit">
+            Cancelar
+          </Button>
+          <Button onClick={handleSalvar} variant="contained" color="primary">
+            {editando ? "Salvar Alterações" : "Cadastrar"}
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </Box>
   );
 }
-
-export default GerenciarFornecedores;
