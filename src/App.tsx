@@ -20,6 +20,8 @@ import SucessoPedido from "./pages/SucessoPedido";
 import GerenciarEstoque from "./pages/GerenciarEstoque";
 import GerenciarUsuarios from "./pages/GerenciarUsuarios";
 import GerenciarProdutos from "./pages/GerenciarProdutos";
+import MeusPedidos from "./pages/MeusPedidos";
+
 
 import "./App.css";
 
@@ -35,6 +37,7 @@ function App() {
       <Route path="/produto/:id" element={<Produto />} />
       <Route path="/produtos" element={<Produtos />} />
       <Route path="/carrinho" element={<Carrinho />} />
+      <Route path="/meus-pedidos" element={<MeusPedidos />} />
       <Route path="/checkout" element={<Checkout />} />
 
       {/* 🔍 Categorias e busca */}
