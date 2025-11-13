@@ -1,230 +1,270 @@
-.fornecedor-page {
-  font-family: "Inter", sans-serif;
-  background-color: #f7f8fa;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+
+/* Estilos globais que não conflitam com MUI */
+:root {
+  --verde-primario: #2e7d32;
+  --verde-hover: #388e3c;
+  --cinza-fundo: #f7f8fa;
 }
 
-.fornecedor-container {
-  width: 90%;
-  max-width: 1200px;
-  margin: 40px auto;
+/* Animações e efeitos adicionais */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-.fornecedor-header {
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-  margin-bottom: 25px;
-  text-align: center;
+/* Customização do Toast */
+.Toastify__toast {
+  border-radius: 12px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+  font-family: "Inter", sans-serif !important;
 }
 
-.fornecedor-header h1 {
-  color: #2e7d32;
-  font-size: 2rem;
-  margin-bottom: 5px;
+.Toastify__toast--success {
+  background: #2e7d32 !important;
 }
 
-.fornecedor-actions {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
+.Toastify__toast--error {
+  background: #d32f2f !important;
 }
 
-.fornecedor-actions input {
-  padding: 10px 14px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  width: 280px;
-  font-size: 1rem;
-  transition: 0.3s;
+.Toastify__toast--info {
+  background: #1976d2 !important;
 }
 
-.fornecedor-actions input:focus {
-  outline: none;
-  border-color: #2e7d32;
-  box-shadow: 0 0 6px rgba(46, 125, 50, 0.4);
+/* Animação para os cards aparecerem */
+.MuiCard-root {
+  animation: slideIn 0.3s ease-out;
 }
 
-.btn-novo {
-  background: #2e7d32;
-  color: #fff;
-  border: none;
-  padding: 10px 16px;
-  border-radius: 8px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: 0.3s;
+/* Efeito hover nos cards - sobrescreve o MUI */
+.MuiCard-root:hover {
+  transform: translateY(-4px) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15) !important;
+  transition: all 0.3s ease !important;
 }
 
-.btn-novo:hover {
-  background: #388e3c;
-}
-
-.fornecedor-lista {
-  display: grid;
-  gap: 16px;
-}
-
-.fornecedor-card {
-  background: white;
-  border-radius: 10px;
-  padding: 18px 24px;
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  transition: transform 0.2s, box-shadow 0.2s;
-}
-
-.fornecedor-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-}
-
-.fornecedor-info h3 {
-  color: #1b5e20;
-  margin: 0 0 6px;
-}
-
-.fornecedor-info p {
-  margin: 2px 0;
-  color: #444;
-  font-size: 0.95rem;
-}
-
-.fornecedor-acoes {
-  display: flex;
-  gap: 10px;
-}
-
-.btn-editar, .btn-excluir {
-  border: none;
-  padding: 8px 14px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: 600;
-  transition: 0.3s;
-}
-
-.btn-editar {
-  background: #1976d2;
-  color: white;
-}
-
-.btn-editar:hover {
-  background: #0d47a1;
-}
-
-.btn-excluir {
-  background: #d32f2f;
-  color: white;
-}
-
-.btn-excluir:hover {
-  background: #b71c1c;
-}
-
-.sem-fornecedores {
-  text-align: center;
-  color: #777;
-  font-size: 1.1rem;
-}
-
-.btn-voltar {
-  display: block;
-  margin: 40px auto;
-  background: #555;
-  color: white;
-  border: none;
-  padding: 10px 18px;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-.btn-voltar:hover {
-  background: #333;
-}
-
-/* MODAL */
-.modal-overlay {
-  position: fixed;
+/* Borda colorida no card ao hover */
+.MuiCard-root::before {
+  content: "";
+  position: absolute;
   top: 0;
   left: 0;
-  width: 100%;
+  width: 4px;
+  height: 0;
+  background: var(--verde-primario);
+  transition: height 0.3s ease;
+}
+
+.MuiCard-root:hover::before {
   height: 100%;
-  background: rgba(0,0,0,0.4);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 999;
 }
 
-.modal {
-  background: #fff;
-  border-radius: 12px;
-  padding: 30px 40px;
-  width: 400px;
-  text-align: center;
-  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2);
+/* Estilo dos botões de ação nos cards */
+.MuiCardActions-root .MuiButton-outlined {
+  border-width: 2px !important;
+  font-weight: 600 !important;
+  transition: all 0.3s ease !important;
 }
 
-.modal h2 {
-  color: #2e7d32;
-  margin-bottom: 20px;
+.MuiCardActions-root .MuiButton-outlined:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15) !important;
 }
 
-.form-grid {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+/* Customização do Dialog (Modal) para ficar maior */
+.MuiDialog-paper {
+  border-radius: 16px !important;
+  padding: 8px !important;
+  max-width: 680px !important;
+  width: 100% !important;
 }
 
-.form-grid input {
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  font-size: 0.95rem;
-  transition: 0.3s;
+/* Título do Dialog */
+.MuiDialogTitle-root {
+  font-size: 1.8rem !important;
+  font-weight: 700 !important;
+  color: var(--verde-primario) !important;
+  padding: 24px 32px 16px !important;
 }
 
-.form-grid input:focus {
-  outline: none;
-  border-color: #2e7d32;
+/* Conteúdo do Dialog */
+.MuiDialogContent-root {
+  padding: 24px 32px !important;
 }
 
-.botoes-form {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 20px;
+/* Ações do Dialog */
+.MuiDialogActions-root {
+  padding: 16px 32px 24px !important;
+  gap: 12px !important;
 }
 
-.btn-salvar {
-  background: #2e7d32;
-  color: white;
-  border: none;
-  padding: 10px 18px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: 600;
+/* Botões do Dialog */
+.MuiDialogActions-root .MuiButton-root {
+  padding: 12px 28px !important;
+  font-weight: 600 !important;
+  border-radius: 10px !important;
+  font-size: 1rem !important;
 }
 
-.btn-cancelar {
-  background: #d32f2f;
-  color: white;
-  border: none;
-  padding: 10px 18px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: 600;
+/* TextField no Dialog - espaçamento maior */
+.MuiDialogContent-root .MuiTextField-root {
+  margin-bottom: 4px !important;
 }
 
-.btn-salvar:hover {
-  background: #43a047;
+/* Inputs com foco - efeito aprimorado */
+.MuiTextField-root .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-width: 2px !important;
+  box-shadow: 0 0 0 4px rgba(46, 125, 50, 0.1) !important;
 }
 
-.btn-cancelar:hover {
-  background: #b71c1c;
+/* Botão "Novo" no topo */
+.MuiButton-contained {
+  font-weight: 600 !important;
+  padding: 12px 24px !important;
+  border-radius: 10px !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+  transition: all 0.3s ease !important;
+}
+
+.MuiButton-contained:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Campo de busca - estilo aprimorado */
+.MuiTextField-root .MuiOutlinedInput-root {
+  border-radius: 10px !important;
+  transition: all 0.3s ease !important;
+}
+
+.MuiTextField-root .MuiOutlinedInput-root:hover {
+  transform: translateY(-1px);
+}
+
+/* Typography nos cards */
+.MuiCardContent-root .MuiTypography-root {
+  line-height: 1.7 !important;
+}
+
+.MuiCardContent-root .MuiTypography-h6 {
+  color: #1b5e20 !important;
+  margin-bottom: 12px !important;
+  font-size: 1.25rem !important;
+}
+
+/* Ícone de voltar */
+.MuiIconButton-root {
+  transition: all 0.3s ease !important;
+}
+
+.MuiIconButton-root:hover {
+  transform: translateX(-3px) !important;
+  background-color: rgba(46, 125, 50, 0.08) !important;
+}
+
+/* Responsividade do Dialog */
+@media (max-width: 768px) {
+  .MuiDialog-paper {
+    max-width: 95% !important;
+    margin: 16px !important;
+  }
+  
+  .MuiDialogTitle-root {
+    font-size: 1.5rem !important;
+    padding: 20px 24px 12px !important;
+  }
+  
+  .MuiDialogContent-root {
+    padding: 16px 24px !important;
+  }
+  
+  .MuiDialogActions-root {
+    padding: 12px 24px 20px !important;
+    flex-direction: column-reverse !important;
+  }
+  
+  .MuiDialogActions-root .MuiButton-root {
+    width: 100% !important;
+  }
+}
+
+/* Grid responsivo melhorado */
+@media (max-width: 600px) {
+  .MuiGrid-container {
+    padding: 0 8px !important;
+  }
+}
+
+/* Scrollbar customizada para o Dialog */
+.MuiDialogContent-root::-webkit-scrollbar {
+  width: 8px;
+}
+
+.MuiDialogContent-root::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.MuiDialogContent-root::-webkit-scrollbar-thumb {
+  background: var(--verde-primario);
+  border-radius: 10px;
+}
+
+.MuiDialogContent-root::-webkit-scrollbar-thumb:hover {
+  background: var(--verde-hover);
+}
+
+/* Efeito de foco nos botões */
+.MuiButton-root:focus-visible {
+  outline: 3px solid rgba(46, 125, 50, 0.3) !important;
+  outline-offset: 2px !important;
+}
+
+/* Estado vazio - mensagem */
+.MuiTypography-root[align="center"] {
+  padding: 60px 20px !important;
+  font-size: 1.1rem !important;
+  color: #666 !important;
+}
+
+/* Animação de entrada do backdrop do Dialog */
+.MuiBackdrop-root {
+  backdrop-filter: blur(4px) !important;
+  animation: fadeIn 0.3s ease !important;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Melhorias nos labels dos inputs */
+.MuiInputLabel-root {
+  font-weight: 500 !important;
+}
+
+.MuiInputLabel-root.Mui-focused {
+  font-weight: 600 !important;
+}
+
+/* Espaçamento entre campos no formulário */
+.MuiDialogContent-root > .MuiBox-root > .MuiTextField-root {
+  margin-top: 8px !important;
+  margin-bottom: 8px !important;
+}
+
+/* Primeira TextField do formulário */
+.MuiDialogContent-root > .MuiBox-root > .MuiTextField-root:first-of-type {
+  margin-top: 0 !important;
 }
