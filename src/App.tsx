@@ -56,6 +56,7 @@ function App() {
       />
       <Route path="/gerenciar/usuarios" element={<GerenciarUsuarios />} />
       <Route path="/gerenciar/produtos" element={<GerenciarProdutos />}/>
+      <Route path="/gerenciar/fornecedores" element={<GerenciarFornecedores />} />
 
       {/* 📝 Cadastros */}
       <Route path="/cadastro/usuario" element={<CadastroUsuario />} />
