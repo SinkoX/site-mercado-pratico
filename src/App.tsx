@@ -19,6 +19,7 @@ import GerenciarCategorias from "./pages/GerenciarCategorias";
 import SucessoPedido from "./pages/SucessoPedido";
 import GerenciarEstoque from "./pages/GerenciarEstoque";
 import GerenciarUsuarios from "./pages/GerenciarUsuarios";
+import GerenciarProdutos from "./pages/GerenciarProdutos";
 
 import "./App.css";
 
@@ -50,16 +51,17 @@ function App() {
       <Route path="/gerenciar/categorias" element={<GerenciarCategorias />} />
       <Route path="/gerenciar/estoque" element={<GerenciarEstoque />} />
       <Route
-        path="/gerenciar/cadastro-usuario"
+        path="/gerenciar/cadastro/usuario"
         element={<CadastroUsuarioAdm />}
       />
       <Route path="/gerenciar/usuarios" element={<GerenciarUsuarios />} />
+      <Route path="/gerenciar/produtos" element={<GerenciarProdutos />}/>
       <Route path="/gerenciar/fornecedores" element={<GerenciarFornecedores />} />
 
       {/* 📝 Cadastros */}
       <Route path="/cadastro/usuario" element={<CadastroUsuario />} />
       <Route path="/cadastro/endereco" element={<CadastroEndereco />} />
-      <Route path="/cadastro/produto" element={<CadastroProduto />} />
+      <Route path="/gerenciar/cadastro/produto" element={<CadastroProduto />}/>
 
       <Route path="/sucesso" element={<SucessoPedido />} />
     </Routes>

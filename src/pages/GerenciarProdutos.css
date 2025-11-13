@@ -1,0 +1,96 @@
+.gerenciar-produtos-page {
+  padding: 30px;
+  background-color: #f9f9f9;
+  min-height: 100vh;
+}
+
+.gerenciar-produtos-page h1 {
+  text-align: center;
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 30px;
+}
+
+.gerenciar-produtos-page .bloco {
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+}
+
+.gerenciar-produtos-page .btn-adicionar {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 15px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-bottom: 15px;
+}
+
+.gerenciar-produtos-page .btn-adicionar:hover {
+  background-color: #218838;
+}
+
+.gerenciar-produtos-page .input-filtro {
+  margin-left: 10px;
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  width: 250px;
+}
+
+.gerenciar-produtos-page .tabela {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+}
+
+.gerenciar-produtos-page .tabela th,
+.gerenciar-produtos-page .tabela td {
+  padding: 10px 15px;
+  border-bottom: 1px solid #ddd;
+  text-align: left;
+}
+
+.gerenciar-produtos-page .tabela th {
+  background-color: #f1f1f1;
+}
+
+.gerenciar-produtos-page #imagem-produto {
+    width: 100px;
+    height: 100px;
+}
+
+.gerenciar-produtos-page .vazio {
+  text-align: center;
+  color: #666;
+  font-style: italic;
+}
+
+.gerenciar-produtos-page .btn-editar,
+.gerenciar-produtos-page .btn-excluir {
+  border: none;
+  padding: 6px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-right: 8px;
+  color: white;
+}
+
+.gerenciar-produtos-page .btn-editar {
+  background-color: #007bff;
+}
+
+.gerenciar-produtos-page .btn-editar:hover {
+  background-color: #0056b3;
+}
+
+.gerenciar-produtos-page .btn-excluir {
+  background-color: #dc3545;
+}
+
+.gerenciar-produtos-page .btn-excluir:hover {
+  background-color: #b52a37;
+}

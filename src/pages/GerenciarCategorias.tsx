@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import { api } from "../api";
 import {
   FaPlus,
   FaEdit,
@@ -41,20 +41,20 @@ export default function GerenciarCategorias() {
   }, []);
 
   const carregarCategorias = async () => {
-    const res = await axios.get("http://localhost:8080/categorias");
+    const res = await api.get("/categorias");
     setCategorias(res.data);
   };
 
   const excluirCategoria = async (id: number) => {
     if (window.confirm("Tem certeza que deseja excluir esta categoria?")) {
-      await axios.delete(`http://localhost:8080/categorias/${id}`);
+      await api.delete(`/categorias/${id}`);
       carregarCategorias();
     }
   };
 
   const excluirSubcategoria = async (id: number) => {
     if (window.confirm("Tem certeza que deseja excluir esta subcategoria?")) {
-      await axios.delete(`http://localhost:8080/subcategorias/${id}`);
+      await api.delete(`/subcategorias/${id}`);
       carregarCategorias();
     }
   };

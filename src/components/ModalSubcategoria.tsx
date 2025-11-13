@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import { api } from "../api";
 
 interface ModalSubcategoriaProps {
   subcategoriaEdit?: any;
@@ -26,15 +26,15 @@ export default function ModalSubcategoria({
 
   const salvar = async () => {
     if (subcategoriaEdit) {
-      await axios.put(
-        `http://localhost:8080/subcategorias/${subcategoriaEdit.idSubcategoria}`,
+      await api.put(
+        `/subcategorias/${subcategoriaEdit.idSubcategoria}`,
         {
           nomeSubcategoria: nome,
           categoria: { idCategoria: categoriaId },
         }
       );
     } else {
-      await axios.post("http://localhost:8080/subcategorias", {
+      await api.post("/subcategorias", {
         nomeSubcategoria: nome,
         categoria: { idCategoria: categoriaId },
       });
