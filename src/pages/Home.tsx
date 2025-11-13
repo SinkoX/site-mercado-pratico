@@ -29,12 +29,23 @@ function Home() {
     { id: 3, src: superOferta3, alt: "Super Oferta 3" },
   ];
 
+  // Autoplay: troca automaticamente a cada 5 segundos
+  useEffect(() => {
+    const intervalo = setInterval(() => {
+      setIndiceOferta((prev) =>
+        prev === superOfertas.length - 1 ? 0 : prev + 1
+      );
+    }, 3000); 
+
+    // Limpa o intervalo quando o componente for desmontado
+    return () => clearInterval(intervalo);
+  }, [superOfertas.length]);
+
   const proximaOferta = () => {
     setIndiceOferta((prev) =>
       prev === superOfertas.length - 1 ? 0 : prev + 1
     );
   };
-
   const anteriorOferta = () => {
     setIndiceOferta((prev) =>
       prev === 0 ? superOfertas.length - 1 : prev - 1
@@ -93,15 +104,9 @@ function Home() {
 
         {/* ===== SUPER OFERTAS ===== */}
         <section id="section-super-ofertas">
-          {/* Mobile carrossel */}
+          {/* Mobile/Tablet carrossel */}
           <div className="super-ofertas-carrossel">
-            <button
-              className="seta-oferta"
-              onClick={anteriorOferta}
-              aria-label="Oferta anterior"
-            >
-              &#8249;
-            </button>
+
 
             <div className="ofertas-container">
               {superOfertas.map((oferta, index) => (
@@ -115,14 +120,6 @@ function Home() {
                 </div>
               ))}
             </div>
-
-            <button
-              className="seta-oferta"
-              onClick={proximaOferta}
-              aria-label="Próxima oferta"
-            >
-              &#8250;
-            </button>
           </div>
 
           {/* Desktop layout */}

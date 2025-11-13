@@ -61,26 +61,6 @@
   transform: scale(1);
 }
 
-.seta-oferta {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  font-size: 40px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #00000053;
-  transition: background 0.3s ease;
-  color: #ffffffaf;
-  border: none;
-  cursor: pointer;
-  z-index: 10;
-}
-
-.seta-oferta:hover {
-  background-color: #000000de;
-}
-
 /* ===== PRODUTOS DESTAQUE ===== */
 .home-page #section-produtos-destaque {
   display: flex;
@@ -127,6 +107,7 @@
   margin-top: 100px;
 }
 
+/* ===== RESPONSIVIDADE MOBILE (até 500px) ===== */
 @media (max-width: 500px) {
   .super-ofertas-carrossel {
     display: flex;
@@ -154,8 +135,53 @@
   .desktop-ofertas {
     display: none;
   }
+
+  /* PRODUTOS: 2 POR LINHA NO MOBILE */
+  .home-page .produtos {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    padding: 0 12px;
+  }
 }
 
+/* ===== RESPONSIVIDADE TABLET (501px - 1023px) ===== */
+@media (min-width: 501px) and (max-width: 1023px) {
+  /* SUPER OFERTAS NO TABLET: carrossel com 1 card por vez */
+  .super-ofertas-carrossel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+  }
+
+  .ofertas-container {
+    max-width: 330px;
+    overflow: hidden;
+    justify-content: center;
+  }
+
+  .oferta-item {
+    display: none;
+    opacity: 0;
+  }
+
+  .oferta-item.active {
+    display: block;
+    opacity: 1;
+  }
+
+  .desktop-ofertas {
+    display: none;
+  }
+
+  /* PRODUTOS: 3 POR LINHA NO TABLET */
+  .home-page .produtos {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+  }
+}
+
+/* ===== RESPONSIVIDADE DESKTOP (1024px+) ===== */
 @media (min-width: 1024px) {
   .super-ofertas-carrossel {
     display: none;
