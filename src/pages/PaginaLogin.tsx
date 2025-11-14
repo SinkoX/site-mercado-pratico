@@ -122,6 +122,11 @@ const PaginaLogin: React.FC<LoginProps> = ({ loginFn }) => {
           </div>
         </div>
 
+        <p className="forgot-password" onClick={() => navigate("/redefinir-senha")}>
+    Esqueci minha senha
+  </p>
+
+
         {error && <p className="error-message">{error}</p>}
 
         <button type="submit" className="login-button" disabled={loading}>

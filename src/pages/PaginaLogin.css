@@ -9,6 +9,20 @@
   font-family: "Arial", sans-serif;
   position: relative;
 }
+.forgot-password {
+  margin-top: 5px;
+  font-size: 0.9rem;
+  color: #007bff;
+  cursor: pointer;
+  text-align: right;
+  transition: color 0.2s;
+}
+
+.forgot-password:hover {
+  color: #0056b3;
+  text-decoration: underline;
+}
+
 
 .home-icon {
   position: absolute;

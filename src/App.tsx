@@ -21,6 +21,7 @@ import GerenciarEstoque from "./pages/GerenciarEstoque";
 import GerenciarUsuarios from "./pages/GerenciarUsuarios";
 import GerenciarProdutos from "./pages/GerenciarProdutos";
 import MeusPedidos from "./pages/MeusPedidos";
+import RedefinirSenha from "./pages/RedefinirSenha";
 
 
 import "./App.css";
@@ -33,6 +34,7 @@ function App() {
       {/* 🏠 Páginas principais */}
       <Route path="/" element={<Home />} />
       <Route path="/login" element={<PaginaLogin loginFn={login} />} />
+      <Route path="/redefinir-senha" element={<RedefinirSenha />} />
       <Route path="/perfil" element={<Perfil />} />
       <Route path="/produto/:id" element={<Produto />} />
       <Route path="/produtos" element={<Produtos />} />
