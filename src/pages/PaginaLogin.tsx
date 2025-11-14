@@ -34,15 +34,23 @@ const PaginaLogin: React.FC<LoginProps> = ({ loginFn }) => {
     setError("");
 
     try {
-      const res = await api.post("/usuario/login", formData);
+      // Enviar payload que o backend espera: { email, senha }
+      const payload = {
+        email: formData.emailUsuario,
+        senha: formData.senhaUsuario,
+      };
 
-      // Verifica se veio algo válido do backend
+      const res = await api.post("/auth/login", payload, {
+        withCredentials: true, // necessário se usar HttpSession
+      });
+
       if (!res.data || !res.data.idUsuario) {
         setError("Email ou senha inválidos!");
         setLoading(false);
         return;
       }
 
+      // Monta o objeto User para o contexto
       const user: User = {
         ...res.data,
         enderecoUsuario: res.data.endereco || [],
