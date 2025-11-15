@@ -41,7 +41,7 @@ const PaginaLogin: React.FC<LoginProps> = ({ loginFn }) => {
       };
 
       const res = await api.post("/auth/login", payload, {
-        withCredentials: true, // necessário se usar HttpSession
+        withCredentials: true, 
       });
 
       if (!res.data || !res.data.idUsuario) {
@@ -57,7 +57,7 @@ const PaginaLogin: React.FC<LoginProps> = ({ loginFn }) => {
       };
 
       loginFn(user);
-      navigate("/perfil");
+      navigate("/");
     } catch (err: any) {
       console.error(err);
 

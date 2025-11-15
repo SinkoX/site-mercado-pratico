@@ -10,7 +10,7 @@ import PaginaCategoria from "./pages/PaginaCategoria";
 import { useAuth } from "./hooks/useAuth";
 import Carrinho from "./pages/Carrinho";
 import Produtos from "./pages/Produtos";
-import Checkout from "./pages/Checkout";
+
 import PaginaAdmin from "./pages/PaginaAdmin";
 import GerenciarPedidos from "./pages/GerenciarPedidos";
 import GerenciarFornecedores from "./pages/GerenciarFornecedores";
@@ -42,7 +42,7 @@ function App() {
       <Route path="/carrinho" element={<Carrinho />} />
       <Route path="/meus-pedidos" element={<MeusPedidos />} />
       <Route path="/compras" element={<PainelCompras />} />
-      <Route path="/checkout" element={<Checkout />} />
+      
 
       {/* 🔍 Categorias e busca */}
       <Route path="/categoria/:nomeCategoria" element={<PaginaCategoria />} />

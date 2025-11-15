@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { api } from "../api";
 import { FaEye, FaEyeSlash, FaArrowLeft } from "react-icons/fa";
+import { useAuth } from "../hooks/useAuth";
 import "./CadastroUsuario.css";
 
 interface FormDataUsuario {
@@ -22,6 +23,7 @@ export default function CadastroUsuarioAdmPage() {
   });
   const [showSenha, setShowSenha] = useState(false);
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -29,7 +31,7 @@ export default function CadastroUsuarioAdmPage() {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: name === "tipoUsuarioId" ? Number(value) : value,
+      [name]: value,
     }));
   };
 
@@ -55,7 +57,7 @@ export default function CadastroUsuarioAdmPage() {
   const toggleSenha = () => setShowSenha((prev) => !prev);
 
   function limparCpf(cpf: string) {
-    return cpf.replace(/\D/g, ""); // remove tudo que não for número
+    return cpf.replace(/\D/g, "");
   }
 
   function limparTelefone(telefone: string) {
@@ -69,17 +71,32 @@ export default function CadastroUsuarioAdmPage() {
       ...formData,
       cpfUsuario: limparCpf(formData.cpfUsuario),
       telefoneUsuario: limparTelefone(formData.telefoneUsuario),
+      tipoUsuario: { idTipoUsuario: 1 }
     };
 
     try {
-      const response = await api.post("/usuario/cadastro", usuarioLimpo);
-      const novoUsuario = response.data;
+      // 1️⃣ Cadastrar usuário
+      await api.post("/usuario/cadastro", usuarioLimpo);
 
-      localStorage.setItem("usuarioId", novoUsuario.idUsuario.toString());
-      alert("Usuário cadastrado com sucesso!");
+      // 2️⃣ Login automático
+      const loginResponse = await api.post(
+        "/auth/login",
+        {
+          email: usuarioLimpo.emailUsuario,
+          senha: usuarioLimpo.senhaUsuario,
+        },
+        { withCredentials: true }
+      );
+
+      // 3️⃣ Atualiza contexto de autenticação
+      login(loginResponse.data);
+
+      alert("Usuário cadastrado e logado com sucesso!");
+
+      // 4️⃣ Redireciona para home
       navigate("/");
     } catch (error) {
-      console.error("Erro ao cadastrar:", error);
+      console.error("Erro ao cadastrar/login:", error);
       alert("Erro ao cadastrar usuário.");
     }
   };

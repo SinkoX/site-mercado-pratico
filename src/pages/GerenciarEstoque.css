@@ -300,7 +300,7 @@ td.saida {
 
 .paginacao-controls button:disabled {
   opacity: 0.4;
-  cursor: not-allowed;
+
   background: #f9fafb;
 }
 
