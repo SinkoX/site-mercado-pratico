@@ -1,70 +1,76 @@
-import React, { useState, useEffect } from 'react';
-import { Package, Clock, Truck, CheckCircle, XCircle, ShoppingCart } from 'lucide-react';
-import './MeusPedidos.css';
+import { useEffect, useState } from "react";
+import { ShoppingCart, Clock, Truck, CheckCircle, XCircle, Package } from "lucide-react";
+import { api } from "../api";
+import { useAuth } from "../hooks/useAuth";
+import "./MeusPedidos.css";
 
-const API_URL = 'http://localhost:8080/api'; // ou sua URL do backend
+interface ItemPedido {
+  idItem?: number;
+  nome: string;
+  quantidade: number;
+  precoUnitario: number;
+  imagem?: string;
+}
 
-const MeusPedidos = () => {
-  const [pedidos, setPedidos] = useState([]);
-  const [filtroStatus, setFiltroStatus] = useState('todos');
+interface Pedido {
+  idPedido: number;
+  dataPedido: string;
+  statusPedido: string;
+  valorTotal: number;
+  enderecoEntrega: string;
+  itens: ItemPedido[];
+}
+
+const statusConfig = {
+  todos: { label: "Todos", classe: "cinza", icon: ShoppingCart },
+  pendente: { label: "Pendente", classe: "amarelo", icon: Clock },
+  enviado: { label: "Enviado", classe: "azul", icon: Truck },
+  entregue: { label: "Entregue", classe: "verde", icon: CheckCircle },
+  cancelado: { label: "Cancelado", classe: "vermelho", icon: XCircle },
+};
+
+export default function MeusPedidos() {
+  const { user } = useAuth();
+  const [pedidos, setPedidos] = useState<Pedido[]>([]);
+  const [filtroStatus, setFiltroStatus] = useState("todos");
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState("");
 
-  // Buscar pedidos do backend
   useEffect(() => {
-    const fetchPedidos = async () => {
+    if (!user?.idUsuario) return;
+
+    const carregarPedidos = async () => {
       try {
         setLoading(true);
-        const userId = localStorage.getItem('userId');
-        
-        const response = await fetch(`${API_URL}/pedidos/usuario/${userId}`, {
-          method: 'GET',
-          headers: {
-            'Authorization': `Bearer ${localStorage.getItem('token')}`,
-            'Content-Type': 'application/json'
-          }
-        });
-        
-        if (!response.ok) {
-          throw new Error('Erro ao carregar pedidos');
-        }
-        
-        const data = await response.json();
-        setPedidos(data);
-        setError(null);
+        setError("");
+
+        const res = await api.get(`/pedidos/usuario/${user.idUsuario}`);
+        setPedidos(res.data);
       } catch (err) {
-        console.error('Erro:', err);
-        setError(err.message);
+        console.error(err);
+        setError("Não foi possível carregar seus pedidos.");
       } finally {
         setLoading(false);
       }
     };
 
-    fetchPedidos();
-  }, []);
-
-  const statusConfig = {
-    todos: { label: 'Todos', classe: 'cinza', icon: ShoppingCart },
-    pendente: { label: 'Pendente', classe: 'amarelo', icon: Clock },
-    enviado: { label: 'Enviado', classe: 'azul', icon: Truck },
-    entregue: { label: 'Entregue', classe: 'verde', icon: CheckCircle },
-    cancelado: { label: 'Cancelado', classe: 'vermelho', icon: XCircle }
-  };
+    carregarPedidos();
+  }, [user]);
 
   const pedidosFiltrados =
-    filtroStatus === 'todos'
+    filtroStatus === "todos"
       ? pedidos
-      : pedidos.filter(p => p.statusPedido.toLowerCase() === filtroStatus);
+      : pedidos.filter((p) => p.statusPedido.toLowerCase() === filtroStatus);
 
-  const StatusBadge = ({ status }) => {
-    const statusKey = status.toLowerCase();
-    const config = statusConfig[statusKey] || statusConfig.pendente;
-    const Icon = config.icon;
+  const StatusBadge = ({ status }: { status: string }) => {
+    const key = status.toLowerCase() as keyof typeof statusConfig;
+    const cfg = statusConfig[key] || statusConfig.pendente;
+    const Icon = cfg.icon;
 
     return (
-      <div className={`status-badge ${config.classe}`}>
+      <div className={`status-badge ${cfg.classe}`}>
         <Icon size={18} />
-        {config.label}
+        {cfg.label}
       </div>
     );
   };
@@ -74,7 +80,7 @@ const MeusPedidos = () => {
       <div className="tela-carregando">
         <div className="conteudo-carregando">
           <div className="spinner"></div>
-          <p>Carregando seus pedidos...</p>
+          <p>Carregando pedidos...</p>
         </div>
       </div>
     );
@@ -83,129 +89,81 @@ const MeusPedidos = () => {
   return (
     <div className="pagina-pedidos">
       <div className="container-pedidos">
-        {/* Cabeçalho */}
+
         <div className="cabecalho">
           <h1>Meus Pedidos</h1>
-          <p>Acompanhe o status da sua compra</p>
+          <p>Acompanhe suas compras</p>
         </div>
 
-        {/* Filtros de Status */}
+        {/* Filtros */}
         <div className="filtros">
-          {Object.entries(statusConfig).map(([key, config]) => (
+          {Object.entries(statusConfig).map(([key, cfg]) => (
             <button
               key={key}
+              className={`botao-filtro ${filtroStatus === key ? "ativo" : ""}`}
               onClick={() => setFiltroStatus(key)}
-              className={`botao-filtro ${filtroStatus === key ? 'ativo' : ''}`}
             >
-              {config.label}
+              {cfg.label}
             </button>
           ))}
         </div>
 
-        {/* Mensagem de Erro */}
-        {error && (
-          <div className="mensagem-erro">
-            <p>⚠️ Erro ao carregar pedidos: {error}</p>
-            <p>Verifique se o backend está rodando e a URL está correta.</p>
-          </div>
-        )}
+        {error && <p className="mensagem-erro">{error}</p>}
 
-        {/* Lista de Pedidos */}
         <div className="lista-pedidos">
           {pedidosFiltrados.length === 0 ? (
             <div className="sem-pedidos">
               <ShoppingCart size={48} />
-              <p>
-                {error
-                  ? 'Não foi possível carregar os pedidos'
-                  : 'Nenhum pedido encontrado'}
-              </p>
-              {!error && (
-                <p>
-                  Quando você fizer uma compra, seus pedidos aparecerão aqui.
-                </p>
-              )}
+              <p>Nenhum pedido encontrado.</p>
             </div>
           ) : (
-            pedidosFiltrados.map(pedido => (
-              <div key={pedido.idPedidoUsuario} className="pedido-card">
-                {/* Cabeçalho do Pedido */}
+            pedidosFiltrados.map((pedido) => (
+              <div key={pedido.idPedido} className="pedido-card">
                 <div className="pedido-header">
                   <div>
-                    <h3>
-                      Pedido #{pedido.idPedidoUsuario || pedido.numeroPedido}
-                    </h3>
+                    <h3>Pedido #{pedido.idPedido}</h3>
                     <p>
-                      Data: {new Date(pedido.dataPedido || pedido.created_at).toLocaleDateString('pt-BR')}
+                      Data:{" "}
+                      {new Date(pedido.dataPedido).toLocaleDateString("pt-BR")}
                     </p>
                   </div>
                   <StatusBadge status={pedido.statusPedido} />
                 </div>
 
-                {/* Itens do Pedido */}
+                {/* Itens */}
                 <div className="pedido-itens">
-                  {pedido.itensPedido &&
-                    pedido.itensPedido.map((item, index) => (
-                      <div key={item.id || index} className="item-linha">
-                        <div className="item-imagem">
-                          {item.imagem_url || item.imagem ? (
-                            <img
-                              src={item.imagem_url || item.imagem}
-                              alt={item.nome_produto || item.nome}
-                              onError={e => {
-                                e.target.style.display = 'none';
-                                e.target.parentElement.innerHTML =
-                                  '<svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>';
-                              }}
-                            />
-                          ) : (
-                            <Package size={32} />
-                          )}
-                        </div>
-
-                        <div className="item-info">
-                          <h4>{item.nome_produto || item.nome}</h4>
-                          <p>Quantidade: {item.quantidade}</p>
-                          {item.descricao && <p>{item.descricao}</p>}
-                        </div>
-
-                        <div className="item-preco">
-                          <strong>
-                            R${' '}
-                            {(
-                              parseFloat(item.preco_unitario || item.preco) *
-                              parseInt(item.quantidade)
-                            )
-                              .toFixed(2)
-                              .replace('.', ',')}
-                          </strong>
-                          <p>
-                            R${' '}
-                            {parseFloat(item.preco_unitario || item.preco)
-                              .toFixed(2)
-                              .replace('.', ',')}{' '}
-                            cada
-                          </p>
-                        </div>
+                  {pedido.itens.map((item, i) => (
+                    <div key={i} className="item-linha">
+                      <div className="item-imagem">
+                        {item.imagem ? (
+                          <img src={item.imagem} alt={item.nome} />
+                        ) : (
+                          <Package size={32} />
+                        )}
                       </div>
-                    ))}
+                      <div className="item-info">
+                        <h4>{item.nome}</h4>
+                        <p>Quantidade: {item.quantidade}</p>
+                      </div>
+                      <div className="item-preco">
+                        <strong>
+                          R${(item.precoUnitario * item.quantidade).toFixed(2)}
+                        </strong>
+                        <p>R${item.precoUnitario.toFixed(2)} cada</p>
+                      </div>
+                    </div>
+                  ))}
                 </div>
 
-                {/* Total */}
                 <div className="pedido-total">
-                  <span>Total do pedido</span>
-                  <span>
-                    R$ {parseFloat(pedido.valorTotal).toFixed(2).replace('.', ',')}
-                  </span>
+                  <span>Total: </span>
+                  <strong>R$ {pedido.valorTotal.toFixed(2)}</strong>
                 </div>
 
-                {/* Endereço */}
-                {pedido.enderecoEntrega && (
-                  <div className="pedido-endereco">
-                    <h5>Endereço de Entrega</h5>
-                    <p>{pedido.enderecoEntrega}</p>
-                  </div>
-                )}
+                <div className="pedido-endereco">
+                  <h5>Endereço de Entrega</h5>
+                  <p>{pedido.enderecoEntrega}</p>
+                </div>
               </div>
             ))
           )}
@@ -213,6 +171,4 @@ const MeusPedidos = () => {
       </div>
     </div>
   );
-};
-
-export default MeusPedidos;
+}

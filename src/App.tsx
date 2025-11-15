@@ -22,6 +22,7 @@ import GerenciarUsuarios from "./pages/GerenciarUsuarios";
 import GerenciarProdutos from "./pages/GerenciarProdutos";
 import MeusPedidos from "./pages/MeusPedidos";
 import RedefinirSenha from "./pages/RedefinirSenha";
+import PainelCompras from "./pages/PainelCompras";
 
 
 import "./App.css";
@@ -40,6 +41,7 @@ function App() {
       <Route path="/produtos" element={<Produtos />} />
       <Route path="/carrinho" element={<Carrinho />} />
       <Route path="/meus-pedidos" element={<MeusPedidos />} />
+      <Route path="/compras" element={<PainelCompras />} />
       <Route path="/checkout" element={<Checkout />} />
 
       {/* 🔍 Categorias e busca */}

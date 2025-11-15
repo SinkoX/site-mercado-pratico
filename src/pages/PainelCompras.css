@@ -1,0 +1,41 @@
+.painel-container {
+  width: 100%;
+  margin: 40px auto;
+  background: #ffffff;
+  padding: 20px 0;
+  border: 1px solid #ddd;
+}
+
+/* Aba superior */
+.abas-navegacao {
+  display: flex;
+  border-bottom: 2px solid #d6d6d6;
+}
+
+.aba-btn {
+  flex: 1;
+  padding: 14px 0;
+  background: #f5f5f5;
+  border: none;
+  text-align: center;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 16px;
+  transition: 0.2s;
+  color: #444;
+}
+
+.aba-btn:hover {
+  background: #e9e9e9;
+}
+
+.aba-btn.ativa {
+  background: #ffffff;
+  border-bottom: 3px solid #f48405; 
+  color: #000000;
+}
+
+/* Conteúdo da área */
+.conteudo-aba {
+  padding: 15px;
+}
