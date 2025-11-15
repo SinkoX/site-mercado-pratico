@@ -84,6 +84,7 @@ function Carrinho() {
   const [showEnderecoPopup, setShowEnderecoPopup] = useState(false);
   const [produtosRelacionados, setProdutosRelacionados] = useState<Produto[]>([]);
   const [paginaRelacionados, setPaginaRelacionados] = useState(0);
+  const [finalizandoCompra, setFinalizandoCompra] = useState(false); // NOVO ESTADO
   const [formData, setFormData] = useState<FormDataEnderecoUsuario>({
     cep: "",
     numero: "",
@@ -317,7 +318,7 @@ function Carrinho() {
     }
   };
 
-  // ------------------ FINALIZAR COMPRA ------------------
+  // ------------------ FINALIZAR COMPRA (ATUALIZADO) ------------------
   const handleFinalizarCompra = async () => {
     if (!carrinho || carrinho.itens.length === 0) {
       alert("Seu carrinho está vazio!");
@@ -327,6 +328,8 @@ function Carrinho() {
       setShowEnderecoPopup(true);
       return;
     }
+
+    setFinalizandoCompra(true); // Inicia o carregamento
     try {
       const pagamentoDTO = {
         idEnderecoEntrega: enderecoSelecionado.idEndereco,
@@ -344,6 +347,7 @@ function Carrinho() {
     } catch (err) {
       console.error("Erro ao finalizar compra:", err);
       alert("Erro ao finalizar compra. Tente novamente.");
+      setFinalizandoCompra(false); // Para o spinner em caso de erro
     }
   };
 
@@ -505,8 +509,15 @@ function Carrinho() {
               </div>
             )}
 
-            <button className="btn-finalizar-compra" onClick={handleFinalizarCompra}>
-              <FaCreditCard style={{ marginRight: "8px" }} /> Finalizar Compra
+            {/* BOTÃO ATUALIZADO COM SPINNER */}
+            <button
+              className={`btn-finalizar-compra ${finalizandoCompra ? 'processando' : ''}`}
+              onClick={handleFinalizarCompra}
+              disabled={finalizandoCompra}
+            >
+              {!finalizandoCompra && <FaCreditCard style={{ marginRight: "8px" }} />}
+              <span>{finalizandoCompra ? "Processando pagamento..." : "Finalizar Compra"}</span>
+              {finalizandoCompra && <div className="spinner-checkout"></div>}
             </button>
           </div>
         </div>

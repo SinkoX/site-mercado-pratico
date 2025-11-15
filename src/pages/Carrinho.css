@@ -830,3 +830,137 @@
     font-size: 13px;
   }
 }
+/* ============================================
+   BOTÃO FINALIZAR COMPRA COM SPINNER
+   ============================================ */
+
+.btn-finalizar-compra {
+  width: 100%;
+  background: var(--verde-escuro);
+  color: white;
+  border: none;
+  padding: 16px;
+  border-radius: 8px;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-finalizar-compra:hover:not(:disabled) {
+  background: var(--verde-claro);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.25);
+}
+
+.btn-finalizar-compra:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Estado de processamento */
+.btn-finalizar-compra.processando {
+  background: linear-gradient(90deg, var(--verde-escuro) 0%, var(--verde-claro) 50%, var(--verde-escuro) 100%);
+  background-size: 200% 100%;
+  animation: gradientShift 2s ease-in-out infinite;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.btn-finalizar-compra:disabled {
+  opacity: 0.9;
+  cursor: not-allowed;
+}
+
+/* Spinner do checkout */
+.spinner-checkout {
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Efeito de pulso no botão durante processamento */
+.btn-finalizar-compra.processando::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  transform: translate(-50%, -50%) scale(0);
+  animation: pulse 1.5s ease-out infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1.5);
+    opacity: 0;
+  }
+}
+
+/* Texto do botão */
+.btn-finalizar-compra span {
+  position: relative;
+  z-index: 1;
+}
+
+/* ============================================
+   RESPONSIVIDADE DO BOTÃO
+   ============================================ */
+
+@media (max-width: 768px) {
+  .btn-finalizar-compra {
+    font-size: 16px;
+    padding: 14px;
+  }
+
+  .spinner-checkout {
+    width: 18px;
+    height: 18px;
+    border-width: 2.5px;
+  }
+}
+
+@media (max-width: 480px) {
+  .btn-finalizar-compra {
+    font-size: 15px;
+    padding: 12px;
+  }
+}
