@@ -76,60 +76,113 @@ const PaginaProduto: React.FC = () => {
       : "/placeholder.png";
 
   return (
-    <div>
+    <div className="pagina-produto-root">
       <Header />
       <MenuCategoria />
 
-      <div className="produto-container">
-        <div className="produto-card">
-          <div className="imagem-container">
+      <main className="produto-container" aria-live="polite">
+        <article className="produto-card" data-product-id={produto.idProduto}>
+          <figure className="imagem-container" aria-hidden={false}>
             <img
               src={imagemFinal}
               alt={produto.nomeProduto}
               className="product-image"
             />
-          </div>
+          </figure>
 
-          <div className="detalhes-produto">
-            <h1 className="nome-produto">{produto.nomeProduto}</h1>
-            {produto.descricaoProduto && (
-              <p className="descricao-junta">{produto.descricaoProduto}</p>
-            )}
+          <section className="detalhes-produto">
+            <div className="produto-meta">
+              <h1 className="nome-produto">{produto.nomeProduto}</h1>
 
-            <p className="preco">
-              R$ {(produto.precoProduto * quantidade).toFixed(2)}
-            </p>
-
-            <div className="quantidade">
-              <button onClick={diminuir}>−</button>
-              <span>{quantidade}</span>
-              <button onClick={aumentar}>+</button>
+              <div className="preco-wrap">
+                <span className="preco-label">Preço</span>
+                <p className="preco">
+                  R$ {(produto.precoProduto * quantidade).toFixed(2)}
+                </p>
+              </div>
             </div>
 
-            <button className="button-add" onClick={adicionarAoCarrinho}>
-              Adicionar ao Carrinho
-            </button>
-          </div>
-        </div>
-      </div>
+            {produto.descricaoProduto && (
+              <div className="descricao-wrapper">
+                <h2 className="descricao-title">Descrição</h2>
+                <p className="descricao-junta">{produto.descricaoProduto}</p>
+              </div>
+            )}
 
-      {/* Toast animado */}
+            <div className="compra-area">
+              <div className="quantidade" role="group" aria-label="Quantidade">
+                <button
+                  className="qty-btn"
+                  onClick={diminuir}
+                  aria-label="Diminuir quantidade"
+                >
+                  {/* Minus SVG */}
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden>
+                    <rect x="4" y="11" width="16" height="2" rx="1" />
+                  </svg>
+                </button>
+
+                <span className="qty-value" aria-live="polite">
+                  {quantidade}
+                </span>
+
+                <button
+                  className="qty-btn"
+                  onClick={aumentar}
+                  aria-label="Aumentar quantidade"
+                >
+                  {/* Plus SVG */}
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden>
+                    <rect x="11" y="4" width="2" height="16" rx="1" />
+                    <rect x="4" y="11" width="16" height="2" rx="1" />
+                  </svg>
+                </button>
+              </div>
+
+              <div className="acoes-compra">
+                <button
+                  className="button-add"
+                  onClick={adicionarAoCarrinho}
+                  aria-label="Adicionar ao carrinho"
+                >
+                  Adicionar ao Carrinho
+                </button>
+              </div>
+            </div>
+
+            <div className="extras-info">
+              {/* espaço para mais informações: frete, parcelamento, SKU etc */}
+            </div>
+          </section>
+        </article>
+      </main>
+
+      {/* Toast animado (aparece top-right) */}
       {showToast && (
-        <div className="toast-carrinho">🛒 Item adicionado ao carrinho!</div>
+        <div className="toast-carrinho" role="status">
+          <strong>Sucesso</strong>
+          <span>Item adicionado ao carrinho</span>
+        </div>
       )}
 
       {/* Popup de Login */}
       {showLoginPopup && (
-        <div className="login-popup-overlay">
-          <div className="login-popup">
-            <span className="close-popup" onClick={fecharPopup}>
-              ✖
-            </span>
+        <div className="login-popup-overlay" role="dialog" aria-modal="true">
+          <div className="login-popup" role="document">
+            <button
+              className="close-popup"
+              onClick={fecharPopup}
+              aria-label="Fechar diálogo"
+            >
+              {/* Close SVG */}
+              <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden>
+                <path d="M18 6L6 18M6 6l12 12" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </button>
+
             <div className="popup-content">
               <h2>Você precisa estar logado</h2>
-              <p>
-                Para adicionar produtos ao carrinho, faça login ou cadastre-se.
-              </p>
+              <p>Para adicionar produtos ao carrinho, faça login ou cadastre-se.</p>
               <div className="popup-buttons">
                 <button
                   className="button-popup"

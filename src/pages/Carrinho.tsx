@@ -84,7 +84,7 @@ function Carrinho() {
   const [showEnderecoPopup, setShowEnderecoPopup] = useState(false);
   const [produtosRelacionados, setProdutosRelacionados] = useState<Produto[]>([]);
   const [paginaRelacionados, setPaginaRelacionados] = useState(0);
-  const [finalizandoCompra, setFinalizandoCompra] = useState(false); // NOVO ESTADO
+  const [finalizandoCompra, setFinalizandoCompra] = useState(false);
   const [formData, setFormData] = useState<FormDataEnderecoUsuario>({
     cep: "",
     numero: "",
@@ -100,60 +100,105 @@ function Carrinho() {
   const fetchCarrinho = async () => {
     if (!user) return;
     setLoading(true);
+    console.log("🛒 Iniciando fetchCarrinho para usuário:", user.idUsuario);
+    
     try {
       const res = await api.get(`/carrinho/${user.idUsuario}`);
+      console.log("📦 Resposta do carrinho:", res.data);
       setCarrinho(res.data);
 
-      // Buscar endereços
-      const resEnderecos = await api.get(`/enderecos/${user.idUsuario}`);
-      let enderecosArray: any[] = [];
-      if (Array.isArray(resEnderecos.data)) {
-        enderecosArray = resEnderecos.data;
-      } else if (resEnderecos.data && typeof resEnderecos.data === "object") {
-        enderecosArray = [resEnderecos.data];
-      }
+      // Buscar endereços (com tratamento de erro 404)
+      console.log("📍 Buscando endereços...");
+      try {
+        const resEnderecos = await api.get(`/enderecos/${user.idUsuario}`);
+        console.log("📍 Resposta dos endereços:", resEnderecos.data);
+        
+        let enderecosArray: any[] = [];
+        if (Array.isArray(resEnderecos.data)) {
+          enderecosArray = resEnderecos.data;
+        } else if (resEnderecos.data && typeof resEnderecos.data === "object") {
+          enderecosArray = [resEnderecos.data];
+        }
 
-      const enderecosFormatados = enderecosArray.map((end: any) => ({
-        idEndereco: end.id_endereco,
-        cep: end.cep,
-        rua: end.rua,
-        numero: end.numero,
-        bairro: end.bairro,
-        cidade: end.cidade,
-        complemento: end.complemento,
-      }));
+        const enderecosFormatados = enderecosArray.map((end: any) => ({
+          idEndereco: end.id_endereco,
+          cep: end.cep,
+          rua: end.rua,
+          numero: end.numero,
+          bairro: end.bairro,
+          cidade: end.cidade,
+          complemento: end.complemento,
+        }));
 
-      setEnderecos(enderecosFormatados);
-      if (enderecosFormatados.length > 0) {
-        setEnderecoSelecionado(enderecosFormatados[0]);
+        console.log("📍 Endereços formatados:", enderecosFormatados);
+        setEnderecos(enderecosFormatados);
+        
+        if (enderecosFormatados.length > 0) {
+          console.log("✅ Endereço selecionado:", enderecosFormatados[0]);
+          setEnderecoSelecionado(enderecosFormatados[0]);
+        } else {
+          console.log("⚠️ Nenhum endereço cadastrado");
+        }
+      } catch (errEndereco: any) {
+        // Se der erro 404, significa que o usuário não tem endereços cadastrados
+        // Isso é NORMAL e não deve interromper o fluxo
+        if (errEndereco?.response?.status === 404) {
+          console.log("⚠️ Usuário sem endereços cadastrados (404 - normal)");
+          setEnderecos([]);
+          setEnderecoSelecionado(null);
+        } else {
+          console.error("❌ Erro ao buscar endereços:", errEndereco);
+          // Mesmo com erro, não vamos interromper
+          setEnderecos([]);
+          setEnderecoSelecionado(null);
+        }
       }
 
       // Buscar produtos relacionados
       if (res.data.itens && res.data.itens.length > 0) {
+        console.log("🎯 Iniciando busca de produtos relacionados...");
         await fetchProdutosRelacionados(res.data.itens);
+      } else {
+        console.log("⚠️ Carrinho vazio, não há produtos para relacionar");
       }
     } catch (err) {
-      console.error(err);
+      console.error("❌ Erro no fetchCarrinho:", err);
     } finally {
       setLoading(false);
+      console.log("✅ fetchCarrinho finalizado");
     }
   };
 
   // ------------------ PRODUTOS RELACIONADOS ------------------
   const fetchProdutosRelacionados = async (itensCarrinho: ItemCarrinhoDTO[]) => {
     try {
-      if (itensCarrinho.length === 0) return;
+      console.log("🔍 === INÍCIO fetchProdutosRelacionados ===");
+      console.log("📦 Itens no carrinho:", itensCarrinho);
+      console.log("📦 Quantidade de itens:", itensCarrinho.length);
+      
+      if (itensCarrinho.length === 0) {
+        console.log("⚠️ Carrinho vazio, abortando busca de relacionados");
+        return;
+      }
 
       const primeiroProdutoId = itensCarrinho[0].idProduto;
+      console.log("🎯 ID do primeiro produto:", primeiroProdutoId);
+      
       const resProduto = await api.get(`/produto/${primeiroProdutoId}`);
       const produto = resProduto.data;
+      console.log("🎯 Produto base encontrado:", produto);
+      console.log("🏷️ Categoria do produto:", produto.categoria);
+      console.log("🏷️ Subcategoria do produto:", produto.subCategoria);
 
       const resTodosProdutos = await api.get(`/produto`);
       const todosProdutos: Produto[] = Array.isArray(resTodosProdutos.data)
         ? resTodosProdutos.data
         : [];
+      
+      console.log("📚 Total de produtos disponíveis:", todosProdutos.length);
 
       const idsNoCarrinho = itensCarrinho.map((item) => item.idProduto);
+      console.log("🚫 IDs no carrinho (a excluir):", idsNoCarrinho);
 
       // Produtos da mesma subcategoria
       const relacionadosSubcategoria = todosProdutos
@@ -163,6 +208,9 @@ function Carrinho() {
             !idsNoCarrinho.includes(p.idProduto)
         )
         .slice(0, 4);
+      
+      console.log("🎯 Produtos da mesma subcategoria:", relacionadosSubcategoria.length);
+      console.log("🎯 Lista subcategoria:", relacionadosSubcategoria);
 
       // Produtos da mesma categoria (mas não da mesma subcategoria)
       const relacionadosCategoria = todosProdutos
@@ -174,16 +222,33 @@ function Carrinho() {
         )
         .slice(0, 4);
 
-      setProdutosRelacionados([...relacionadosSubcategoria, ...relacionadosCategoria]);
+      console.log("🎯 Produtos da mesma categoria:", relacionadosCategoria.length);
+      console.log("🎯 Lista categoria:", relacionadosCategoria);
+
+      const relacionadosFinais = [...relacionadosSubcategoria, ...relacionadosCategoria];
+      console.log("✅ Total de produtos relacionados:", relacionadosFinais.length);
+      console.log("✅ Produtos relacionados finais:", relacionadosFinais);
+
+      setProdutosRelacionados(relacionadosFinais);
       setPaginaRelacionados(0);
+      
+      console.log("🔍 === FIM fetchProdutosRelacionados ===");
     } catch (error) {
-      console.error("Erro ao buscar produtos relacionados:", error);
+      console.error("❌ Erro ao buscar produtos relacionados:", error);
+      console.error("❌ Detalhes do erro:", JSON.stringify(error, null, 2));
     }
   };
 
   useEffect(() => {
+    console.log("🚀 useEffect disparado - iniciando fetchCarrinho");
     fetchCarrinho();
   }, [user]);
+
+  // Log quando produtosRelacionados muda
+  useEffect(() => {
+    console.log("🔄 Estado produtosRelacionados atualizado:", produtosRelacionados.length, "produtos");
+    console.log("🔄 Produtos:", produtosRelacionados);
+  }, [produtosRelacionados]);
 
   // ------------------ ATUALIZAR QUANTIDADE ------------------
   const atualizarEstadoItem = (idItem: number, novaQuantidade: number) => {
@@ -299,7 +364,7 @@ function Carrinho() {
   const handleSubmitEndereco = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const idUsuario = localStorage.getItem("usuarioId");
+      const idUsuario = user?.idUsuario;
       if (!idUsuario) {
         alert("Usuário não identificado! Faça login novamente.");
         return;
@@ -318,7 +383,7 @@ function Carrinho() {
     }
   };
 
-  // ------------------ FINALIZAR COMPRA (ATUALIZADO) ------------------
+  // ------------------ FINALIZAR COMPRA ------------------
   const handleFinalizarCompra = async () => {
     if (!carrinho || carrinho.itens.length === 0) {
       alert("Seu carrinho está vazio!");
@@ -329,7 +394,7 @@ function Carrinho() {
       return;
     }
 
-    setFinalizandoCompra(true); // Inicia o carregamento
+    setFinalizandoCompra(true);
     try {
       const pagamentoDTO = {
         idEnderecoEntrega: enderecoSelecionado.idEndereco,
@@ -347,7 +412,7 @@ function Carrinho() {
     } catch (err) {
       console.error("Erro ao finalizar compra:", err);
       alert("Erro ao finalizar compra. Tente novamente.");
-      setFinalizandoCompra(false); // Para o spinner em caso de erro
+      setFinalizandoCompra(false);
     }
   };
 
@@ -360,6 +425,10 @@ function Carrinho() {
   const totalPaginas = Math.ceil(produtosRelacionados.length / PRODUTOS_POR_PAGINA);
 
   // ------------------ RENDER ------------------
+  console.log("🎨 Renderizando componente...");
+  console.log("🎨 produtosRelacionados.length:", produtosRelacionados.length);
+  console.log("🎨 Vai mostrar seção relacionados?", produtosRelacionados.length > 0);
+
   if (!user) return <p>Você precisa estar logado para acessar o carrinho.</p>;
   if (loading) return <p>Carregando carrinho...</p>;
 
@@ -509,7 +578,6 @@ function Carrinho() {
               </div>
             )}
 
-            {/* BOTÃO ATUALIZADO COM SPINNER */}
             <button
               className={`btn-finalizar-compra ${finalizandoCompra ? 'processando' : ''}`}
               onClick={handleFinalizarCompra}
@@ -571,14 +639,6 @@ function Carrinho() {
               />
               <input
                 type="text"
-                name="numero"
-                value={formData.numero}
-                onChange={handleChange}
-                placeholder="Número"
-                required
-              />
-              <input
-                type="text"
                 name="bairro"
                 value={formData.bairro}
                 onChange={handleChange}
@@ -591,6 +651,14 @@ function Carrinho() {
                 value={formData.cidade}
                 onChange={handleChange}
                 placeholder="Cidade"
+                required
+              />
+              <input
+                type="text"
+                name="numero"
+                value={formData.numero}
+                onChange={handleChange}
+                placeholder="Número"
                 required
               />
               <div className="botoes-popup">
