@@ -13,7 +13,7 @@ interface Produto {
   precoProduto: number;
   descricaoProduto?: string;
   imgUrl?: string;
-  imagemProdutoBase64?: string;
+  imagemProduto?: string;
 }
 
 const PaginaProduto: React.FC = () => {
@@ -71,8 +71,8 @@ const PaginaProduto: React.FC = () => {
   const imagemFinal =
     produto.imgUrl && produto.imgUrl.trim() !== ""
       ? produto.imgUrl
-      : produto.imagemProdutoBase64
-      ? `data:image/png;base64,${produto.imagemProdutoBase64}`
+      : produto.imagemProduto
+      ? `data:image/png;base64,${produto.imagemProduto}`
       : "/placeholder.png";
 
   return (

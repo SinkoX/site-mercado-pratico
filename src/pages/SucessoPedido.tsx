@@ -42,6 +42,13 @@ export default function SucessoPedido() {
         const resposta = await axios.get(
           `http://localhost:8080/pedidos-usuarios/${pedidoId}`
         );
+
+        // se não for sucesso, redireciona para cancelado
+        if (resposta.data.statusPedido !== "SUCESSO") {
+          navigate(`/cancelado?pedido=${pedidoId}`);
+          return;
+        }
+
         setPedido(resposta.data);
       } catch {
         setErro("Erro ao carregar pedido.");
@@ -51,7 +58,7 @@ export default function SucessoPedido() {
     }
 
     buscarPedido();
-  }, [pedidoId]);
+  }, [pedidoId, navigate]);
 
   if (carregando) return <p className="loading">Carregando pedido...</p>;
   if (erro) return <p className="error">{erro}</p>;
@@ -59,33 +66,22 @@ export default function SucessoPedido() {
 
   return (
     <div className="sucesso-container">
-      {/* Confirmação animada */}
       <div className="icone-container">
         <FaCheckCircle className="sucesso-icone" />
       </div>
 
       <h1>Pedido Confirmado!</h1>
 
-      {/* Informações do pedido */}
       <div className="pedido-info">
-        <div className="info-item">
-          <span>ID:</span> #{pedido.idPedidoUsuario}
-        </div>
-        <div className="info-item">
-          <span>Nome:</span> {pedido.nomeUsuario}
-        </div>
-        <div className="info-item">
-          <span>Data:</span> {pedido.dataPedido}
-        </div>
+        <div className="info-item"><span>ID:</span> #{pedido.idPedidoUsuario}</div>
+        <div className="info-item"><span>Nome:</span> {pedido.nomeUsuario}</div>
+        <div className="info-item"><span>Data:</span> {pedido.dataPedido}</div>
         <div className="info-item">
           <span>Status:</span>
-          <span className={`status-badge ${pedido.statusPedido.toLowerCase()}`}>
-            {pedido.statusPedido}
-          </span>
+          <span className="status-badge sucesso">SUCESSO</span>
         </div>
       </div>
 
-      {/* Itens do pedido */}
       <h2>Itens do Pedido</h2>
       <div className="itens-pedido">
         {pedido.itens.map((item, i) => (
@@ -97,20 +93,12 @@ export default function SucessoPedido() {
         ))}
       </div>
 
-      {/* Valores do pedido */}
       <div className="valores-pedido">
-        <div>
-          <span>Total:</span> R$ {pedido.valorTotal.toFixed(2)}
-        </div>
-        <div>
-          <span>Frete:</span> R$ {(pedido.frete ?? 0).toFixed(2)}
-        </div>
-        <div>
-          <span>Desconto:</span> R$ {(pedido.desconto ?? 0).toFixed(2)}
-        </div>
+        <div><span>Total:</span> R$ {pedido.valorTotal.toFixed(2)}</div>
+        <div><span>Frete:</span> R$ {(pedido.frete ?? 0).toFixed(2)}</div>
+        <div><span>Desconto:</span> R$ {(pedido.desconto ?? 0).toFixed(2)}</div>
         <div className="valor-final">
-          <span>Valor Final:</span> R${" "}
-          {(pedido.valorFinal ?? pedido.valorTotal).toFixed(2)}
+          <span>Valor Final:</span> R$ {(pedido.valorFinal ?? pedido.valorTotal).toFixed(2)}
         </div>
       </div>
 

@@ -12,7 +12,7 @@ interface CardProdutoProps {
     precoProduto: number;
     imgUrl?: string;
     img_url?: string;
-    imagemProdutoBase64?: string;
+    imagemProduto?: string;
   };
 }
 
@@ -22,8 +22,8 @@ const CardProduto: React.FC<CardProdutoProps> = ({ produto }) => {
       ? produto.imgUrl
       : produto.img_url && produto.img_url.trim() !== ""
       ? produto.img_url
-      : produto.imagemProdutoBase64
-      ? `data:image/png;base64,${produto.imagemProdutoBase64}`
+      : produto.imagemProduto
+      ? `data:image/png;base64,${produto.imagemProduto}`
       : PlaceHolder;
 
   return (

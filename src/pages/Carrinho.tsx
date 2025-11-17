@@ -100,18 +100,18 @@ function Carrinho() {
   const fetchCarrinho = async () => {
     if (!user) return;
     setLoading(true);
-    console.log("🛒 Iniciando fetchCarrinho para usuário:", user.idUsuario);
+   
     
     try {
       const res = await api.get(`/carrinho/${user.idUsuario}`);
-      console.log("📦 Resposta do carrinho:", res.data);
+   
       setCarrinho(res.data);
 
-      // Buscar endereços (com tratamento de erro 404)
-      console.log("📍 Buscando endereços...");
+     
+    
       try {
         const resEnderecos = await api.get(`/enderecos/${user.idUsuario}`);
-        console.log("📍 Resposta dos endereços:", resEnderecos.data);
+        
         
         let enderecosArray: any[] = [];
         if (Array.isArray(resEnderecos.data)) {
@@ -130,11 +130,11 @@ function Carrinho() {
           complemento: end.complemento,
         }));
 
-        console.log("📍 Endereços formatados:", enderecosFormatados);
+     
         setEnderecos(enderecosFormatados);
         
         if (enderecosFormatados.length > 0) {
-          console.log("✅ Endereço selecionado:", enderecosFormatados[0]);
+          
           setEnderecoSelecionado(enderecosFormatados[0]);
         } else {
           console.log("⚠️ Nenhum endereço cadastrado");
@@ -143,7 +143,7 @@ function Carrinho() {
         // Se der erro 404, significa que o usuário não tem endereços cadastrados
         // Isso é NORMAL e não deve interromper o fluxo
         if (errEndereco?.response?.status === 404) {
-          console.log("⚠️ Usuário sem endereços cadastrados (404 - normal)");
+          
           setEnderecos([]);
           setEnderecoSelecionado(null);
         } else {
@@ -156,7 +156,7 @@ function Carrinho() {
 
       // Buscar produtos relacionados
       if (res.data.itens && res.data.itens.length > 0) {
-        console.log("🎯 Iniciando busca de produtos relacionados...");
+        
         await fetchProdutosRelacionados(res.data.itens);
       } else {
         console.log("⚠️ Carrinho vazio, não há produtos para relacionar");
@@ -165,17 +165,14 @@ function Carrinho() {
       console.error("❌ Erro no fetchCarrinho:", err);
     } finally {
       setLoading(false);
-      console.log("✅ fetchCarrinho finalizado");
+     
     }
   };
 
   // ------------------ PRODUTOS RELACIONADOS ------------------
   const fetchProdutosRelacionados = async (itensCarrinho: ItemCarrinhoDTO[]) => {
     try {
-      console.log("🔍 === INÍCIO fetchProdutosRelacionados ===");
-      console.log("📦 Itens no carrinho:", itensCarrinho);
-      console.log("📦 Quantidade de itens:", itensCarrinho.length);
-      
+    
       if (itensCarrinho.length === 0) {
         console.log("⚠️ Carrinho vazio, abortando busca de relacionados");
         return;
@@ -193,10 +190,10 @@ function Carrinho() {
         ? resTodosProdutos.data
         : [];
       
-      console.log("📚 Total de produtos disponíveis:", todosProdutos.length);
+     
 
       const idsNoCarrinho = itensCarrinho.map((item) => item.idProduto);
-      console.log("🚫 IDs no carrinho (a excluir):", idsNoCarrinho);
+    
 
       // Produtos da mesma subcategoria
       const relacionadosSubcategoria = todosProdutos
@@ -235,14 +232,12 @@ function Carrinho() {
   };
 
   useEffect(() => {
-    console.log("🚀 useEffect disparado - iniciando fetchCarrinho");
+   
     fetchCarrinho();
   }, [user]);
 
   // Log quando produtosRelacionados muda
   useEffect(() => {
-    console.log("🔄 Estado produtosRelacionados atualizado:", produtosRelacionados.length, "produtos");
-    console.log("🔄 Produtos:", produtosRelacionados);
   }, [produtosRelacionados]);
 
   // ------------------ ATUALIZAR QUANTIDADE ------------------

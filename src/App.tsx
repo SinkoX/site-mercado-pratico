@@ -23,6 +23,7 @@ import GerenciarProdutos from "./pages/GerenciarProdutos";
 import MeusPedidos from "./pages/MeusPedidos";
 import RedefinirSenha from "./pages/RedefinirSenha";
 import PainelCompras from "./pages/PainelCompras";
+import CanceladoPedido from "./pages/CanceladoPedido"
 
 
 import "./App.css";
@@ -71,6 +72,7 @@ function App() {
       <Route path="/gerenciar/cadastro/produto" element={<CadastroProduto />}/>
 
       <Route path="/sucesso" element={<SucessoPedido />} />
+      <Route path="/cancelado" element={<CanceladoPedido />} />
     </Routes>
   );
 }
