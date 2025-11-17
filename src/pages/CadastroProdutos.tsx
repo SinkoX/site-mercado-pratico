@@ -15,9 +15,13 @@ interface Subcategoria {
   nomeSubcategoria: string;
 }
 
+interface Fornecedor {
+  idFornecedor: number;
+  nomeFornecedor: string;
+}
+
 function CadastroProduto() {
   const navigate = useNavigate();
-
   const [formData, setFormData] = useState({
     nomeProduto: "",
     categoriaProduto: "",
@@ -26,10 +30,11 @@ function CadastroProduto() {
     descricao: "",
     imagemProduto: "",
     imgUrl: "",
+    fornecedorId: "",
   });
-
   const [categorias, setCategorias] = useState<Categoria[]>([]);
   const [subcategoria, setSubCategoria] = useState<Subcategoria[]>([]);
+  const [fornecedores, setFornecedores] = useState<Fornecedor[]>([]);
 
   useEffect(() => {
     api
@@ -50,6 +55,13 @@ function CadastroProduto() {
       })
       .catch((err) => console.error("Erro ao buscar subcategorias:", err));
   }, [formData.categoriaProduto]);
+
+  useEffect(() => {
+    api
+      .get("/fornecedores")
+      .then((res) => setFornecedores(res.data))
+      .catch((err) => console.error("Erro ao carregar fornecedores:", err));
+  }, []);
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -100,6 +112,7 @@ function CadastroProduto() {
       descricaoProduto: formData.descricao.trim(),
       imagemProdutoBase64: formData.imagemProduto || null,
       imgUrl: formData.imgUrl?.trim() || null,
+      fornecedor: { idFornecedor: parseInt(formData.fornecedorId) },
     };
 
     try {
@@ -113,6 +126,7 @@ function CadastroProduto() {
         descricao: "",
         imagemProduto: "",
         imgUrl: "",
+        fornecedorId: "",
       });
     } catch (err) {
       console.error(err);
@@ -221,6 +235,23 @@ function CadastroProduto() {
           <div className="campo-pag-cadastro-produto">
             <label>Imagem do Produto</label>
             <input type="file" name="imagemProduto" onChange={handleChange} />
+          </div>
+
+          <div className="campo-pag-cadastro-produto">
+            <label>Fornecedor</label>
+            <select
+              name="fornecedorId"
+              value={formData.fornecedorId || ""}
+              onChange={handleChange}
+              required
+            >
+              <option value="">Selecione um fornecedor</option>
+              {fornecedores.map((f) => (
+                <option key={f.idFornecedor} value={f.idFornecedor}>
+                  {f.nomeFornecedor}
+                </option>
+              ))}
+            </select>
           </div>
         </div>
 

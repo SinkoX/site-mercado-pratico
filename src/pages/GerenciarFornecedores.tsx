@@ -116,7 +116,7 @@ export default function GerenciarFornecedores() {
                   <td>{formatTelefone(f.telefoneFornecedor)}</td>
                   <td>
                     <button
-                      className="btn-editar"
+                      className="btn editar"
                       onClick={() => {
                         setFornecedorEdit(f);
                         setModalFornecedor(true);
@@ -125,7 +125,7 @@ export default function GerenciarFornecedores() {
                       Editar
                     </button>
                     <button
-                      className="btn-excluir"
+                      className="btn excluir"
                       onClick={() => deletarFornecedor(f.idFornecedor)}
                     >
                       Excluir

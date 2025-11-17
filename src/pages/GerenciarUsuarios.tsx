@@ -108,8 +108,7 @@ export default function GerenciarUsuarios() {
         <button
           className="btn-adicionar"
           onClick={() => {
-            setUsuarioEdit(null);
-            setModalUsuario(true);
+            navigate("/gerenciar/cadastro/usuario")
           }}
         >
           Adicionar Usuário
@@ -148,7 +147,7 @@ export default function GerenciarUsuarios() {
                   <td>{u.tipoUsuario?.nomeTipoUsuario || "—"}</td>
                   <td>
                     <button
-                      className="btn-editar"
+                      className="btn editar"
                       onClick={() => {
                         setUsuarioEdit(u);
                         setModalUsuario(true);
@@ -157,7 +156,7 @@ export default function GerenciarUsuarios() {
                       Editar
                     </button>
                     <button
-                      className="btn-excluir"
+                      className="btn excluir"
                       onClick={() => deletarUsuario(u.idUsuario)}
                     >
                       Excluir

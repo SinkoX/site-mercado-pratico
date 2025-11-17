@@ -1,5 +1,6 @@
-import React, { useState, useEffect, ChangeEvent } from "react";
+import { useState, useEffect, ChangeEvent } from "react";
 import { api } from "../api";
+import "./Modal.css";
 
 interface Categoria {
   idCategoria: number;

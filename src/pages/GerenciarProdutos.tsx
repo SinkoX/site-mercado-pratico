@@ -16,6 +16,11 @@ interface Categoria {
   subcategorias: Subcategoria[];
 }
 
+interface Fornecedor {
+  idFornecedor: number;
+  nomeFornecedor: string;
+}
+
 interface Produto {
   idProduto: number;
   nomeProduto: string;
@@ -24,27 +29,42 @@ interface Produto {
   precoProduto: number;
   categoria: Categoria;
   subCategoria: Subcategoria;
+  fornecedor: Fornecedor;
 }
 
 export default function GerenciarProdutos() {
   const [produtos, setProdutos] = useState<Produto[]>([]);
   const [produtoEdit, setProdutoEdit] = useState<Produto | null>(null);
   const [modalProduto, setModalProduto] = useState(false);
-  const [filtro, setFiltro] = useState("");
-  const [filtroCategoria, setFiltroCategoria] = useState("");
-  const [filtroSubcategoria, setFiltroSubcategoria] = useState("");
+  const [filtroProduto, setFiltroProduto] = useState(
+    localStorage.getItem("filtroProduto") || ""
+  );
+  const [filtroCategoria, setFiltroCategoria] = useState(
+    localStorage.getItem("filtroCategoria") || ""
+  );
+  const [filtroSubcategoria, setFiltroSubcategoria] = useState(
+    localStorage.getItem("filtroSubcategoria") || ""
+  );
+  const [filtroFornecedor, setFiltroFornecedor] = useState(
+    localStorage.getItem("filtroFornecedor") || ""
+  );
   const [categorias, setCategorias] = useState<Categoria[]>([]);
   const [subCategorias, setSubCategorias] = useState<Subcategoria[]>([]);
+  const [fornecedores, setFornecedores] = useState<Fornecedor[]>([]);
   const navigate = useNavigate();
 
-  // 🔹 Estados de paginação
-  const [paginaEstoque, setPaginaEstoque] = useState(1);
-  const [itensPorPaginaEstoque, setItensPorPaginaEstoque] = useState(10);
+  const [paginaEstoque, setPaginaEstoque] = useState(
+    Number(localStorage.getItem("paginaEstoque")) || 1
+  );
+  const [itensPorPaginaEstoque, setItensPorPaginaEstoque] = useState(
+    Number(localStorage.getItem("itensPorPaginaEstoque")) || 10
+  );
 
   useEffect(() => {
     carregarProdutos();
     carregarCategorias();
     carregarSubcategorias();
+    carregarFornecedores();
   }, []);
 
   const carregarProdutos = async () => {
@@ -66,6 +86,11 @@ export default function GerenciarProdutos() {
     setSubCategorias(res.data);
   };
 
+  const carregarFornecedores = async () => {
+    const res = await api.get("/fornecedores");
+    setFornecedores(res.data);
+  }
+
   const deletarProduto = async (id: number) => {
     if (!window.confirm("Tem certeza que deseja excluir este produto?")) return;
     try {
@@ -76,33 +101,57 @@ export default function GerenciarProdutos() {
     }
   };
 
+  useEffect(() => {
+    localStorage.setItem("filtroProduto", filtroProduto);
+    localStorage.setItem("filtroCategoria", filtroCategoria);
+    localStorage.setItem("filtroSubcategoria", filtroSubcategoria);
+    localStorage.setItem("filtrofornecedor", filtroFornecedor);
+    localStorage.setItem("paginaEstoque", String(paginaEstoque));
+    localStorage.setItem(
+      "itensPorPaginaEstoque",
+      String(itensPorPaginaEstoque)
+    );
+  }, [
+    filtroProduto,
+    filtroCategoria,
+    filtroSubcategoria,
+    paginaEstoque,
+    itensPorPaginaEstoque,
+  ]);
+
   const limparFiltros = () => {
-    setFiltro("");
+    setFiltroProduto("");
     setFiltroCategoria("");
     setFiltroSubcategoria("");
   };
 
   // 🔹 Filtro composto
   const produtosFiltrados = produtos.filter((p) => {
-    const nomeMatch = p.nomeProduto.toLowerCase().includes(filtro.toLowerCase());
+    const nomeMatch = p.nomeProduto
+      .toLowerCase()
+      .includes(filtroProduto.toLowerCase());
     const categoriaMatch = p.categoria?.nomeCategoria
       ?.toLowerCase()
       .includes(filtroCategoria.toLowerCase());
     const subcategoriaMatch = p.subCategoria?.nomeSubcategoria
       ?.toLowerCase()
       .includes(filtroSubcategoria.toLowerCase());
+    const fornecedorMatch = p.fornecedor?.nomeFornecedor?.toLowerCase().includes(filtroFornecedor.toLowerCase());
 
-    return nomeMatch && categoriaMatch && subcategoriaMatch;
+    return nomeMatch && categoriaMatch && subcategoriaMatch && fornecedorMatch;
   });
 
   // 🔹 Paginação
-  const totalPaginasEstoque = Math.ceil(produtosFiltrados.length / itensPorPaginaEstoque);
+  const totalPaginasEstoque = Math.ceil(
+    produtosFiltrados.length / itensPorPaginaEstoque
+  );
   const indexInicio = (paginaEstoque - 1) * itensPorPaginaEstoque;
   const indexFim = indexInicio + itensPorPaginaEstoque;
   const produtosPaginados = produtosFiltrados.slice(indexInicio, indexFim);
 
   const nextEstoque = () => {
-    if (paginaEstoque < totalPaginasEstoque) setPaginaEstoque(paginaEstoque + 1);
+    if (paginaEstoque < totalPaginasEstoque)
+      setPaginaEstoque(paginaEstoque + 1);
   };
 
   const prevEstoque = () => {
@@ -133,8 +182,11 @@ export default function GerenciarProdutos() {
           <input
             type="text"
             placeholder="Filtrar por nome"
-            value={filtro}
-            onChange={(e) => setFiltro(e.target.value)}
+            value={filtroProduto}
+            onChange={(e) => {
+              setFiltroProduto(e.target.value);
+              setPaginaEstoque(1);
+            }}
             className="input-filtro"
           />
 
@@ -143,6 +195,7 @@ export default function GerenciarProdutos() {
             onChange={(e) => {
               setFiltroCategoria(e.target.value);
               setFiltroSubcategoria("");
+              setPaginaEstoque(1);
             }}
             className="input-filtro"
           >
@@ -156,7 +209,10 @@ export default function GerenciarProdutos() {
 
           <select
             value={filtroSubcategoria}
-            onChange={(e) => setFiltroSubcategoria(e.target.value)}
+            onChange={(e) => {
+              setFiltroSubcategoria(e.target.value);
+              setPaginaEstoque(1);
+            }}
             className="input-filtro"
           >
             <option value="">Todas as subcategorias</option>
@@ -177,7 +233,24 @@ export default function GerenciarProdutos() {
               ))}
           </select>
 
-          <button className="btn-limpar" onClick={limparFiltros}>
+          <select
+            value={filtroFornecedor}
+            onChange={(e) => {
+              setFiltroFornecedor(e.target.value);
+              setFiltroFornecedor("");
+              setPaginaEstoque(1);  
+            }} 
+            className="input-filtro"
+          >
+            <option value="">Todas os fornecedores</option>
+            {fornecedores.map((f) => (
+              <option key={f.idFornecedor} value={f.nomeFornecedor}>
+                {f.nomeFornecedor}
+              </option>
+            ))}
+          </select>
+
+          <button className="btn limpar" onClick={limparFiltros}>
             Limpar filtros
           </button>
         </div>
@@ -192,6 +265,7 @@ export default function GerenciarProdutos() {
               <th>Preço</th>
               <th>Categoria</th>
               <th>Subcategoria</th>
+              <th>Fornecedor</th>
               <th>Ações</th>
             </tr>
           </thead>
@@ -202,19 +276,24 @@ export default function GerenciarProdutos() {
                   <td>{p.idProduto}</td>
                   <td>
                     {p.imgUrl ? (
-                      <img src={p.imgUrl} alt={p.nomeProduto} id="imagem-produto" />
+                      <img
+                        src={p.imgUrl}
+                        alt={p.nomeProduto}
+                        id="imagem-produto"
+                      />
                     ) : (
                       "—"
                     )}
                   </td>
                   <td>{p.nomeProduto}</td>
                   <td>{p.descricaoProduto}</td>
-                  <td>{p.precoProduto}</td>
+                  <td>{p.precoProduto.toFixed(2).replace(".", ",")}</td>
                   <td>{p.categoria?.nomeCategoria || "—"}</td>
                   <td>{p.subCategoria?.nomeSubcategoria || "—"}</td>
+                  <td>{p.fornecedor?.nomeFornecedor || "—"}</td>
                   <td>
                     <button
-                      className="btn-editar"
+                      className="btn editar"
                       onClick={() => {
                         setProdutoEdit(p);
                         setModalProduto(true);
@@ -223,7 +302,7 @@ export default function GerenciarProdutos() {
                       Editar
                     </button>
                     <button
-                      className="btn-excluir"
+                      className="btn excluir"
                       onClick={() => deletarProduto(p.idProduto)}
                     >
                       Excluir
@@ -268,7 +347,9 @@ export default function GerenciarProdutos() {
           <label>Itens por página</label>
           <select
             value={itensPorPaginaEstoque}
-            onChange={(e) => handleChangeItensPorPaginaEstoque(Number(e.target.value))}
+            onChange={(e) =>
+              handleChangeItensPorPaginaEstoque(Number(e.target.value))
+            }
           >
             <option value={6}>6</option>
             <option value={10}>10</option>

@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import "./EstoqueModal.css";
+import "./Modal.css";
 
 interface ModalProps {
   isOpen: boolean;
@@ -27,7 +27,7 @@ export default function Modal({
   if (!isOpen) return null;
 
   return (
-    <div className="modal-overlay" onClick={onClose}>
+    <div className="modal-overlay">
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <button className="modal-close" onClick={onClose}>
           &times;

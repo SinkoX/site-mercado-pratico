@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { api } from "../api";
-import Modal from "../components/EstoqueModal";
+import Modal from "../components/ModalEstoque";
 import "./GerenciarEstoque.css";
 import { useNavigate } from "react-router-dom";
 import { FaArrowLeft } from "react-icons/fa";
@@ -403,11 +403,15 @@ export default function GerenciarEstoque() {
             type="text"
             placeholder="Buscar por nome ou ID..."
             value={filtroEstoque}
-            onChange={(e) => setFiltroEstoque(e.target.value)}
+            onChange={(e) => {setFiltroEstoque(e.target.value);
+              setPaginaEstoque(1);
+            }}
           />
           <select
             value={filtroStatus}
-            onChange={(e) => setFiltroStatus(e.target.value)}
+            onChange={(e) => {setFiltroStatus(e.target.value);
+              setPaginaEstoque(1);
+            }}
           >
             <option value="TODOS">Todos</option>
             <option value="ABAIXO">Abaixo do mínimo</option>
@@ -521,11 +525,15 @@ export default function GerenciarEstoque() {
             type="text"
             placeholder="Buscar por nome, ID produto ou ID mov..."
             value={filtroMov}
-            onChange={(e) => setFiltroMov(e.target.value)}
+            onChange={(e) => {setFiltroMov(e.target.value);
+              setPaginaMov(1);
+            }}
           />
           <select
             value={tipoFiltroMov}
-            onChange={(e) => setTipoFiltroMov(e.target.value)}
+            onChange={(e) => {setTipoFiltroMov(e.target.value);
+              setPaginaMov(1);
+            }}
           >
             <option value="TODOS">Todos</option>
             <option value="ENTRADA">Entrada</option>
@@ -534,7 +542,9 @@ export default function GerenciarEstoque() {
           <input
             type="date"
             value={filtroData}
-            onChange={(e) => setFiltroData(e.target.value)}
+            onChange={(e) => {setFiltroData(e.target.value);
+              setPaginaMov(1);
+            }}
           />
           <button className="btn limpar" onClick={limparFiltrosMov}>
             Limpar filtros

@@ -27,10 +27,14 @@
   font-weight: bold;
   cursor: pointer;
   margin-bottom: 15px;
+  transition: all 0.2s;
+  box-shadow: 0 2px 4px rgba(108, 117, 125, 0.2);
 }
 
 .gerenciar-usuarios-page .btn-adicionar:hover {
   background-color: #218838;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(108, 117, 125, 0.3);
 }
 
 .gerenciar-usuarios-page .input-filtro {
@@ -64,28 +68,41 @@
   font-style: italic;
 }
 
-.gerenciar-usuarios-page .btn-editar,
-.gerenciar-usuarios-page .btn-excluir {
+.gerenciar-usuarios-page .btn {
   border: none;
-  padding: 6px 12px;
-  border-radius: 5px;
+  padding: 8px 14px;
+  border-radius: 8px;
   cursor: pointer;
-  margin-right: 8px;
+  font-weight: 600;
+  font-size: 13px;
+  transition: all 0.2s;
+  margin-right: 6px;
   color: white;
 }
 
-.gerenciar-usuarios-page .btn-editar {
+.gerenciar-usuarios-page .btn.editar,
+.gerenciar-usuarios-page .btn.excluir {
+  width: 70px;
+}
+
+.gerenciar-usuarios-page .btn.editar {
   background-color: #007bff;
+  box-shadow: 0 4px 8px rgba(108, 117, 125, 0.3);
 }
 
-.gerenciar-usuarios-page .btn-editar:hover {
+.gerenciar-usuarios-page .btn.editar:hover {
   background-color: #0056b3;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(108, 117, 125, 0.3);
 }
 
-.gerenciar-usuarios-page .btn-excluir {
+.gerenciar-usuarios-page .btn.excluir {
   background-color: #dc3545;
+  box-shadow: 0 4px 8px rgba(108, 117, 125, 0.3);
 }
 
-.gerenciar-usuarios-page .btn-excluir:hover {
+.gerenciar-usuarios-page .btn.excluir:hover {
   background-color: #b52a37;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(108, 117, 125, 0.3);
 }
