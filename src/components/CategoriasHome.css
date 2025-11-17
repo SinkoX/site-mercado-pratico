@@ -10,14 +10,14 @@
 
 .categorias-home {
   text-align: center;
-  margin: 60px auto;
+  margin: 20px auto;
   max-width: 1400px;
   font-family: "Inter", sans-serif;
 }
 
 .categorias-home h2 {
   font-size: 36px;
-  margin-bottom: 40px;
+  margin-bottom: 60px;
   color: #333;
 }
 
@@ -25,8 +25,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 40px;
+  gap: 60px;
   overflow: hidden;
+  margin-bottom: 40px;
+  height: 300px;
 }
 
 .container-seta {
@@ -59,6 +61,7 @@
   gap: 50px;
   overflow: hidden;
   transition: transform 0.4s ease;
+  height: 200px;
 }
 
 .categoria-card {
