@@ -32,11 +32,19 @@ export default function ModalCategoria({
         }
       );
     } else {
-      await api.post("/categorias", {
-        nomeCategoria: nomeCategoria,
-        imgUrl: imgUrl,
-      });
+      await api.post(
+  "/categorias",
+  {
+    nomeCategoria,
+    imgUrl,
+  },
+  {
+    headers: { "Content-Type": "application/json" }
+  }
+);
+
     }
+
     atualizar();
     fechar();
   };

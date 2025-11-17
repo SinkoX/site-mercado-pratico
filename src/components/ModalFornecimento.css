@@ -1,0 +1,45 @@
+.produtos-container {
+  margin-top: 20px;
+}
+
+.produtos-container h3 {
+  margin-bottom: 10px;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.produtos-container button {
+  margin-bottom: 15px;
+  padding: 6px 12px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.produtos-container button:hover {
+  background-color: #45a049;
+}
+
+.produto-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  gap: 10px; /* espaço entre select e input */
+}
+
+.produto-item select {
+  flex: 2;
+  padding: 5px;
+  border-radius: 5px;
+  max-width: 80%;
+  border: 1px solid #ccc;
+}
+
+.produto-item input[type="number"] {
+  width: 80px;
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}

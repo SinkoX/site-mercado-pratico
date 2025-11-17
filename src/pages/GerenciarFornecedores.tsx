@@ -4,6 +4,13 @@ import { api } from "../api";
 import { FaArrowLeft } from "react-icons/fa6";
 import "./GerenciarFornecedores.css";
 import ModalFornecedor from "../components/ModalFornecedor";
+import ModalFornecimento from "../components/ModalFornecimento";
+
+interface Produto {
+  idProduto: number;
+  nomeProduto: string;
+  precoProduto: number;
+}
 
 interface Fornecedor {
   idFornecedor: number;
@@ -12,6 +19,7 @@ interface Fornecedor {
   cpfFornecedor: string;
   cnpj: string;
   telefoneFornecedor: string;
+  produtos?: Produto[];
 }
 
 export default function GerenciarFornecedores() {
@@ -19,6 +27,7 @@ export default function GerenciarFornecedores() {
   const [filtro, setFiltro] = useState("");
   const [modalFornecedor, setModalFornecedor] = useState(false);
   const [fornecedorEdit, setFornecedorEdit] = useState<Fornecedor | null>(null);
+  const [modalFornecimento, setModalFornecimento] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -83,6 +92,14 @@ export default function GerenciarFornecedores() {
           }}
         >
           Adicionar Fornecedor
+        </button>
+        <button
+          className="btn-adicionar"
+          onClick={() => {
+            setModalFornecimento(true);
+          }}
+        >
+          Novo Fornecimento
         </button>
         <input
           type="text"
@@ -152,6 +169,13 @@ export default function GerenciarFornecedores() {
             setFornecedorEdit(null);
           }}
           atualizar={carregarFornecedores}
+        />
+      )}
+
+      {modalFornecimento && (
+        <ModalFornecimento
+          fechar={() => setModalFornecimento(false)}
+          atualizar={carregarFornecedores} 
         />
       )}
     </div>
