@@ -182,13 +182,11 @@ function Carrinho() {
       }
 
       const primeiroProdutoId = itensCarrinho[0].idProduto;
-      console.log("🎯 ID do primeiro produto:", primeiroProdutoId);
+   
       
       const resProduto = await api.get(`/produto/${primeiroProdutoId}`);
       const produto = resProduto.data;
-      console.log("🎯 Produto base encontrado:", produto);
-      console.log("🏷️ Categoria do produto:", produto.categoria);
-      console.log("🏷️ Subcategoria do produto:", produto.subCategoria);
+
 
       const resTodosProdutos = await api.get(`/produto`);
       const todosProdutos: Produto[] = Array.isArray(resTodosProdutos.data)
@@ -209,8 +207,7 @@ function Carrinho() {
         )
         .slice(0, 4);
       
-      console.log("🎯 Produtos da mesma subcategoria:", relacionadosSubcategoria.length);
-      console.log("🎯 Lista subcategoria:", relacionadosSubcategoria);
+  
 
       // Produtos da mesma categoria (mas não da mesma subcategoria)
       const relacionadosCategoria = todosProdutos
@@ -222,12 +219,10 @@ function Carrinho() {
         )
         .slice(0, 4);
 
-      console.log("🎯 Produtos da mesma categoria:", relacionadosCategoria.length);
-      console.log("🎯 Lista categoria:", relacionadosCategoria);
+   
 
       const relacionadosFinais = [...relacionadosSubcategoria, ...relacionadosCategoria];
-      console.log("✅ Total de produtos relacionados:", relacionadosFinais.length);
-      console.log("✅ Produtos relacionados finais:", relacionadosFinais);
+      
 
       setProdutosRelacionados(relacionadosFinais);
       setPaginaRelacionados(0);
@@ -424,10 +419,7 @@ function Carrinho() {
 
   const totalPaginas = Math.ceil(produtosRelacionados.length / PRODUTOS_POR_PAGINA);
 
-  // ------------------ RENDER ------------------
-  console.log("🎨 Renderizando componente...");
-  console.log("🎨 produtosRelacionados.length:", produtosRelacionados.length);
-  console.log("🎨 Vai mostrar seção relacionados?", produtosRelacionados.length > 0);
+
 
   if (!user) return <p>Você precisa estar logado para acessar o carrinho.</p>;
   if (loading) return <p>Carregando carrinho...</p>;
