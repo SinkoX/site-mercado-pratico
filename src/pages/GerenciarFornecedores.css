@@ -1,270 +1,105 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
-
-/* Estilos globais que não conflitam com MUI */
-:root {
-  --verde-primario: #2e7d32;
-  --verde-hover: #388e3c;
-  --cinza-fundo: #f7f8fa;
+.gerenciar-fornecedores-page {
+  padding: 30px;
+  background-color: #f9f9f9;
+  min-height: 100vh;
 }
 
-/* Animações e efeitos adicionais */
-@keyframes slideIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.gerenciar-fornecedores-page h1 {
+  text-align: center;
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 30px;
 }
 
-/* Customização do Toast */
-.Toastify__toast {
-  border-radius: 12px !important;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
-  font-family: "Inter", sans-serif !important;
+.gerenciar-fornecedores-page .bloco {
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  padding: 20px;
 }
 
-.Toastify__toast--success {
-  background: #2e7d32 !important;
+.gerenciar-fornecedores-page .btn-adicionar {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 15px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-bottom: 15px;
 }
 
-.Toastify__toast--error {
-  background: #d32f2f !important;
+.gerenciar-fornecedores-page .btn-adicionar:hover {
+  background-color: #218838;
 }
 
-.Toastify__toast--info {
-  background: #1976d2 !important;
+.gerenciar-fornecedores-page .input-filtro {
+  margin-left: 10px;
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  width: 250px;
 }
 
-/* Animação para os cards aparecerem */
-.MuiCard-root {
-  animation: slideIn 0.3s ease-out;
+.gerenciar-fornecedores-page .tabela {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
 }
 
-/* Efeito hover nos cards - sobrescreve o MUI */
-.MuiCard-root:hover {
-  transform: translateY(-4px) !important;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15) !important;
-  transition: all 0.3s ease !important;
+.gerenciar-fornecedores-page .tabela th,
+.gerenciar-fornecedores-page .tabela td {
+  padding: 10px 15px;
+  border-bottom: 1px solid #ddd;
+  text-align: left;
 }
 
-/* Borda colorida no card ao hover */
-.MuiCard-root::before {
-  content: "";
+.gerenciar-fornecedores-page .tabela th {
+  background-color: #f1f1f1;
+}
+
+.gerenciar-fornecedores-page .vazio {
+  text-align: center;
+  color: #666;
+  font-style: italic;
+}
+
+.gerenciar-fornecedores-page .btn-editar,
+.gerenciar-fornecedores-page .btn-excluir {
+  border: none;
+  padding: 6px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-right: 8px;
+  color: white;
+}
+
+.gerenciar-fornecedores-page .btn-editar {
+  background-color: #007bff;
+}
+
+.gerenciar-fornecedores-page .btn-editar:hover {
+  background-color: #0056b3;
+}
+
+.gerenciar-fornecedores-page .btn-excluir {
+  background-color: #dc3545;
+}
+
+.gerenciar-fornecedores-page .btn-excluir:hover {
+  background-color: #b52a37;
+}
+
+.gerenciar-fornecedores-page .back-icon {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 4px;
-  height: 0;
-  background: var(--verde-primario);
-  transition: height 0.3s ease;
+  top: 30px;
+  left: 30px;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #333;
+  transition: color 0.3s;
 }
 
-.MuiCard-root:hover::before {
-  height: 100%;
-}
-
-/* Estilo dos botões de ação nos cards */
-.MuiCardActions-root .MuiButton-outlined {
-  border-width: 2px !important;
-  font-weight: 600 !important;
-  transition: all 0.3s ease !important;
-}
-
-.MuiCardActions-root .MuiButton-outlined:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15) !important;
-}
-
-/* Customização do Dialog (Modal) para ficar maior */
-.MuiDialog-paper {
-  border-radius: 16px !important;
-  padding: 8px !important;
-  max-width: 680px !important;
-  width: 100% !important;
-}
-
-/* Título do Dialog */
-.MuiDialogTitle-root {
-  font-size: 1.8rem !important;
-  font-weight: 700 !important;
-  color: var(--verde-primario) !important;
-  padding: 24px 32px 16px !important;
-}
-
-/* Conteúdo do Dialog */
-.MuiDialogContent-root {
-  padding: 24px 32px !important;
-}
-
-/* Ações do Dialog */
-.MuiDialogActions-root {
-  padding: 16px 32px 24px !important;
-  gap: 12px !important;
-}
-
-/* Botões do Dialog */
-.MuiDialogActions-root .MuiButton-root {
-  padding: 12px 28px !important;
-  font-weight: 600 !important;
-  border-radius: 10px !important;
-  font-size: 1rem !important;
-}
-
-/* TextField no Dialog - espaçamento maior */
-.MuiDialogContent-root .MuiTextField-root {
-  margin-bottom: 4px !important;
-}
-
-/* Inputs com foco - efeito aprimorado */
-.MuiTextField-root .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
-  border-width: 2px !important;
-  box-shadow: 0 0 0 4px rgba(46, 125, 50, 0.1) !important;
-}
-
-/* Botão "Novo" no topo */
-.MuiButton-contained {
-  font-weight: 600 !important;
-  padding: 12px 24px !important;
-  border-radius: 10px !important;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
-  transition: all 0.3s ease !important;
-}
-
-.MuiButton-contained:hover {
-  transform: translateY(-2px) !important;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
-}
-
-/* Campo de busca - estilo aprimorado */
-.MuiTextField-root .MuiOutlinedInput-root {
-  border-radius: 10px !important;
-  transition: all 0.3s ease !important;
-}
-
-.MuiTextField-root .MuiOutlinedInput-root:hover {
-  transform: translateY(-1px);
-}
-
-/* Typography nos cards */
-.MuiCardContent-root .MuiTypography-root {
-  line-height: 1.7 !important;
-}
-
-.MuiCardContent-root .MuiTypography-h6 {
-  color: #1b5e20 !important;
-  margin-bottom: 12px !important;
-  font-size: 1.25rem !important;
-}
-
-/* Ícone de voltar */
-.MuiIconButton-root {
-  transition: all 0.3s ease !important;
-}
-
-.MuiIconButton-root:hover {
-  transform: translateX(-3px) !important;
-  background-color: rgba(46, 125, 50, 0.08) !important;
-}
-
-/* Responsividade do Dialog */
-@media (max-width: 768px) {
-  .MuiDialog-paper {
-    max-width: 95% !important;
-    margin: 16px !important;
-  }
-  
-  .MuiDialogTitle-root {
-    font-size: 1.5rem !important;
-    padding: 20px 24px 12px !important;
-  }
-  
-  .MuiDialogContent-root {
-    padding: 16px 24px !important;
-  }
-  
-  .MuiDialogActions-root {
-    padding: 12px 24px 20px !important;
-    flex-direction: column-reverse !important;
-  }
-  
-  .MuiDialogActions-root .MuiButton-root {
-    width: 100% !important;
-  }
-}
-
-/* Grid responsivo melhorado */
-@media (max-width: 600px) {
-  .MuiGrid-container {
-    padding: 0 8px !important;
-  }
-}
-
-/* Scrollbar customizada para o Dialog */
-.MuiDialogContent-root::-webkit-scrollbar {
-  width: 8px;
-}
-
-.MuiDialogContent-root::-webkit-scrollbar-track {
-  background: #f1f1f1;
-  border-radius: 10px;
-}
-
-.MuiDialogContent-root::-webkit-scrollbar-thumb {
-  background: var(--verde-primario);
-  border-radius: 10px;
-}
-
-.MuiDialogContent-root::-webkit-scrollbar-thumb:hover {
-  background: var(--verde-hover);
-}
-
-/* Efeito de foco nos botões */
-.MuiButton-root:focus-visible {
-  outline: 3px solid rgba(46, 125, 50, 0.3) !important;
-  outline-offset: 2px !important;
-}
-
-/* Estado vazio - mensagem */
-.MuiTypography-root[align="center"] {
-  padding: 60px 20px !important;
-  font-size: 1.1rem !important;
-  color: #666 !important;
-}
-
-/* Animação de entrada do backdrop do Dialog */
-.MuiBackdrop-root {
-  backdrop-filter: blur(4px) !important;
-  animation: fadeIn 0.3s ease !important;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-/* Melhorias nos labels dos inputs */
-.MuiInputLabel-root {
-  font-weight: 500 !important;
-}
-
-.MuiInputLabel-root.Mui-focused {
-  font-weight: 600 !important;
-}
-
-/* Espaçamento entre campos no formulário */
-.MuiDialogContent-root > .MuiBox-root > .MuiTextField-root {
-  margin-top: 8px !important;
-  margin-bottom: 8px !important;
-}
-
-/* Primeira TextField do formulário */
-.MuiDialogContent-root > .MuiBox-root > .MuiTextField-root:first-of-type {
-  margin-top: 0 !important;
+.gerenciar-fornecedores-page .back-icon:hover {
+  color: #28a745;
 }
