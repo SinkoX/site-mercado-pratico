@@ -267,7 +267,7 @@ export default function GerenciarProdutos() {
               <th>ID</th>
               <th>Imagem</th>
               <th>Nome</th>
-              <th>Descrição</th>
+              <th>Descrição</th>  
               <th>Preço</th>
               <th>Categoria</th>
               <th>Subcategoria</th>

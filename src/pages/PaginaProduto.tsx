@@ -5,6 +5,7 @@ import { useAuth } from "../hooks/useAuth";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import MenuCategoria from "../components/MenuCategoria";
+import PlaceHolder from "../assets/images/categorias/placeholder.png";
 import "../pages/PaginaProduto.css";
 
 interface Produto {
@@ -13,8 +14,9 @@ interface Produto {
   precoProduto: number;
   descricaoProduto?: string;
   imgUrl?: string;
+  img_url?: string;
   imagemProdutoBase64?: string;
-  imagemProduto?: number[]; // array de bytes do backend
+  imagemProduto?: string; 
 }
 
 const PaginaProduto: React.FC = () => {
@@ -89,9 +91,11 @@ const PaginaProduto: React.FC = () => {
   const imagemFinal =
     produto.imgUrl && produto.imgUrl.trim() !== ""
       ? produto.imgUrl
-      : produto.imagemProdutoBase64
-      ? produto.imagemProdutoBase64
-      : "/placeholder.png";
+      : produto.img_url && produto.img_url.trim() !== ""
+      ? produto.img_url
+      : produto.imagemProduto
+      ? `data:image/png;base64,${produto.imagemProduto}`
+      : PlaceHolder;
 
   return (
     <div className="pagina-produto-root">
