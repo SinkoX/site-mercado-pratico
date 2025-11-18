@@ -89,11 +89,13 @@ export default function ModalFornecedor({
         telefoneFornecedor: limparFormatacao(form.telefoneFornecedor || ""),
       };
 
+      console.log(fornecedorLimpo);
+
       if (fornecedorEdit) {
         await api.put(`/fornecedores/${fornecedorEdit.idFornecedor}`, fornecedorLimpo);
         alert("Fornecedor atualizado com sucesso!");
       } else {
-        await api.post("/fornecedores", fornecedorLimpo);
+        await api.post("/fornecedores/cadastro", fornecedorLimpo);
         alert("Fornecedor cadastrado com sucesso!");
       }
       atualizar();
@@ -105,7 +107,7 @@ export default function ModalFornecedor({
   };
 
   return (
-    <div className="modal-overlay" onClick={fechar}>
+    <div className="modal-overlay">
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <h2>{fornecedorEdit ? "Editar Fornecedor" : "Cadastrar Fornecedor"}</h2>
 

@@ -105,7 +105,7 @@ export default function GerenciarProdutos() {
     localStorage.setItem("filtroProduto", filtroProduto);
     localStorage.setItem("filtroCategoria", filtroCategoria);
     localStorage.setItem("filtroSubcategoria", filtroSubcategoria);
-    localStorage.setItem("filtrofornecedor", filtroFornecedor);
+    localStorage.setItem("filtroFornecedor", filtroFornecedor);
     localStorage.setItem("paginaEstoque", String(paginaEstoque));
     localStorage.setItem(
       "itensPorPaginaEstoque",
@@ -123,6 +123,7 @@ export default function GerenciarProdutos() {
     setFiltroProduto("");
     setFiltroCategoria("");
     setFiltroSubcategoria("");
+    setFiltroFornecedor("");
   };
 
   // 🔹 Filtro composto
@@ -237,12 +238,11 @@ export default function GerenciarProdutos() {
             value={filtroFornecedor}
             onChange={(e) => {
               setFiltroFornecedor(e.target.value);
-              setFiltroFornecedor("");
               setPaginaEstoque(1);  
             }} 
             className="input-filtro"
           >
-            <option value="">Todas os fornecedores</option>
+            <option value="">Todos os fornecedores</option>
             {fornecedores.map((f) => (
               <option key={f.idFornecedor} value={f.nomeFornecedor}>
                 {f.nomeFornecedor}

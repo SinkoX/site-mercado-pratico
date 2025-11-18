@@ -123,3 +123,89 @@
   transform: translateY(-1px);
   box-shadow: 0 4px 8px rgba(108, 117, 125, 0.3);
 }
+
+/* RESPONSIVO - Tablets */
+@media (max-width: 1024px) {
+  .gerenciar-produtos-page .bloco {
+    padding: 15px;
+  }
+
+  .gerenciar-produtos-page .input-filtro {
+    width: 100%;
+    margin: 5px 0;
+  }
+
+  .gerenciar-produtos-page .filtros {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .gerenciar-produtos-page .tabela th,
+  .gerenciar-produtos-page .tabela td {
+    padding: 8px;
+  }
+
+  .gerenciar-produtos-page #imagem-produto {
+    width: 80px;
+    height: 80px;
+  }
+
+  .gerenciar-produtos-page .btn {
+    font-size: 12px;
+    padding: 6px 10px;
+  }
+
+  .gerenciar-produtos-page .paginacao-controls button {
+    padding: 5px 8px;
+    font-size: 12px;
+  }
+}
+
+/* RESPONSIVO - Celulares */
+@media (max-width: 768px) {
+  .gerenciar-produtos-page {
+    padding: 15px;
+  }
+
+  .gerenciar-produtos-page .bloco {
+    padding: 10px;
+  }
+
+  .gerenciar-produtos-page .tabela {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  .gerenciar-produtos-page .tabela th,
+  .gerenciar-produtos-page .tabela td {
+    padding: 6px;
+    font-size: 12px;
+  }
+
+  .gerenciar-produtos-page #imagem-produto {
+    width: 60px;
+    height: 60px;
+  }
+
+  .gerenciar-produtos-page .btn {
+    width: 100%;
+    margin-bottom: 5px;
+  }
+
+  .gerenciar-produtos-page .btn-adicionar {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  .gerenciar-produtos-page h1 {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+  }
+
+  .gerenciar-produtos-page .paginacao {
+    flex-direction: column;
+    gap: 10px;
+  }
+}

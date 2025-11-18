@@ -161,7 +161,7 @@ export default function ModalFornecimento({
                 >
                   {fornecedorSelecionado.produtos.map((p) => (
                     <option key={p.idProduto} value={p.idProduto}>
-                      {p.nomeProduto} (R$ {p.precoProduto.toFixed(2)})
+                      {p.nomeProduto}
                     </option>
                   ))}
                 </select>

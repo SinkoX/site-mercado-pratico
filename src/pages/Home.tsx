@@ -41,17 +41,6 @@ function Home() {
     return () => clearInterval(intervalo);
   }, [superOfertas.length]);
 
-  const proximaOferta = () => {
-    setIndiceOferta((prev) =>
-      prev === superOfertas.length - 1 ? 0 : prev + 1
-    );
-  };
-  const anteriorOferta = () => {
-    setIndiceOferta((prev) =>
-      prev === 0 ? superOfertas.length - 1 : prev - 1
-    );
-  };
-
   const limparProduto = (produto: any) => {
     const copia = { ...produto };
     delete copia.itensCarrinho;

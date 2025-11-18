@@ -124,7 +124,7 @@ export default function PaginaCategoria() {
   };
 
   return (
-    <div>
+    <div className="page-categoria">
       <Header />
 
       <div className="container">
@@ -133,9 +133,11 @@ export default function PaginaCategoria() {
         ) : (
           <div className="pagina-com-filtros">
             <aside className="filtros">
-              <h2 className="titulo-categoria">
-                {nomeCategoria || termo || "Produtos"}
-              </h2>
+              <div className="container-titulo">
+                <h2 className="titulo-categoria">
+                  {nomeCategoria || termo || "Produtos"}
+                </h2>
+              </div>
 
               {subcategorias.length > 0 && (
                 <div className="filtro">
@@ -159,7 +161,7 @@ export default function PaginaCategoria() {
                 </div>
               )}
 
-              <div className="filtro">
+              <div className="filtro filtro-preco">
                 <strong>Faixa de preço</strong>
                 <div className="slider-container">
                   {/* Sliders */}

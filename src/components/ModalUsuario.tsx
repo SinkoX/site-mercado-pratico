@@ -44,8 +44,8 @@ export default function ModalUsuario({
 }: ModalUsuarioProps) {
   const [nomeUsuario, setNomeUsuario] = useState<string>("");
   const [emailUsuario, setEmailUsuario] = useState<string>("");
-  const [senhaUsuario, setSenhaUsuario] = useState<string>("");
   const [cpfUsuario, setCpfUsuario] = useState<string>("");
+  const [senhaUsuario, setSenhaUsuario] = useState<string>("");
   const [telefoneUsuario, setTelefoneUsuario] = useState<string>("");
   const [tipoUsuarioId, setTipoUsuarioId] = useState<number | string>("");
   const [enderecoId, setEnderecoId] = useState<number | string>("");
@@ -54,8 +54,8 @@ export default function ModalUsuario({
     if (usuarioEdit) {
       setNomeUsuario(usuarioEdit.nomeUsuario || "");
       setEmailUsuario(usuarioEdit.emailUsuario || "");
-      setSenhaUsuario(usuarioEdit.senhaUsuario || "");
       setCpfUsuario(usuarioEdit.cpfUsuario || "");
+      setSenhaUsuario(usuarioEdit.senhaUsuario || "");
       setTelefoneUsuario(usuarioEdit.telefoneUsuario || "");
       setTipoUsuarioId(usuarioEdit.tipoUsuario?.idTipoUsuario || "");
       setEnderecoId(usuarioEdit.endereco?.[0]?.idEndereco || "");
@@ -70,7 +70,6 @@ export default function ModalUsuario({
   const salvar = async () => {
     if (!nomeUsuario.trim()) return alert("Informe o nome do usuário.");
     if (!emailUsuario.trim()) return alert("Informe o email do usuário.");
-    if (!senhaUsuario.trim()) return alert("Informe a senha do usuário.");
     if (!cpfUsuario.trim()) return alert("Informe o CPF do usuário.");
     if (!telefoneUsuario.trim()) return alert("Informe o telefone do usuário.");
     if (!tipoUsuarioId) return alert("Selecione o tipo de usuário.");
@@ -79,8 +78,8 @@ export default function ModalUsuario({
     const usuario = {
       nomeUsuario: nomeUsuario.trim(),
       emailUsuario: emailUsuario.trim(),
-      senhaUsuario: senhaUsuario.trim(),
       cpfUsuario: cpfUsuario.trim(),
+      senhaUsuario: senhaUsuario.trim(),
       telefoneUsuario: telefoneUsuario.trim(),
       tipoUsuario: { idTipoUsuario: Number(tipoUsuarioId) },
       endereco: [{ idEndereco: Number(enderecoId) }],
@@ -120,14 +119,6 @@ export default function ModalUsuario({
           placeholder="Email"
           value={emailUsuario}
           onChange={handleChange(setEmailUsuario)}
-        />
-
-        <label>Senha</label>
-        <input
-          type="text"
-          placeholder="Senha"
-          value={senhaUsuario}
-          onChange={handleChange(setSenhaUsuario)}
         />
 
         <label>CPF</label>

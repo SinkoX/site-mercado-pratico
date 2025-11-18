@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { api } from "../api";
 import "./Sidebar.css";
 
 interface SidebarProps {
@@ -7,20 +8,23 @@ interface SidebarProps {
   onClose?: () => void;
 }
 
-const categorias = [
-  "Super Ofertas",
-  "Hortifruti",
-  "Bebidas",
-  "Mercearia",
-  "Limpeza",
-  "Açougue",
-  "Higiene",
-  "Padaria",
-  "PetShop",
-];
+interface Categoria {
+  id: number;
+  nomeCategoria: string;
+}
 
 const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
+  const [categorias, setCategorias] = useState<Categoria[]>([]);
   const navigate = useNavigate();
+
+  useEffect(() => {
+      api
+        .get("/categorias")
+        .then((res) => {
+          setCategorias(Array.isArray(res.data) ? res.data : []);
+        })
+        .catch((err) => console.error("Erro ao buscar categorias:", err));
+    }, []);
 
   const handleCategoriaClick = (categoria: string) => {
     navigate(`/categoria/${categoria}`);
@@ -46,12 +50,12 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
           </div>
           <ul className="sidebar_list">
             {categorias.map((c) => (
-              <li key={c} className="sidebar_item">
+              <li key={c.id} className="sidebar_item">
                 <button
                   className="sidebar_link"
-                  onClick={() => handleCategoriaClick(c)}
+                  onClick={() => handleCategoriaClick(c.nomeCategoria)}
                 >
-                  {c}
+                  {c.nomeCategoria}
                 </button>
               </li>
             ))}

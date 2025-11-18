@@ -2,6 +2,7 @@
   padding: 30px;
   background-color: #f9f9f9;
   min-height: 100vh;
+  box-sizing: border-box;
 }
 
 .gerenciar-usuarios-page h1 {
@@ -16,6 +17,7 @@
   border-radius: 10px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
   padding: 20px;
+  overflow-x: auto; /* permite scroll horizontal se a tabela for grande */
 }
 
 .gerenciar-usuarios-page .btn-adicionar {
@@ -38,17 +40,20 @@
 }
 
 .gerenciar-usuarios-page .input-filtro {
-  margin-left: 10px;
+  margin-bottom: 15px;
   padding: 8px 10px;
   border-radius: 6px;
   border: 1px solid #ccc;
-  width: 250px;
+  width: 100%;
+  max-width: 300px;
+  box-sizing: border-box;
 }
 
 .gerenciar-usuarios-page .tabela {
   width: 100%;
   border-collapse: collapse;
   margin-top: 15px;
+  min-width: 600px; /* tabela não quebra muito em desktop */
 }
 
 .gerenciar-usuarios-page .tabela th,
@@ -56,6 +61,7 @@
   padding: 10px 15px;
   border-bottom: 1px solid #ddd;
   text-align: left;
+  white-space: nowrap; /* evita quebra de texto em células */
 }
 
 .gerenciar-usuarios-page .tabela th {
@@ -105,4 +111,72 @@
   background-color: #b52a37;
   transform: translateY(-1px);
   box-shadow: 0 4px 8px rgba(108, 117, 125, 0.3);
+}
+
+/* RESPONSIVIDADE */
+@media (max-width: 1024px) {
+  .gerenciar-usuarios-page .tabela {
+    min-width: 100%;
+  }
+
+  .gerenciar-usuarios-page .input-filtro {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .gerenciar-usuarios-page {
+    padding: 15px;
+  }
+
+  .gerenciar-usuarios-page h1 {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+  }
+
+  .gerenciar-usuarios-page .btn-adicionar {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  .gerenciar-usuarios-page .tabela th,
+  .gerenciar-usuarios-page .tabela td {
+    padding: 8px 10px;
+    font-size: 12px;
+  }
+
+  .gerenciar-usuarios-page .btn.editar,
+  .gerenciar-usuarios-page .btn.excluir {
+    width: auto;
+    padding: 6px 10px;
+    font-size: 11px;
+  }
+
+  .gerenciar-usuarios-page .input-filtro {
+    margin-bottom: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .gerenciar-usuarios-page .bloco {
+    padding: 10px;
+  }
+
+  .gerenciar-usuarios-page .tabela {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  .gerenciar-usuarios-page .tabela th,
+  .gerenciar-usuarios-page .tabela td {
+    padding: 6px 8px;
+    font-size: 11px;
+  }
+
+  .gerenciar-usuarios-page .btn {
+    padding: 5px 8px;
+    font-size: 10px;
+    margin-right: 4px;
+  }
 }
