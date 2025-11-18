@@ -37,6 +37,7 @@ export default function GerenciarFornecedores() {
   const carregarFornecedores = async () => {
     try {
       const res = await api.get("/fornecedores");
+      console.log("RETORNO API:", res.data); // <-- veja o formato real
       setFornecedores(res.data);
     } catch (err) {
       console.error("Erro ao buscar fornecedores:", err);
@@ -44,7 +45,8 @@ export default function GerenciarFornecedores() {
   };
 
   const deletarFornecedor = async (id: number) => {
-    if (!window.confirm("Tem certeza que deseja excluir este fornecedor?")) return;
+    if (!window.confirm("Tem certeza que deseja excluir este fornecedor?"))
+      return;
     try {
       await api.delete(`/fornecedores/${id}`);
       setFornecedores(fornecedores.filter((f) => f.idFornecedor !== id));
@@ -53,12 +55,13 @@ export default function GerenciarFornecedores() {
     }
   };
 
-  const fornecedoresFiltrados = fornecedores.filter((f) =>
-    f.nomeFornecedor.toLowerCase().includes(filtro.toLowerCase()) ||
-    f.emailFornecedor.toLowerCase().includes(filtro.toLowerCase()) ||
-    f.cpfFornecedor.includes(filtro) ||
-    f.cnpj.includes(filtro) ||
-    f.telefoneFornecedor.includes(filtro)
+  const fornecedoresFiltrados = fornecedores.filter(
+    (f) =>
+      f.nomeFornecedor.toLowerCase().includes(filtro.toLowerCase()) ||
+      f.emailFornecedor.toLowerCase().includes(filtro.toLowerCase()) ||
+      f.cpfFornecedor.includes(filtro) ||
+      f.cnpj.includes(filtro) ||
+      f.telefoneFornecedor.includes(filtro)
   );
 
   const formatTelefone = (telefone: string) => {
@@ -73,7 +76,10 @@ export default function GerenciarFornecedores() {
 
   const formatCNPJ = (cnpj: string) => {
     if (!cnpj) return "";
-    return cnpj.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})$/, "$1.$2.$3/$4-$5");
+    return cnpj.replace(
+      /^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})$/,
+      "$1.$2.$3/$4-$5"
+    );
   };
 
   return (
@@ -175,7 +181,7 @@ export default function GerenciarFornecedores() {
       {modalFornecimento && (
         <ModalFornecimento
           fechar={() => setModalFornecimento(false)}
-          atualizar={carregarFornecedores} 
+          atualizar={carregarFornecedores}
         />
       )}
     </div>

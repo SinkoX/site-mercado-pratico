@@ -77,9 +77,15 @@ export default function GerenciarProdutos() {
   };
 
   const carregarCategorias = async () => {
+  try {
     const res = await api.get("/categorias");
-    setCategorias(res.data);
-  };
+    console.log("Categorias API:", res.data); // <--- verificar
+    setCategorias(Array.isArray(res.data) ? res.data : []);
+  } catch (err) {
+    console.error(err);
+  }
+};
+
 
   const carregarSubcategorias = async () => {
     const res = await api.get("/subcategorias");
