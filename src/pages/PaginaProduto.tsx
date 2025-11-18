@@ -13,7 +13,8 @@ interface Produto {
   precoProduto: number;
   descricaoProduto?: string;
   imgUrl?: string;
-  imagemProduto?: string;
+  imagemProdutoBase64?: string;
+  imagemProduto?: number[]; // array de bytes do backend
 }
 
 const PaginaProduto: React.FC = () => {
@@ -29,11 +30,28 @@ const PaginaProduto: React.FC = () => {
   useEffect(() => {
     if (!id) return;
     setLoading(true);
+
     api
       .get(`/produto/${id}`)
       .then((res) => {
         const data = res.data;
-        setProduto({ ...data, precoProduto: Number(data.precoProduto) });
+
+        // Converter byte[] em Base64
+        let imagemBase64 = "";
+        if (data.imagemProduto && data.imagemProduto.length > 0) {
+          const bytes = new Uint8Array(data.imagemProduto);
+          let binaryString = "";
+          for (let i = 0; i < bytes.length; i++) {
+            binaryString += String.fromCharCode(bytes[i]);
+          }
+          imagemBase64 = `data:image/png;base64,${btoa(binaryString)}`;
+        }
+
+        setProduto({
+          ...data,
+          precoProduto: Number(data.precoProduto),
+          imagemProdutoBase64: imagemBase64,
+        });
       })
       .catch((err) => console.error("Erro ao buscar produto:", err))
       .finally(() => setLoading(false));
@@ -71,8 +89,8 @@ const PaginaProduto: React.FC = () => {
   const imagemFinal =
     produto.imgUrl && produto.imgUrl.trim() !== ""
       ? produto.imgUrl
-      : produto.imagemProduto
-      ? `data:image/png;base64,${produto.imagemProduto}`
+      : produto.imagemProdutoBase64
+      ? produto.imagemProdutoBase64
       : "/placeholder.png";
 
   return (
@@ -116,8 +134,13 @@ const PaginaProduto: React.FC = () => {
                   onClick={diminuir}
                   aria-label="Diminuir quantidade"
                 >
-                  {/* Minus SVG */}
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden>
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    aria-hidden
+                  >
                     <rect x="4" y="11" width="16" height="2" rx="1" />
                   </svg>
                 </button>
@@ -131,8 +154,13 @@ const PaginaProduto: React.FC = () => {
                   onClick={aumentar}
                   aria-label="Aumentar quantidade"
                 >
-                  {/* Plus SVG */}
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden>
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    aria-hidden
+                  >
                     <rect x="11" y="4" width="2" height="16" rx="1" />
                     <rect x="4" y="11" width="16" height="2" rx="1" />
                   </svg>
@@ -149,15 +177,10 @@ const PaginaProduto: React.FC = () => {
                 </button>
               </div>
             </div>
-
-            <div className="extras-info">
-              {/* espaço para mais informações: frete, parcelamento, SKU etc */}
-            </div>
           </section>
         </article>
       </main>
 
-      {/* Toast animado (aparece top-right) */}
       {showToast && (
         <div className="toast-carrinho" role="status">
           <strong>Sucesso</strong>
@@ -165,7 +188,6 @@ const PaginaProduto: React.FC = () => {
         </div>
       )}
 
-      {/* Popup de Login */}
       {showLoginPopup && (
         <div className="login-popup-overlay" role="dialog" aria-modal="true">
           <div className="login-popup" role="document">
@@ -174,9 +196,13 @@ const PaginaProduto: React.FC = () => {
               onClick={fecharPopup}
               aria-label="Fechar diálogo"
             >
-              {/* Close SVG */}
               <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden>
-                <path d="M18 6L6 18M6 6l12 12" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                <path
+                  d="M18 6L6 18M6 6l12 12"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
               </svg>
             </button>
 

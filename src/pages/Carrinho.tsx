@@ -24,7 +24,7 @@ interface ItemCarrinhoDTO {
   subTotal: number;
   imgUrl?: string;
   img_url?: string;
-  imagemProdutoBase64?: string;
+  imagemProduto?: number[]; // Array de bytes do backend
 }
 
 interface CarrinhoDTO {
@@ -62,6 +62,7 @@ interface Produto {
   categoria?: Categoria;
   subCategoria: Subcategoria;
   imgUrl?: string;
+  imagemProduto?: string;
 }
 
 interface Categoria {
@@ -96,22 +97,37 @@ function Carrinho() {
   const VALOR_FRETE = 15;
   const PRODUTOS_POR_PAGINA = 4;
 
+  // ================== FUNÇÃO HELPER ==================
+  /**
+   * Converte array de bytes em Base64 para exibir imagens
+   */
+  const converterBytesParaBase64 = (bytes: number[] | undefined): string | null => {
+    if (!bytes || bytes.length === 0) return null;
+    
+    try {
+      const uint8Array = new Uint8Array(bytes);
+      let binaryString = "";
+      for (let i = 0; i < uint8Array.length; i++) {
+        binaryString += String.fromCharCode(uint8Array[i]);
+      }
+      return `data:image/png;base64,${btoa(binaryString)}`;
+    } catch (error) {
+      console.error("Erro ao converter bytes para Base64:", error);
+      return null;
+    }
+  };
+
   // ------------------ BUSCAR CARRINHO ------------------
   const fetchCarrinho = async () => {
     if (!user) return;
     setLoading(true);
    
-    
     try {
       const res = await api.get(`/carrinho/${user.idUsuario}`);
-   
       setCarrinho(res.data);
-
-     
     
       try {
         const resEnderecos = await api.get(`/enderecos/${user.idUsuario}`);
-        
         
         let enderecosArray: any[] = [];
         if (Array.isArray(resEnderecos.data)) {
@@ -130,25 +146,19 @@ function Carrinho() {
           complemento: end.complemento,
         }));
 
-     
         setEnderecos(enderecosFormatados);
         
         if (enderecosFormatados.length > 0) {
-          
           setEnderecoSelecionado(enderecosFormatados[0]);
         } else {
           console.log("⚠️ Nenhum endereço cadastrado");
         }
       } catch (errEndereco: any) {
-        // Se der erro 404, significa que o usuário não tem endereços cadastrados
-        // Isso é NORMAL e não deve interromper o fluxo
         if (errEndereco?.response?.status === 404) {
-          
           setEnderecos([]);
           setEnderecoSelecionado(null);
         } else {
           console.error("❌ Erro ao buscar endereços:", errEndereco);
-          // Mesmo com erro, não vamos interromper
           setEnderecos([]);
           setEnderecoSelecionado(null);
         }
@@ -156,7 +166,6 @@ function Carrinho() {
 
       // Buscar produtos relacionados
       if (res.data.itens && res.data.itens.length > 0) {
-        
         await fetchProdutosRelacionados(res.data.itens);
       } else {
         console.log("⚠️ Carrinho vazio, não há produtos para relacionar");
@@ -165,35 +174,28 @@ function Carrinho() {
       console.error("❌ Erro no fetchCarrinho:", err);
     } finally {
       setLoading(false);
-     
     }
   };
 
   // ------------------ PRODUTOS RELACIONADOS ------------------
   const fetchProdutosRelacionados = async (itensCarrinho: ItemCarrinhoDTO[]) => {
     try {
-    
       if (itensCarrinho.length === 0) {
         console.log("⚠️ Carrinho vazio, abortando busca de relacionados");
         return;
       }
 
       const primeiroProdutoId = itensCarrinho[0].idProduto;
-   
       
       const resProduto = await api.get(`/produto/${primeiroProdutoId}`);
       const produto = resProduto.data;
-
 
       const resTodosProdutos = await api.get(`/produto`);
       const todosProdutos: Produto[] = Array.isArray(resTodosProdutos.data)
         ? resTodosProdutos.data
         : [];
-      
-     
 
       const idsNoCarrinho = itensCarrinho.map((item) => item.idProduto);
-    
 
       // Produtos da mesma subcategoria
       const relacionadosSubcategoria = todosProdutos
@@ -203,8 +205,6 @@ function Carrinho() {
             !idsNoCarrinho.includes(p.idProduto)
         )
         .slice(0, 4);
-      
-  
 
       // Produtos da mesma categoria (mas não da mesma subcategoria)
       const relacionadosCategoria = todosProdutos
@@ -216,27 +216,19 @@ function Carrinho() {
         )
         .slice(0, 4);
 
-   
-
       const relacionadosFinais = [...relacionadosSubcategoria, ...relacionadosCategoria];
-      
 
       setProdutosRelacionados(relacionadosFinais);
       setPaginaRelacionados(0);
-      
-      console.log("🔍 === FIM fetchProdutosRelacionados ===");
     } catch (error) {
       console.error("❌ Erro ao buscar produtos relacionados:", error);
-      console.error("❌ Detalhes do erro:", JSON.stringify(error, null, 2));
     }
   };
 
   useEffect(() => {
-   
     fetchCarrinho();
   }, [user]);
 
-  // Log quando produtosRelacionados muda
   useEffect(() => {
   }, [produtosRelacionados]);
 
@@ -414,8 +406,6 @@ function Carrinho() {
 
   const totalPaginas = Math.ceil(produtosRelacionados.length / PRODUTOS_POR_PAGINA);
 
-
-
   if (!user) return <p>Você precisa estar logado para acessar o carrinho.</p>;
   if (loading) return <p>Carregando carrinho...</p>;
 
@@ -470,17 +460,33 @@ function Carrinho() {
               </thead>
               <tbody>
                 {carrinho.itens.map((item) => {
-                  const imagemFinal =
-                    (item.imgUrl && item.imgUrl.trim() !== "" && item.imgUrl) ||
-                    (item.img_url && item.img_url.trim() !== "" && item.img_url) ||
-                    (item.imagemProdutoBase64
-                      ? `data:image/png;base64,${item.imagemProdutoBase64}`
-                      : PlaceHolder);
+                  // ========== LÓGICA DE IMAGEM CORRIGIDA ==========
+                  // Prioridade: imgUrl → img_url → imagemProduto (bytes) → PlaceHolder
+                  let imagemFinal = PlaceHolder;
+                  
+                  if (item.imgUrl && item.imgUrl.trim() !== "") {
+                    imagemFinal = item.imgUrl;
+                  } else if (item.img_url && item.img_url.trim() !== "") {
+                    imagemFinal = item.img_url;
+                  } else if (item.imagemProduto) {
+                    const base64Image = converterBytesParaBase64(item.imagemProduto);
+                    if (base64Image) {
+                      imagemFinal = base64Image;
+                    }
+                  }
 
                   return (
                     <tr key={item.idItemCarrinho}>
                       <td className="produto-info">
-                        <img src={imagemFinal} alt={item.nomeProduto} className="produto-img" />
+                        <img 
+                          src={imagemFinal} 
+                          alt={item.nomeProduto} 
+                          className="produto-img"
+                          onError={(e) => {
+                            // Fallback caso a imagem falhe ao carregar
+                            (e.target as HTMLImageElement).src = PlaceHolder;
+                          }}
+                        />
                         <span>{item.nomeProduto}</span>
                       </td>
                       <td>R$ {(item.subTotal / item.quantidade).toFixed(2)} / un</td>
