@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 
@@ -35,6 +35,7 @@ export default function PaginaCategoria() {
     nomeCategoria?: string;
     termo?: string;
   }>();
+
   const [produtos, setProdutos] = useState<Produto[]>([]);
   const [subcategorias, setSubcategorias] = useState<Subcategoria[]>([]);
   const [loading, setLoading] = useState(true);
@@ -42,12 +43,43 @@ export default function PaginaCategoria() {
   const [filtroSubcategoria, setFiltroSubcategoria] = useState<number | null>(
     null
   );
-  const [precoMin, setPrecoMin] = useState(0);
-  const [precoMax, setPrecoMax] = useState(1000);
 
   const STEP = 1;
+  const MAX_PRECO = 1000;
 
-  // Busca produtos e subcategorias
+  // valores reais
+  const [precoMin, setPrecoMin] = useState(0);
+  const [precoMax, setPrecoMax] = useState(MAX_PRECO);
+
+  // strings exibidas
+  const [precoMinStr, setPrecoMinStr] = useState("R$ 0,00");
+  const [precoMaxStr, setPrecoMaxStr] = useState("R$ 1.000,00");
+
+  const inputMinRef = useRef<HTMLInputElement | null>(null);
+  const inputMaxRef = useRef<HTMLInputElement | null>(null);
+
+  // formatador de moeda
+  function formatMoney(value: number) {
+    return value.toLocaleString("pt-BR", {
+      style: "currency",
+      currency: "BRL",
+      minimumFractionDigits: 2,
+    });
+  }
+
+  // máscara enquanto digita (centavos)
+  function maskCurrency(value: string, maxDigits: number) {
+    let v = value.replace(/\D/g, "");
+
+    if (v.length > maxDigits) v = v.slice(0, maxDigits);
+
+    if (v.length === 0) return "R$ 0,00";
+
+    const num = Number(v) / 100;
+    return formatMoney(num);
+  }
+
+  // carregar produtos
   useEffect(() => {
     const parametro = termo || nomeCategoria;
     if (!parametro) return;
@@ -64,11 +96,8 @@ export default function PaginaCategoria() {
 
     axios
       .get(url)
-      .then((res) => {
-        console.log("Produtos recebidos:", res.data); // <-- coloca aqui
-        setProdutos(Array.isArray(res.data) ? res.data : []);
-      })
-      .catch((err) => console.error("Erro ao buscar produtos:", err))
+      .then((res) => setProdutos(Array.isArray(res.data) ? res.data : []))
+      .catch(() => {})
       .finally(() => setLoading(false));
 
     if (nomeCategoria) {
@@ -81,16 +110,13 @@ export default function PaginaCategoria() {
             : Array.isArray(data.subcategorias)
             ? data.subcategorias
             : [];
-          console.log("Subcategorias carregadas:", subcats);
           setSubcategorias(subcats);
         })
-        .catch((err) =>
-          console.warn("Sem subcategorias para esta categoria:", err)
-        );
+        .catch(() => {});
     }
   }, [nomeCategoria, termo]);
 
-  // Filtra produtos automaticamente com base em subcategoria e faixa de preço
+  // filtragem
   const produtosFiltrados = produtos.filter((prod) => {
     const atendeSub = filtroSubcategoria
       ? prod.subCategoria?.idSubcategoria === filtroSubcategoria
@@ -98,29 +124,54 @@ export default function PaginaCategoria() {
 
     const atendePreco =
       prod.precoProduto >= precoMin && prod.precoProduto <= precoMax;
+
     return atendeSub && atendePreco;
   });
 
-  // Sliders
+  // sliders
   const handleSliderMinChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const valor = Number(e.target.value);
-    setPrecoMin(Math.min(valor, precoMax - STEP));
+    const novoMin = Math.min(Number(e.target.value), precoMax - STEP);
+    setPrecoMin(novoMin);
+    setPrecoMinStr(formatMoney(novoMin));
   };
 
   const handleSliderMaxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const valor = Number(e.target.value);
-    setPrecoMax(Math.max(valor, precoMin + STEP));
+    const novoMax = Math.max(Number(e.target.value), precoMin + STEP);
+    setPrecoMax(novoMax);
+    setPrecoMaxStr(formatMoney(novoMax));
   };
 
-  // Inputs numéricos
+  // inputs digitando
   const handleInputMinChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const valorNumerico = Number(e.target.value.replace(/\D/g, ""));
-    setPrecoMin(Math.min(valorNumerico, precoMax - STEP));
+    setPrecoMinStr(maskCurrency(e.target.value, 5)); // max 999,99
   };
 
   const handleInputMaxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const valorNumerico = Number(e.target.value.replace(/\D/g, ""));
-    setPrecoMax(Math.max(valorNumerico, precoMin + STEP));
+    setPrecoMaxStr(maskCurrency(e.target.value, 6)); // max 1.000,00
+  };
+
+  // aplicar valores
+  const handleInputMinBlur = () => {
+    const num =
+      parseFloat(precoMinStr.replace(/[^\d,]/g, "").replace(",", ".")) || 0;
+
+    let valor = Math.min(num, precoMax - STEP);
+    if (valor < 0) valor = 0;
+
+    setPrecoMin(valor);
+    setPrecoMinStr(formatMoney(valor));
+  };
+
+  const handleInputMaxBlur = () => {
+    const num =
+      parseFloat(precoMaxStr.replace(/[^\d,]/g, "").replace(",", ".")) ||
+      MAX_PRECO;
+
+    let valor = Math.max(num, precoMin + STEP);
+    if (valor > MAX_PRECO) valor = MAX_PRECO;
+
+    setPrecoMax(valor);
+    setPrecoMaxStr(formatMoney(valor));
   };
 
   return (
@@ -133,15 +184,15 @@ export default function PaginaCategoria() {
         ) : (
           <div className="pagina-com-filtros">
             <aside className="filtros">
-              <div className="container-titulo">
-                <h2 className="titulo-categoria">
-                  {nomeCategoria || termo || "Produtos"}
-                </h2>
-              </div>
+              <h2 className="titulo-categoria">
+                {nomeCategoria || termo || "Produtos"}
+              </h2>
 
+              {/* Subcategorias */}
               {subcategorias.length > 0 && (
                 <div className="filtro">
                   <strong>Subcategorias</strong>
+
                   {subcategorias.map((sub) => (
                     <label key={sub.idSubcategoria}>
                       <input
@@ -155,67 +206,85 @@ export default function PaginaCategoria() {
                       {sub.nomeSubcategoria}
                     </label>
                   ))}
-                  <button onClick={() => setFiltroSubcategoria(null)}>
-                    Limpar
-                  </button>
+
+                 <button
+  onClick={() => {
+    setFiltroSubcategoria(null);
+
+    // reset preço
+    setPrecoMin(0);
+    setPrecoMax(MAX_PRECO);
+    setPrecoMinStr("R$ 0,00");
+    setPrecoMaxStr("R$ 1.000,00");
+  }}
+>
+  Limpar
+</button>
                 </div>
               )}
 
+              {/* Preço */}
               <div className="filtro filtro-preco">
                 <strong>Faixa de preço</strong>
+
                 <div className="slider-container">
-                  {/* Sliders */}
                   <input
                     type="range"
                     min={0}
-                    max={1000}
+                    max={MAX_PRECO}
                     step={STEP}
                     value={precoMin}
                     onChange={handleSliderMinChange}
                     className="slider slider-min"
                   />
+
                   <input
                     type="range"
                     min={0}
-                    max={1000}
+                    max={MAX_PRECO}
                     step={STEP}
                     value={precoMax}
                     onChange={handleSliderMaxChange}
                     className="slider slider-max"
                   />
 
-                  {/* Track ativo */}
                   <div
                     className="slider-track-active"
                     style={{
-                      left: `${(precoMin / 1000) * 100}%`,
-                      width: `${((precoMax - precoMin) / 1000) * 100}%`,
+                      left: `${(precoMin / MAX_PRECO) * 100}%`,
+                      width: `${((precoMax - precoMin) / MAX_PRECO) * 100}%`,
                     }}
                   />
 
-                  {/* Inputs numéricos formatados */}
                   <div className="valores-preco">
                     <input
+                      ref={inputMinRef}
                       type="text"
-                      value={precoMin.toLocaleString("pt-BR", {
-                        style: "currency",
-                        currency: "BRL",
-                      })}
+                      value={precoMinStr}
                       onChange={handleInputMinChange}
-                      onBlur={(e) => {
-                        if (!e.target.value) setPrecoMin(0);
+                      onBlur={handleInputMinBlur}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                          e.preventDefault();
+                          handleInputMinBlur();
+                          inputMaxRef.current?.focus();
+                        }
                       }}
                     />
+
                     <span>—</span>
+
                     <input
+                      ref={inputMaxRef}
                       type="text"
-                      value={precoMax.toLocaleString("pt-BR", {
-                        style: "currency",
-                        currency: "BRL",
-                      })}
+                      value={precoMaxStr}
                       onChange={handleInputMaxChange}
-                      onBlur={(e) => {
-                        if (!e.target.value) setPrecoMax(1000);
+                      onBlur={handleInputMaxBlur}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                          e.preventDefault();
+                          handleInputMaxBlur();
+                        }
                       }}
                     />
                   </div>
