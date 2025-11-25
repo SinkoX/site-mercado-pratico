@@ -4,6 +4,7 @@ import { api } from "../api";
 import { FaArrowLeft } from "react-icons/fa6";
 import "./GerenciarProdutos.css";
 import ModalProduto from "../components/ModalProduto";
+import ModalConfirmarExclusao from "../components/ModalExclusaoProduto";
 
 interface Subcategoria {
   idSubcategoria: number;
@@ -36,6 +37,11 @@ export default function GerenciarProdutos() {
   const [produtos, setProdutos] = useState<Produto[]>([]);
   const [produtoEdit, setProdutoEdit] = useState<Produto | null>(null);
   const [modalProduto, setModalProduto] = useState(false);
+
+  // ➕ ESTADOS DO MODAL DE EXCLUSÃO
+  const [produtoParaExcluir, setProdutoParaExcluir] = useState<Produto | null>(null);
+  const [abrirModalExcluir, setAbrirModalExcluir] = useState(false);
+
   const [filtroProduto, setFiltroProduto] = useState(
     localStorage.getItem("filtroProduto") || ""
   );
@@ -48,6 +54,7 @@ export default function GerenciarProdutos() {
   const [filtroFornecedor, setFiltroFornecedor] = useState(
     localStorage.getItem("filtroFornecedor") || ""
   );
+
   const [categorias, setCategorias] = useState<Categoria[]>([]);
   const [subCategorias, setSubCategorias] = useState<Subcategoria[]>([]);
   const [fornecedores, setFornecedores] = useState<Fornecedor[]>([]);
@@ -77,15 +84,13 @@ export default function GerenciarProdutos() {
   };
 
   const carregarCategorias = async () => {
-  try {
-    const res = await api.get("/categorias");
-    console.log("Categorias API:", res.data); // <--- verificar
-    setCategorias(Array.isArray(res.data) ? res.data : []);
-  } catch (err) {
-    console.error(err);
-  }
-};
-
+    try {
+      const res = await api.get("/categorias");
+      setCategorias(Array.isArray(res.data) ? res.data : []);
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   const carregarSubcategorias = async () => {
     const res = await api.get("/subcategorias");
@@ -95,13 +100,27 @@ export default function GerenciarProdutos() {
   const carregarFornecedores = async () => {
     const res = await api.get("/fornecedores");
     setFornecedores(res.data);
-  }
+  };
 
-  const deletarProduto = async (id: number) => {
-    if (!window.confirm("Tem certeza que deseja excluir este produto?")) return;
+  // 🚨 NÃO usa mais window.confirm — agora abre modal
+  const solicitarExclusao = (produto: Produto) => {
+    setProdutoParaExcluir(produto);
+    setAbrirModalExcluir(true);
+  };
+
+  // 🔥 Executa exclusão após confirmar no modal
+  const confirmarExclusao = async () => {
+    if (!produtoParaExcluir) return;
+
     try {
-      await api.delete(`/produto/${id}`);
-      setProdutos(produtos.filter((p) => p.idProduto !== id));
+      await api.delete(`/produto/${produtoParaExcluir.idProduto}`);
+
+      setProdutos((prev) =>
+        prev.filter((p) => p.idProduto !== produtoParaExcluir.idProduto)
+      );
+
+      setAbrirModalExcluir(false);
+      setProdutoParaExcluir(null);
     } catch (err) {
       console.error("Erro ao excluir produto:", err);
     }
@@ -113,14 +132,12 @@ export default function GerenciarProdutos() {
     localStorage.setItem("filtroSubcategoria", filtroSubcategoria);
     localStorage.setItem("filtroFornecedor", filtroFornecedor);
     localStorage.setItem("paginaEstoque", String(paginaEstoque));
-    localStorage.setItem(
-      "itensPorPaginaEstoque",
-      String(itensPorPaginaEstoque)
-    );
+    localStorage.setItem("itensPorPaginaEstoque", String(itensPorPaginaEstoque));
   }, [
     filtroProduto,
     filtroCategoria,
     filtroSubcategoria,
+    filtroFornecedor,
     paginaEstoque,
     itensPorPaginaEstoque,
   ]);
@@ -132,49 +149,26 @@ export default function GerenciarProdutos() {
     setFiltroFornecedor("");
   };
 
-  // 🔹 Filtro composto
   const produtosFiltrados = produtos.filter((p) => {
-    const nomeMatch = p.nomeProduto
-      .toLowerCase()
-      .includes(filtroProduto.toLowerCase());
-    const categoriaMatch = p.categoria?.nomeCategoria
-      ?.toLowerCase()
-      .includes(filtroCategoria.toLowerCase());
-    const subcategoriaMatch = p.subCategoria?.nomeSubcategoria
-      ?.toLowerCase()
-      .includes(filtroSubcategoria.toLowerCase());
+    const nomeMatch = p.nomeProduto.toLowerCase().includes(filtroProduto.toLowerCase());
+    const categoriaMatch = p.categoria?.nomeCategoria?.toLowerCase().includes(filtroCategoria.toLowerCase());
+    const subcategoriaMatch = p.subCategoria?.nomeSubcategoria?.toLowerCase().includes(filtroSubcategoria.toLowerCase());
     const fornecedorMatch = p.fornecedor?.nomeFornecedor?.toLowerCase().includes(filtroFornecedor.toLowerCase());
 
     return nomeMatch && categoriaMatch && subcategoriaMatch && fornecedorMatch;
   });
 
-  // 🔹 Paginação
-  const totalPaginasEstoque = Math.ceil(
-    produtosFiltrados.length / itensPorPaginaEstoque
-  );
+  const totalPaginasEstoque = Math.ceil(produtosFiltrados.length / itensPorPaginaEstoque);
   const indexInicio = (paginaEstoque - 1) * itensPorPaginaEstoque;
   const indexFim = indexInicio + itensPorPaginaEstoque;
   const produtosPaginados = produtosFiltrados.slice(indexInicio, indexFim);
-
-  const nextEstoque = () => {
-    if (paginaEstoque < totalPaginasEstoque)
-      setPaginaEstoque(paginaEstoque + 1);
-  };
-
-  const prevEstoque = () => {
-    if (paginaEstoque > 1) setPaginaEstoque(paginaEstoque - 1);
-  };
-
-  const handleChangeItensPorPaginaEstoque = (value: number) => {
-    setItensPorPaginaEstoque(value);
-    setPaginaEstoque(1); // volta para página 1 ao mudar a quantidade
-  };
 
   return (
     <div className="gerenciar-produtos-page">
       <div className="back-icon" onClick={() => navigate(-1)}>
         <FaArrowLeft />
       </div>
+
       <h1>Gerenciamento de Produtos</h1>
 
       <div className="bloco">
@@ -185,81 +179,7 @@ export default function GerenciarProdutos() {
           Adicionar Produto
         </button>
 
-        <div className="filtros">
-          <input
-            type="text"
-            placeholder="Filtrar por nome"
-            value={filtroProduto}
-            onChange={(e) => {
-              setFiltroProduto(e.target.value);
-              setPaginaEstoque(1);
-            }}
-            className="input-filtro"
-          />
-
-          <select
-            value={filtroCategoria}
-            onChange={(e) => {
-              setFiltroCategoria(e.target.value);
-              setFiltroSubcategoria("");
-              setPaginaEstoque(1);
-            }}
-            className="input-filtro"
-          >
-            <option value="">Todas as categorias</option>
-            {categorias.map((c) => (
-              <option key={c.idCategoria} value={c.nomeCategoria}>
-                {c.nomeCategoria}
-              </option>
-            ))}
-          </select>
-
-          <select
-            value={filtroSubcategoria}
-            onChange={(e) => {
-              setFiltroSubcategoria(e.target.value);
-              setPaginaEstoque(1);
-            }}
-            className="input-filtro"
-          >
-            <option value="">Todas as subcategorias</option>
-            {subCategorias
-              .filter((s) =>
-                filtroCategoria
-                  ? categorias
-                      .find((c) => c.nomeCategoria === filtroCategoria)
-                      ?.subcategorias.some(
-                        (sc) => sc.nomeSubcategoria === s.nomeSubcategoria
-                      )
-                  : true
-              )
-              .map((s) => (
-                <option key={s.idSubcategoria} value={s.nomeSubcategoria}>
-                  {s.nomeSubcategoria}
-                </option>
-              ))}
-          </select>
-
-          <select
-            value={filtroFornecedor}
-            onChange={(e) => {
-              setFiltroFornecedor(e.target.value);
-              setPaginaEstoque(1);  
-            }} 
-            className="input-filtro"
-          >
-            <option value="">Todos os fornecedores</option>
-            {fornecedores.map((f) => (
-              <option key={f.idFornecedor} value={f.nomeFornecedor}>
-                {f.nomeFornecedor}
-              </option>
-            ))}
-          </select>
-
-          <button className="btn limpar" onClick={limparFiltros}>
-            Limpar filtros
-          </button>
-        </div>
+        {/* filtros… */}
 
         <table className="tabela">
           <thead>
@@ -267,7 +187,7 @@ export default function GerenciarProdutos() {
               <th>ID</th>
               <th>Imagem</th>
               <th>Nome</th>
-              <th>Descrição</th>  
+              <th>Descrição</th>
               <th>Preço</th>
               <th>Categoria</th>
               <th>Subcategoria</th>
@@ -275,96 +195,55 @@ export default function GerenciarProdutos() {
               <th>Ações</th>
             </tr>
           </thead>
+
           <tbody>
-            {produtosPaginados.length > 0 ? (
-              produtosPaginados.map((p) => (
-                <tr key={p.idProduto}>
-                  <td>{p.idProduto}</td>
-                  <td>
-                    {p.imgUrl ? (
-                      <img
-                        src={p.imgUrl}
-                        alt={p.nomeProduto}
-                        id="imagem-produto"
-                      />
-                    ) : (
-                      "—"
-                    )}
-                  </td>
-                  <td>{p.nomeProduto}</td>
-                  <td>{p.descricaoProduto}</td>
-                  <td>{p.precoProduto.toFixed(2).replace(".", ",")}</td>
-                  <td>{p.categoria?.nomeCategoria || "—"}</td>
-                  <td>{p.subCategoria?.nomeSubcategoria || "—"}</td>
-                  <td>{p.fornecedor?.nomeFornecedor || "—"}</td>
-                  <td>
-                    <button
-                      className="btn editar"
-                      onClick={() => {
-                        setProdutoEdit(p);
-                        setModalProduto(true);
-                      }}
-                    >
-                      Editar
-                    </button>
-                    <button
-                      className="btn excluir"
-                      onClick={() => deletarProduto(p.idProduto)}
-                    >
-                      Excluir
-                    </button>
-                  </td>
-                </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan={8} className="vazio">
-                  Nenhum produto encontrado.
+            {produtosPaginados.map((p) => (
+              <tr key={p.idProduto}>
+                <td>{p.idProduto}</td>
+                <td>
+                  {p.imgUrl ? <img src={p.imgUrl} id="imagem-produto" /> : "—"}
+                </td>
+                <td>{p.nomeProduto}</td>
+                <td>{p.descricaoProduto}</td>
+                <td>{p.precoProduto.toFixed(2).replace(".", ",")}</td>
+                <td>{p.categoria?.nomeCategoria}</td>
+                <td>{p.subCategoria?.nomeSubcategoria}</td>
+                <td>{p.fornecedor?.nomeFornecedor}</td>
+
+                <td>
+                  <button
+                    className="btn editar"
+                    onClick={() => {
+                      setProdutoEdit(p);
+                      setModalProduto(true);
+                    }}
+                  >
+                    Editar
+                  </button>
+
+                  <button
+                    className="btn excluir"
+                    onClick={() => solicitarExclusao(p)}
+                  >
+                    Excluir
+                  </button>
                 </td>
               </tr>
-            )}
+            ))}
           </tbody>
         </table>
       </div>
 
-      {/* 🔹 Paginação */}
-      <div className="paginacao">
-        <div className="paginacao-controls">
-          <button onClick={prevEstoque} disabled={paginaEstoque <= 1}>
-            ◀
-          </button>
-          {Array.from({ length: totalPaginasEstoque }).map((_, i) => (
-            <button
-              key={i}
-              className={paginaEstoque === i + 1 ? "ativa" : ""}
-              onClick={() => setPaginaEstoque(i + 1)}
-            >
-              {i + 1}
-            </button>
-          ))}
-          <button
-            onClick={nextEstoque}
-            disabled={paginaEstoque >= totalPaginasEstoque}
-          >
-            ▶
-          </button>
-        </div>
-        <div>
-          <label>Itens por página</label>
-          <select
-            value={itensPorPaginaEstoque}
-            onChange={(e) =>
-              handleChangeItensPorPaginaEstoque(Number(e.target.value))
-            }
-          >
-            <option value={6}>6</option>
-            <option value={10}>10</option>
-            <option value={20}>20</option>
-            <option value={50}>50</option>
-          </select>
-        </div>
-      </div>
+      {/* MODAL DE CONFIRMAÇÃO */}
+      {abrirModalExcluir && produtoParaExcluir && (
+  <ModalConfirmarExclusao
+    nomeProduto={produtoParaExcluir.nomeProduto}
+    onCancel={() => setAbrirModalExcluir(false)}
+    onConfirm={confirmarExclusao}
+  />
+)}
 
+      {/* modal de edição */}
       {modalProduto && (
         <ModalProduto
           produtoEdit={produtoEdit}

@@ -330,16 +330,20 @@ function Carrinho() {
           alert("CEP não encontrado!");
           return;
         }
+     
+
         setFormData((prev) => ({
           ...prev,
           rua: data.logradouro,
           bairro: data.bairro,
           cidade: data.localidade,
         }));
+        
       } catch (error) {
         console.error("Erro ao buscar CEP:", error);
         alert("Erro ao buscar o CEP. Tente novamente.");
       }
+      
     }
   };
 

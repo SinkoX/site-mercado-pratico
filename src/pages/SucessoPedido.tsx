@@ -44,7 +44,7 @@ export default function SucessoPedido() {
         );
 
         // se não for sucesso, redireciona para cancelado
-        if (resposta.data.statusPedido !== "SUCESSO") {
+        if (resposta.data.statusPedido !== "PAGO") {
           navigate(`/cancelado?pedido=${pedidoId}`);
           return;
         }
