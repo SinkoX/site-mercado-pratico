@@ -369,7 +369,7 @@ export default function GerenciarEstoque() {
 
   return (
     <div className="estoque-container">
-      <div className="back-icon" onClick={() => navigate(-1)}>
+      <div className="voltar-icon" onClick={() => navigate(-1)}>
         <FaArrowLeft />
       </div>
       <h1>Gerenciamento de Estoque</h1>

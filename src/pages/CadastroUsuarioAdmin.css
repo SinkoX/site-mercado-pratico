@@ -46,6 +46,10 @@ html {
   position: relative;
   margin: 0 auto;
 }
+.back-icon{
+  padding-left: 20px;
+ 
+}
 
 /* Título e subtítulo */
 .formulario-pag-cadastro-usuario-adm .titulo h1 {

@@ -179,7 +179,124 @@ export default function GerenciarProdutos() {
           Adicionar Produto
         </button>
 
-        {/* filtros… */}
+       {/* FILTROS */}
+<div className="filtros">
+
+  <input
+    type="text"
+    placeholder="Buscar por nome"
+    value={filtroProduto}
+    onChange={(e) => {
+      setFiltroProduto(e.target.value);
+      setPaginaEstoque(1);
+    }}
+    className="input-filtro"
+  />
+
+  <select
+    value={filtroCategoria}
+    onChange={(e) => {
+      setFiltroCategoria(e.target.value);
+      setFiltroSubcategoria("");
+      setPaginaEstoque(1);
+    }}
+    className="input-filtro"
+  >
+    <option value="">Todas as categorias</option>
+    {categorias.map((c) => (
+      <option key={c.idCategoria} value={c.nomeCategoria}>
+        {c.nomeCategoria}
+      </option>
+    ))}
+  </select>
+
+  <select
+    value={filtroSubcategoria}
+    onChange={(e) => {
+      setFiltroSubcategoria(e.target.value);
+      setPaginaEstoque(1);
+    }}
+    className="input-filtro"
+  >
+    <option value="">Todas as subcategorias</option>
+    {subCategorias
+      .filter((s) =>
+        !filtroCategoria ||
+        categorias
+          .find((c) => c.nomeCategoria === filtroCategoria)
+          ?.subcategorias.some(
+            (sc) => sc.nomeSubcategoria === s.nomeSubcategoria
+          )
+      )
+      .map((s) => (
+        <option key={s.idSubcategoria} value={s.nomeSubcategoria}>
+          {s.nomeSubcategoria}
+        </option>
+      ))}
+  </select>
+
+  <select
+    value={filtroFornecedor}
+    onChange={(e) => {
+      setFiltroFornecedor(e.target.value);
+      setPaginaEstoque(1);
+    }}
+    className="input-filtro"
+  >
+    <option value="">Todos os fornecedores</option>
+    {fornecedores.map((f) => (
+      <option key={f.idFornecedor} value={f.nomeFornecedor}>
+        {f.nomeFornecedor}
+      </option>
+    ))}
+  </select>
+
+  <button className="btn limpar" onClick={limparFiltros}>
+    Limpar filtros
+  </button>
+</div>
+
+
+{/* PAGINAÇÃO */}
+<div className="paginacao">
+  <button
+    onClick={() => setPaginaEstoque(paginaEstoque - 1)}
+    disabled={paginaEstoque <= 1}
+  >
+    ◀
+  </button>
+
+  {Array.from({ length: totalPaginasEstoque }).map((_, i) => (
+    <button
+      key={i}
+      className={paginaEstoque === i + 1 ? "ativa" : ""}
+      onClick={() => setPaginaEstoque(i + 1)}
+    >
+      {i + 1}
+    </button>
+  ))}
+
+  <button
+    onClick={() => setPaginaEstoque(paginaEstoque + 1)}
+    disabled={paginaEstoque >= totalPaginasEstoque}
+  >
+    ▶
+  </button>
+
+  <div className="itens-por-pagina">
+    <label>Itens por página:</label>
+    <select
+      value={itensPorPaginaEstoque}
+      onChange={(e) => setItensPorPaginaEstoque(Number(e.target.value))}
+    >
+      <option value={6}>6</option>
+      <option value={10}>10</option>
+      <option value={20}>20</option>
+      <option value={50}>50</option>
+    </select>
+  </div>
+</div>
+
 
         <table className="tabela">
           <thead>

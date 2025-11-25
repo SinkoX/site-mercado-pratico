@@ -123,6 +123,87 @@
   transform: translateY(-1px);
   box-shadow: 0 4px 8px rgba(108, 117, 125, 0.3);
 }
+/* ==== FILTROS ==== */
+.gerenciar-produtos-page .filtros {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.gerenciar-produtos-page .input-filtro {
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  width: 220px;
+  background: white;
+  transition: all 0.2s ease;
+}
+
+.gerenciar-produtos-page .input-filtro:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 4px rgba(0, 123, 255, 0.4);
+  outline: none;
+}
+🔢 ESTILO DA PAGINAÇÃO
+css
+Copiar código
+/* ==== PAGINAÇÃO ==== */
+.gerenciar-produtos-page .paginacao {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 20px 0;
+  flex-wrap: wrap;
+  padding-left: 30px;
+}
+
+/* Botões de paginação */
+.gerenciar-produtos-page .paginacao button {
+  background: #ffffff;
+  border: 1px solid #ccc;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: 600;
+  align-items: center;
+  padding-left: 15px;
+  margin-left: 15px;
+}
+
+.gerenciar-produtos-page .paginacao button:hover {
+  background: #e6e6e6;
+}
+
+.gerenciar-produtos-page .paginacao button:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+/* Botão ativo da paginação */
+.gerenciar-produtos-page .paginacao .ativa {
+  background: #007bff !important;
+  color: white;
+  border-color: #007bff;
+}
+
+/* Seleção de itens por página */
+.gerenciar-produtos-page .itens-por-pagina {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+}
+
+.gerenciar-produtos-page .itens-por-pagina select {
+  padding: 5px 6px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
 
 /* RESPONSIVO - Tablets */
 @media (max-width: 1024px) {
